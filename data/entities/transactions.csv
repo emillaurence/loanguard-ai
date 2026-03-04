@@ -1,0 +1,174 @@
+transaction_id,from_account_id,to_account_id,amount,currency,date,type,description,flagged_suspicious
+TXN-0001,ACC-0597,ACC-0596,9044,AUD,2025-11-21,personal_transfer,Savings contribution,true
+TXN-0002,ACC-0598,ACC-0596,8630,AUD,2025-11-23,personal_transfer,Family support,true
+TXN-0003,ACC-0599,ACC-0596,8966,AUD,2025-11-15,personal_transfer,Family support,true
+TXN-0004,ACC-0600,ACC-0596,9450,AUD,2025-11-19,personal_transfer,Gift,true
+TXN-0005,ACC-0601,ACC-0596,9798,AUD,2025-11-17,personal_transfer,Gift,true
+TXN-0006,ACC-0602,ACC-0596,8670,AUD,2025-11-19,personal_transfer,Personal,true
+TXN-0007,ACC-0604,ACC-0603,9113,AUD,2025-08-19,personal_transfer,Loan repayment,true
+TXN-0008,ACC-0605,ACC-0603,9063,AUD,2025-08-14,personal_transfer,Savings contribution,true
+TXN-0009,ACC-0606,ACC-0603,8728,AUD,2025-08-16,personal_transfer,Family support,true
+TXN-0010,ACC-0607,ACC-0603,9543,AUD,2025-08-23,personal_transfer,Personal,true
+TXN-0011,ACC-0608,ACC-0603,9384,AUD,2025-08-10,personal_transfer,Loan repayment,true
+TXN-0012,ACC-0609,ACC-0603,9906,AUD,2025-08-19,personal_transfer,Savings contribution,true
+TXN-0013,ACC-0611,ACC-0610,9987,AUD,2025-10-20,personal_transfer,Loan repayment,true
+TXN-0014,ACC-0612,ACC-0610,9121,AUD,2025-10-22,personal_transfer,Loan repayment,true
+TXN-0015,ACC-0613,ACC-0610,9224,AUD,2025-10-19,personal_transfer,Loan repayment,true
+TXN-0016,ACC-0614,ACC-0610,9305,AUD,2025-10-17,personal_transfer,Personal,true
+TXN-0017,ACC-0615,ACC-0610,9337,AUD,2025-10-08,personal_transfer,Loan repayment,true
+TXN-0018,ACC-0616,ACC-0610,9061,AUD,2025-10-20,personal_transfer,Gift,true
+TXN-0019,ACC-0617,ACC-0610,9855,AUD,2025-10-11,personal_transfer,Loan repayment,true
+TXN-0020,ACC-0619,ACC-0620,229420,VUV,2025-02-21,international_transfer,Transfer - Vanuatu operations,true
+TXN-0021,ACC-0620,ACC-0621,482012,SGD,2025-05-22,international_transfer,Transfer - Singapore operations,true
+TXN-0022,ACC-0621,ACC-0618,493697,AUD,2026-03-25,international_transfer,Investment return - overseas,true
+TXN-0023,ACC-0623,ACC-0624,319371,SGD,2025-08-28,international_transfer,Transfer - Singapore operations,true
+TXN-0024,ACC-0624,ACC-0625,304325,MYR,2025-06-20,international_transfer,Transfer - Malaysia operations,true
+TXN-0025,ACC-0625,ACC-0622,435804,AUD,2025-09-19,international_transfer,Investment return - overseas,true
+TXN-0026,ACC-0644,ACC-0025,19000,AUD,2025-08-26,refund,Refund,false
+TXN-0027,ACC-0645,ACC-0025,18500,AUD,2025-06-07,salary,Transfer,false
+TXN-0028,ACC-0646,ACC-0025,16000,AUD,2025-09-19,salary,Refund,false
+TXN-0029,ACC-0647,ACC-0025,19500,AUD,2025-10-26,salary,Salary deposit,false
+TXN-0030,ACC-0648,ACC-0006,15500,AUD,2025-09-05,refund,Refund,false
+TXN-0031,ACC-0649,ACC-0006,17000,AUD,2025-02-28,refund,Salary deposit,false
+TXN-0032,ACC-0650,ACC-0035,12500,AUD,2025-09-15,refund,Transfer,false
+TXN-0033,ACC-0651,ACC-0035,12000,AUD,2026-01-01,salary,Salary deposit,false
+TXN-0034,ACC-0652,ACC-0035,19500,AUD,2025-09-06,refund,Refund,false
+TXN-0035,ACC-0653,ACC-0026,12500,AUD,2025-04-17,refund,Refund,false
+TXN-0036,ACC-0654,ACC-0026,16000,AUD,2026-09-14,refund,Refund,false
+TXN-0037,ACC-0655,ACC-0033,7000,AUD,2026-08-13,salary,Salary deposit,false
+TXN-0038,ACC-0656,ACC-0033,17000,AUD,2026-02-08,refund,Salary deposit,false
+TXN-0039,ACC-0657,ACC-0044,18500,AUD,2026-08-11,refund,Salary deposit,false
+TXN-0040,ACC-0658,ACC-0044,17500,AUD,2026-11-17,salary,Monthly pay,false
+TXN-0041,ACC-0659,ACC-0044,14500,AUD,2025-04-12,personal_transfer,Refund,false
+TXN-0042,ACC-0660,ACC-0036,12000,AUD,2026-01-03,refund,Transfer,false
+TXN-0043,ACC-0661,ACC-0036,12500,AUD,2026-04-02,salary,Transfer,false
+TXN-0044,ACC-0662,ACC-0041,9000,AUD,2025-08-03,refund,Transfer,false
+TXN-0045,ACC-0663,ACC-0041,15000,AUD,2025-06-26,personal_transfer,Salary deposit,false
+TXN-0046,ACC-0664,ACC-0041,11000,AUD,2025-11-21,personal_transfer,Salary deposit,false
+TXN-0047,ACC-0665,ACC-0040,14000,AUD,2026-09-29,personal_transfer,Monthly pay,false
+TXN-0048,ACC-0666,ACC-0040,12000,AUD,2026-12-26,personal_transfer,Transfer,false
+TXN-0049,ACC-0667,ACC-0040,15500,AUD,2025-06-13,salary,Transfer,false
+TXN-0050,ACC-0668,ACC-0040,13500,AUD,2026-06-03,refund,Transfer,false
+TXN-0051,ACC-0669,ACC-0029,6000,AUD,2025-07-23,salary,Salary deposit,false
+TXN-0052,ACC-0670,ACC-0029,16500,AUD,2025-09-27,salary,Transfer,false
+TXN-0053,ACC-0671,ACC-0029,8000,AUD,2026-01-30,salary,Transfer,false
+TXN-0054,ACC-0672,ACC-0029,14000,AUD,2025-08-19,personal_transfer,Salary deposit,false
+TXN-0055,ACC-0673,ACC-0012,12500,AUD,2025-01-27,personal_transfer,Monthly pay,false
+TXN-0056,ACC-0674,ACC-0012,11500,AUD,2025-08-20,personal_transfer,Monthly pay,false
+TXN-0057,ACC-0675,ACC-0027,4500,AUD,2026-09-19,personal_transfer,Refund,false
+TXN-0058,ACC-0676,ACC-0027,10000,AUD,2026-02-27,salary,Refund,false
+TXN-0059,ACC-0677,ACC-0001,12000,AUD,2026-12-25,personal_transfer,Transfer,false
+TXN-0060,ACC-0678,ACC-0001,11500,AUD,2025-11-24,refund,Transfer,false
+TXN-0061,ACC-0679,ACC-0001,8000,AUD,2025-11-26,refund,Monthly pay,false
+TXN-0062,ACC-0680,ACC-0001,8000,AUD,2025-04-09,refund,Refund,false
+TXN-0063,ACC-0681,ACC-0007,11000,AUD,2025-12-23,refund,Monthly pay,false
+TXN-0064,ACC-0682,ACC-0007,5500,AUD,2026-04-17,refund,Refund,false
+TXN-0065,ACC-0683,ACC-0007,6000,AUD,2025-06-25,salary,Refund,false
+TXN-0066,ACC-0684,ACC-0007,15000,AUD,2026-05-04,refund,Monthly pay,false
+TXN-0067,ACC-0685,ACC-0024,12500,AUD,2026-08-07,personal_transfer,Salary deposit,false
+TXN-0068,ACC-0686,ACC-0024,17500,AUD,2026-12-23,salary,Refund,false
+TXN-0069,ACC-0687,ACC-0051,13500,AUD,2025-12-05,salary,Refund,false
+TXN-0070,ACC-0688,ACC-0051,14000,AUD,2025-01-07,refund,Salary deposit,false
+TXN-0071,ACC-0689,ACC-0020,7500,AUD,2025-03-14,refund,Salary deposit,false
+TXN-0072,ACC-0690,ACC-0020,9000,AUD,2025-07-19,salary,Monthly pay,false
+TXN-0073,ACC-0691,ACC-0020,19500,AUD,2025-05-03,personal_transfer,Salary deposit,false
+TXN-0074,ACC-0692,ACC-0020,16000,AUD,2026-02-22,personal_transfer,Refund,false
+TXN-0075,ACC-0693,ACC-0049,7000,AUD,2025-11-15,personal_transfer,Monthly pay,false
+TXN-0076,ACC-0694,ACC-0049,19500,AUD,2025-04-03,salary,Transfer,false
+TXN-0077,ACC-0695,ACC-0063,6500,AUD,2025-12-14,personal_transfer,Salary deposit,false
+TXN-0078,ACC-0696,ACC-0063,5500,AUD,2026-07-25,salary,Transfer,false
+TXN-0079,ACC-0697,ACC-0063,4000,AUD,2025-01-05,personal_transfer,Refund,false
+TXN-0080,ACC-0698,ACC-0059,15500,AUD,2025-03-13,salary,Monthly pay,false
+TXN-0081,ACC-0699,ACC-0059,9500,AUD,2026-07-03,salary,Transfer,false
+TXN-0082,ACC-0700,ACC-0059,8500,AUD,2026-09-07,personal_transfer,Monthly pay,false
+TXN-0083,ACC-0701,ACC-0058,9500,AUD,2026-06-04,salary,Refund,false
+TXN-0084,ACC-0702,ACC-0058,7500,AUD,2025-11-16,personal_transfer,Salary deposit,false
+TXN-0085,ACC-0703,ACC-0058,9000,AUD,2025-04-13,personal_transfer,Monthly pay,false
+TXN-0086,ACC-0704,ACC-0043,18500,AUD,2026-11-06,refund,Refund,false
+TXN-0087,ACC-0705,ACC-0043,6000,AUD,2025-12-13,salary,Transfer,false
+TXN-0088,ACC-0706,ACC-0043,19500,AUD,2025-07-12,personal_transfer,Salary deposit,false
+TXN-0089,ACC-0707,ACC-0043,7000,AUD,2026-06-17,salary,Transfer,false
+TXN-0090,ACC-0708,ACC-0039,16500,AUD,2026-07-14,refund,Monthly pay,false
+TXN-0091,ACC-0709,ACC-0039,18000,AUD,2025-07-22,personal_transfer,Refund,false
+TXN-0092,ACC-0710,ACC-0039,6500,AUD,2026-05-18,salary,Refund,false
+TXN-0093,ACC-0711,ACC-0039,19000,AUD,2026-09-17,personal_transfer,Transfer,false
+TXN-0094,ACC-0712,ACC-0023,5500,AUD,2026-06-25,salary,Monthly pay,false
+TXN-0095,ACC-0713,ACC-0023,9500,AUD,2026-10-19,personal_transfer,Salary deposit,false
+TXN-0096,ACC-0714,ACC-0023,13500,AUD,2026-01-30,salary,Transfer,false
+TXN-0097,ACC-0715,ACC-0009,17500,AUD,2026-06-05,refund,Monthly pay,false
+TXN-0098,ACC-0716,ACC-0009,5000,AUD,2025-08-08,salary,Refund,false
+TXN-0099,ACC-0717,ACC-0009,14000,AUD,2025-03-16,refund,Monthly pay,false
+TXN-0100,ACC-0718,ACC-0009,4000,AUD,2025-02-16,personal_transfer,Monthly pay,false
+TXN-0101,ACC-0719,ACC-0056,4000,AUD,2025-09-04,refund,Transfer,false
+TXN-0102,ACC-0720,ACC-0056,11000,AUD,2026-01-16,personal_transfer,Salary deposit,false
+TXN-0103,ACC-0721,ACC-0056,11500,AUD,2026-09-29,refund,Transfer,false
+TXN-0104,ACC-0722,ACC-0056,13500,AUD,2025-07-29,refund,Transfer,false
+TXN-0105,ACC-0723,ACC-0011,17000,AUD,2026-01-22,personal_transfer,Monthly pay,false
+TXN-0106,ACC-0724,ACC-0011,12000,AUD,2026-09-07,salary,Refund,false
+TXN-0107,ACC-0725,ACC-0011,18000,AUD,2025-05-12,refund,Monthly pay,false
+TXN-0108,ACC-0726,ACC-0019,9000,AUD,2026-05-16,salary,Monthly pay,false
+TXN-0109,ACC-0727,ACC-0019,12000,AUD,2026-11-29,refund,Refund,false
+TXN-0110,ACC-0728,ACC-0062,12000,AUD,2025-04-22,salary,Refund,false
+TXN-0111,ACC-0729,ACC-0062,6500,AUD,2026-07-23,personal_transfer,Monthly pay,false
+TXN-0112,ACC-0730,ACC-0062,19000,AUD,2026-05-06,salary,Salary deposit,false
+TXN-0113,ACC-0731,ACC-0053,9500,AUD,2025-03-27,refund,Salary deposit,false
+TXN-0114,ACC-0732,ACC-0053,15500,AUD,2026-03-25,refund,Monthly pay,false
+TXN-0115,ACC-0733,ACC-0055,20000,AUD,2025-07-13,salary,Transfer,false
+TXN-0116,ACC-0734,ACC-0055,8500,AUD,2025-12-16,personal_transfer,Monthly pay,false
+TXN-0117,ACC-0735,ACC-0055,5500,AUD,2026-02-05,personal_transfer,Monthly pay,false
+TXN-0118,ACC-0736,ACC-0031,9500,AUD,2026-10-05,salary,Transfer,false
+TXN-0119,ACC-0737,ACC-0031,4500,AUD,2026-03-28,salary,Monthly pay,false
+TXN-0120,ACC-0738,ACC-0031,9000,AUD,2025-05-27,refund,Transfer,false
+TXN-0121,ACC-0739,ACC-0010,17000,AUD,2026-06-15,refund,Salary deposit,false
+TXN-0122,ACC-0740,ACC-0010,14000,AUD,2026-01-15,salary,Monthly pay,false
+TXN-0123,ACC-0741,ACC-0032,16000,AUD,2025-01-04,refund,Salary deposit,false
+TXN-0124,ACC-0742,ACC-0032,7500,AUD,2025-08-18,refund,Salary deposit,false
+TXN-0125,ACC-0743,ACC-0018,19000,AUD,2026-08-09,refund,Refund,false
+TXN-0126,ACC-0744,ACC-0018,16000,AUD,2026-04-06,refund,Monthly pay,false
+TXN-0127,ACC-0745,ACC-0018,12000,AUD,2025-12-20,refund,Refund,false
+TXN-0128,ACC-0746,ACC-0018,18500,AUD,2026-07-04,personal_transfer,Monthly pay,false
+TXN-0129,ACC-0747,ACC-0003,9500,AUD,2026-02-02,personal_transfer,Monthly pay,false
+TXN-0130,ACC-0748,ACC-0003,17500,AUD,2025-11-04,salary,Salary deposit,false
+TXN-0131,ACC-0749,ACC-0042,11000,AUD,2026-02-16,salary,Transfer,false
+TXN-0132,ACC-0750,ACC-0042,17000,AUD,2026-03-04,personal_transfer,Refund,false
+TXN-0133,ACC-0751,ACC-0042,18500,AUD,2026-01-08,personal_transfer,Transfer,false
+TXN-0134,ACC-0752,ACC-0038,10500,AUD,2025-09-09,salary,Monthly pay,false
+TXN-0135,ACC-0753,ACC-0038,15500,AUD,2026-04-20,refund,Refund,false
+TXN-0136,ACC-0754,ACC-0038,10500,AUD,2026-02-07,salary,Refund,false
+TXN-0137,ACC-0755,ACC-0038,18000,AUD,2025-11-04,refund,Refund,false
+TXN-0138,ACC-0756,ACC-0004,9000,AUD,2026-11-07,personal_transfer,Refund,false
+TXN-0139,ACC-0757,ACC-0004,4500,AUD,2026-12-12,salary,Refund,false
+TXN-0140,ACC-0758,ACC-0064,8500,AUD,2026-10-19,personal_transfer,Monthly pay,false
+TXN-0141,ACC-0759,ACC-0064,18500,AUD,2025-09-09,refund,Monthly pay,false
+TXN-0142,ACC-0760,ACC-0064,14000,AUD,2026-09-18,refund,Salary deposit,false
+TXN-0143,ACC-0761,ACC-0064,6000,AUD,2025-03-29,salary,Salary deposit,false
+TXN-0144,ACC-0762,ACC-0021,14000,AUD,2026-01-01,salary,Monthly pay,false
+TXN-0145,ACC-0763,ACC-0021,6000,AUD,2026-01-07,refund,Transfer,false
+TXN-0146,ACC-0764,ACC-0057,14500,AUD,2026-12-22,salary,Transfer,false
+TXN-0147,ACC-0765,ACC-0057,9000,AUD,2025-06-05,salary,Refund,false
+TXN-0148,ACC-0766,ACC-0057,17000,AUD,2025-06-12,refund,Refund,false
+TXN-0149,ACC-0767,ACC-0057,11500,AUD,2025-04-27,refund,Monthly pay,false
+TXN-0150,ACC-0768,ACC-0045,8000,AUD,2026-01-26,personal_transfer,Refund,false
+TXN-0151,ACC-0769,ACC-0045,4500,AUD,2026-08-24,refund,Transfer,false
+TXN-0152,ACC-0770,ACC-0045,9500,AUD,2026-04-04,salary,Refund,false
+TXN-0153,ACC-0771,ACC-0047,6500,AUD,2026-01-14,salary,Monthly pay,false
+TXN-0154,ACC-0772,ACC-0047,16500,AUD,2025-06-03,salary,Monthly pay,false
+TXN-0155,ACC-0773,ACC-0047,6500,AUD,2025-12-30,refund,Refund,false
+TXN-0156,ACC-0774,ACC-0047,17000,AUD,2025-06-23,personal_transfer,Transfer,false
+TXN-0157,ACC-0775,ACC-0013,4500,AUD,2026-05-17,personal_transfer,Monthly pay,false
+TXN-0158,ACC-0776,ACC-0013,13500,AUD,2025-09-27,personal_transfer,Refund,false
+TXN-0159,ACC-0777,ACC-0052,18500,AUD,2026-11-07,salary,Transfer,false
+TXN-0160,ACC-0778,ACC-0052,4000,AUD,2026-08-11,salary,Transfer,false
+TXN-0161,ACC-0779,ACC-0052,16000,AUD,2026-02-02,salary,Transfer,false
+TXN-0162,ACC-0780,ACC-0060,20000,AUD,2026-03-11,personal_transfer,Transfer,false
+TXN-0163,ACC-0781,ACC-0060,12000,AUD,2026-07-20,salary,Refund,false
+TXN-0164,ACC-0782,ACC-0060,18000,AUD,2026-11-19,salary,Transfer,false
+TXN-0165,ACC-0783,ACC-0060,4500,AUD,2025-05-12,salary,Monthly pay,false
+TXN-0166,ACC-0784,ACC-0050,8500,AUD,2026-08-09,salary,Salary deposit,false
+TXN-0167,ACC-0785,ACC-0050,4000,AUD,2025-12-16,refund,Salary deposit,false
+TXN-0168,ACC-0786,ACC-0015,14500,AUD,2026-11-12,salary,Salary deposit,false
+TXN-0169,ACC-0787,ACC-0015,10000,AUD,2025-03-25,salary,Salary deposit,false
+TXN-0170,ACC-0788,ACC-0030,11000,AUD,2025-08-04,salary,Salary deposit,false
+TXN-0171,ACC-0789,ACC-0030,10000,AUD,2026-05-03,salary,Refund,false
+TXN-0172,ACC-0790,ACC-0030,19000,AUD,2025-10-22,refund,Salary deposit,false
+TXN-0173,ACC-0791,ACC-0030,4000,AUD,2025-03-23,salary,Monthly pay,false

@@ -1,0 +1,610 @@
+address_id,street,city,state,postcode,country,address_type
+ADR-0001,190 Wattle Street,Reservoir,VIC,3073,Australia,residential
+ADR-0002,Unit 25 / 72 Park Road,Doncaster,VIC,3108,Australia,residential
+ADR-0003,142 Russell Street,St Kilda,VIC,3182,Australia,residential
+ADR-0004,Unit 13 / 187 Flinders Street,Marrickville,NSW,2204,Australia,residential
+ADR-0005,191 Toorak Road,Blacktown,NSW,2148,Australia,residential
+ADR-0006,41 Sunrise Boulevard,North Adelaide,SA,5006,Australia,residential
+ADR-0007,28 Bottlebrush Court,Neutral Bay,NSW,2089,Australia,residential
+ADR-0008,188 Nicholson Street,Hurstville,NSW,2220,Australia,residential
+ADR-0009,80 Canterbury Road,Maroubra,NSW,2035,Australia,residential
+ADR-0010,125 Collins Street,Coogee,NSW,2034,Australia,residential
+ADR-0011,115 Church Street,Marrickville,NSW,2204,Australia,residential
+ADR-0012,74 Bell Street,Mandurah,WA,6210,Australia,residential
+ADR-0013,Unit 29 / 61 Canterbury Road,Coogee,NSW,2034,Australia,residential
+ADR-0014,19 High Street,Miranda,NSW,2228,Australia,residential
+ADR-0015,Unit 26 / 140 Pittwater Road,Mandurah,WA,6210,Australia,residential
+ADR-0016,65 Wattle Street,Mandurah,WA,6210,Australia,residential
+ADR-0017,Unit 29 / 144 High Street,Rockingham,WA,6168,Australia,commercial
+ADR-0018,27 Cleveland Street,Coogee,NSW,2034,Australia,residential
+ADR-0019,52 Waratah Crescent,Chermside,QLD,4032,Australia,residential
+ADR-0020,Unit 26 / 153 Bell Street,Bondi,NSW,2026,Australia,residential
+ADR-0021,Unit 23 / 171 Plenty Road,Wynnum,QLD,4178,Australia,residential
+ADR-0022,173 Collins Street,Broadbeach,QLD,4218,Australia,residential
+ADR-0023,Unit 16 / 7 King Street,Carlton,VIC,3053,Australia,residential
+ADR-0024,64 Acacia Close,Armadale,WA,6112,Australia,residential
+ADR-0025,113 Elizabeth Street,Ryde,NSW,2112,Australia,residential
+ADR-0026,Unit 13 / 2 Cleveland Street,Mosman,NSW,2088,Australia,residential
+ADR-0027,Unit 15 / 165 Bell Street,Fremantle,WA,6160,Australia,residential
+ADR-0028,64 Chapel Street,Subiaco,WA,6008,Australia,residential
+ADR-0029,80 Albert Street,Claremont,WA,6010,Australia,residential
+ADR-0030,108 Waratah Crescent,Parramatta,NSW,2150,Australia,residential
+ADR-0031,119 Malvern Road,Miranda,NSW,2228,Australia,residential
+ADR-0032,183 Nicholson Street,Randwick,NSW,2031,Australia,residential
+ADR-0033,56 Condamine Street,Liverpool,NSW,2170,Australia,residential
+ADR-0034,Unit 16 / 4 Malvern Road,Bondi,NSW,2026,Australia,residential
+ADR-0035,39 Banksia Drive,Manly,NSW,2095,Australia,residential
+ADR-0036,Unit 6 / 170 Victoria Street,Ryde,NSW,2112,Australia,residential
+ADR-0037,Unit 5 / 30 St Kilda Road,Hornsby,NSW,2077,Australia,residential
+ADR-0038,78 Epping Road,Coburg,VIC,3058,Australia,residential
+ADR-0039,47 Glenferrie Road,Ryde,NSW,2112,Australia,residential
+ADR-0040,132 Waratah Crescent,Holland Park,QLD,4121,Australia,residential
+ADR-0041,41 Exhibition Street,Coburg,VIC,3058,Australia,residential
+ADR-0042,18 Spring Street,Frenchs Forest,NSW,2086,Australia,residential
+ADR-0043,99 Bourke Street,Newtown,NSW,2042,Australia,residential
+ADR-0044,105 Bottlebrush Court,Claremont,WA,6010,Australia,residential
+ADR-0045,Unit 4 / 59 Condamine Street,Joondalup,WA,6027,Australia,residential
+ADR-0046,Unit 30 / 159 Lane Cove Road,Rockingham,WA,6168,Australia,residential
+ADR-0047,Unit 14 / 89 Glenferrie Road,Broadbeach,QLD,4218,Australia,residential
+ADR-0048,74 Rocky Point Road,Robina,QLD,4226,Australia,residential
+ADR-0049,80 Sunrise Boulevard,Fortitude Valley,QLD,4006,Australia,residential
+ADR-0050,37 Forest Road,New Farm,QLD,4005,Australia,residential
+ADR-0051,166 Elizabeth Street,Scarborough,WA,6019,Australia,residential
+ADR-0052,126 Camberwell Road,Fremantle,WA,6160,Australia,residential
+ADR-0053,86 Flinders Street,Chatswood,NSW,2067,Australia,residential
+ADR-0054,Unit 26 / 7 Church Street,Coogee,NSW,2034,Australia,residential
+ADR-0055,93 Hoddle Street,Miranda,NSW,2228,Australia,residential
+ADR-0056,163 Glenferrie Road,Surry Hills,NSW,2010,Australia,residential
+ADR-0057,171 Lonsdale Street,Doncaster,VIC,3108,Australia,residential
+ADR-0058,27 Malvern Road,Midland,WA,6056,Australia,residential
+ADR-0059,Unit 22 / 47 Bottlebrush Court,South Brisbane,QLD,4101,Australia,residential
+ADR-0060,114 Mowbray Road,Ryde,NSW,2112,Australia,residential
+ADR-0061,197 Church Street,Liverpool,NSW,2170,Australia,residential
+ADR-0062,102 Bottlebrush Court,Hurstville,NSW,2220,Australia,residential
+ADR-0063,135 Victoria Street,Rockingham,WA,6168,Australia,residential
+ADR-0064,46 Rocky Point Road,New Farm,QLD,4005,Australia,residential
+ADR-0065,Unit 21 / 95 Eucalyptus Lane,South Yarra,VIC,3141,Australia,residential
+ADR-0066,64 Pittwater Road,Chatswood,NSW,2067,Australia,residential
+ADR-0067,21 Glenferrie Road,Burwood,NSW,2134,Australia,residential
+ADR-0068,93 George Street,Neutral Bay,NSW,2089,Australia,residential
+ADR-0069,113 King Street,Essendon,VIC,3040,Australia,residential
+ADR-0070,Unit 20 / 42 Waratah Crescent,Prospect,SA,5082,Australia,residential
+ADR-0071,102 Hoddle Street,Subiaco,WA,6008,Australia,residential
+ADR-0072,Unit 10 / 29 Rocky Point Road,Brighton,VIC,3186,Australia,residential
+ADR-0073,93 Elizabeth Street,Neutral Bay,NSW,2089,Australia,residential
+ADR-0074,Unit 21 / 91 St Kilda Road,Chatswood,NSW,2067,Australia,residential
+ADR-0075,Unit 30 / 52 Grevillea Place,Dee Why,NSW,2099,Australia,residential
+ADR-0076,128 Epping Road,Penrith,NSW,2750,Australia,residential
+ADR-0077,Unit 15 / 84 Mowbray Road,St Kilda,VIC,3182,Australia,residential
+ADR-0078,Unit 21 / 33 Elizabeth Street,South Yarra,VIC,3141,Australia,residential
+ADR-0079,199 Lonsdale Street,Ryde,NSW,2112,Australia,residential
+ADR-0080,58 Station Road,Southbank,VIC,3006,Australia,residential
+ADR-0081,165 Elizabeth Street,Sunnybank,QLD,4109,Australia,residential
+ADR-0082,71 Church Street,Armadale,WA,6112,Australia,residential
+ADR-0083,Unit 29 / 159 Military Road,Surfers Paradise,QLD,4217,Australia,residential
+ADR-0084,95 Hoddle Street,Miranda,NSW,2228,Australia,residential
+ADR-0085,Unit 13 / 128 George Street,Wynnum,QLD,4178,Australia,residential
+ADR-0086,Unit 17 / 142 Russell Street,Mount Gravatt,QLD,4122,Australia,residential
+ADR-0087,117 Park Road,Southbank,VIC,3006,Australia,residential
+ADR-0088,Unit 21 / 153 Smith Street,South Brisbane,QLD,4101,Australia,residential
+ADR-0089,129 Rocky Point Road,Surfers Paradise,QLD,4217,Australia,residential
+ADR-0090,88 St Kilda Road,Marrickville,NSW,2204,Australia,residential
+ADR-0091,89 Rocky Point Road,Rockingham,WA,6168,Australia,residential
+ADR-0092,14 Albert Street,Scarborough,WA,6019,Australia,residential
+ADR-0093,Unit 21 / 194 Russell Street,Scarborough,WA,6019,Australia,commercial
+ADR-0094,Unit 10 / 75 Grevillea Place,Essendon,VIC,3040,Australia,residential
+ADR-0095,146 Lane Cove Road,Glen Waverley,VIC,3150,Australia,residential
+ADR-0096,99 Flinders Street,Box Hill,VIC,3128,Australia,residential
+ADR-0097,57 Church Street,Scarborough,WA,6019,Australia,residential
+ADR-0098,Unit 28 / 138 Park Road,Collingwood,VIC,3066,Australia,residential
+ADR-0099,109 Cleveland Street,Chatswood,NSW,2067,Australia,residential
+ADR-0100,46 St Kilda Road,Fremantle,WA,6160,Australia,residential
+ADR-0101,Unit 2 / 53 Elizabeth Street,Scarborough,WA,6019,Australia,residential
+ADR-0102,71 Queen Street,Wynnum,QLD,4178,Australia,residential
+ADR-0103,Unit 14 / 119 Acacia Close,Toowong,QLD,4066,Australia,residential
+ADR-0104,69 Parramatta Road,Chatswood,NSW,2067,Australia,residential
+ADR-0105,Unit 10 / 62 Toorak Road,Castle Hill,NSW,2154,Australia,residential
+ADR-0106,150 Glenferrie Road,Prahran,VIC,3181,Australia,residential
+ADR-0107,9 Eucalyptus Lane,Southbank,VIC,3006,Australia,residential
+ADR-0108,2 St Kilda Road,Richmond,VIC,3121,Australia,residential
+ADR-0109,Unit 17 / 39 Flinders Street,Neutral Bay,NSW,2089,Australia,residential
+ADR-0110,44 Victoria Street,Maroubra,NSW,2035,Australia,residential
+ADR-0111,20 Lane Cove Road,Subiaco,WA,6008,Australia,residential
+ADR-0112,Unit 3 / 26 Bell Street,South Yarra,VIC,3141,Australia,residential
+ADR-0113,Unit 13 / 19 Victoria Street,Coburg,VIC,3058,Australia,residential
+ADR-0114,48 Bell Street,Hurstville,NSW,2220,Australia,residential
+ADR-0115,Unit 16 / 36 Spring Street,Claremont,WA,6010,Australia,residential
+ADR-0116,Unit 11 / 167 Burke Road,Hornsby,NSW,2077,Australia,residential
+ADR-0117,187 Brunswick Street,South Brisbane,QLD,4101,Australia,residential
+ADR-0118,140 King Street,Surfers Paradise,QLD,4217,Australia,residential
+ADR-0119,Unit 9 / 111 Albert Street,Sunnybank,QLD,4109,Australia,residential
+ADR-0120,Unit 16 / 117 Sunrise Boulevard,Burwood,NSW,2134,Australia,residential
+ADR-0121,Unit 22 / 162 Main Street,Williamstown,VIC,3016,Australia,residential
+ADR-0122,164 Oxford Street,Southbank,VIC,3006,Australia,residential
+ADR-0123,Unit 21 / 99 Bell Street,Newtown,NSW,2042,Australia,residential
+ADR-0124,182 Eucalyptus Lane,Hornsby,NSW,2077,Australia,residential
+ADR-0125,131 Station Road,Marrickville,NSW,2204,Australia,residential
+ADR-0126,31 Rocky Point Road,Frenchs Forest,NSW,2086,Australia,residential
+ADR-0127,72 Burke Road,Prahran,VIC,3181,Australia,residential
+ADR-0128,161 Plenty Road,Joondalup,WA,6027,Australia,residential
+ADR-0129,Unit 18 / 83 Eucalyptus Lane,Joondalup,WA,6027,Australia,residential
+ADR-0130,71 Victoria Street,Brunswick,VIC,3056,Australia,residential
+ADR-0131,Unit 4 / 3 Epping Road,Richmond,VIC,3121,Australia,residential
+ADR-0132,Unit 17 / 165 Lane Cove Road,Toowong,QLD,4066,Australia,residential
+ADR-0133,Unit 20 / 166 Victoria Street,Ryde,NSW,2112,Australia,residential
+ADR-0134,4 Anzac Parade,Neutral Bay,NSW,2089,Australia,residential
+ADR-0135,107 Bell Street,Miranda,NSW,2228,Australia,residential
+ADR-0136,163 Forest Road,Newtown,NSW,2042,Australia,residential
+ADR-0137,133 Sunrise Boulevard,Neutral Bay,NSW,2089,Australia,residential
+ADR-0138,68 Pittwater Road,New Farm,QLD,4005,Australia,residential
+ADR-0139,Unit 30 / 99 Acacia Close,Mount Gravatt,QLD,4122,Australia,residential
+ADR-0140,96 Station Road,Collingwood,VIC,3066,Australia,residential
+ADR-0141,152 Nicholson Street,Footscray,VIC,3011,Australia,residential
+ADR-0142,1 Forest Road,Midland,WA,6056,Australia,residential
+ADR-0143,Unit 22 / 152 Malvern Road,Norwood,SA,5067,Australia,residential
+ADR-0144,116 Exhibition Street,Glenelg,SA,5045,Australia,residential
+ADR-0145,Unit 10 / 102 Hoddle Street,Mount Gravatt,QLD,4122,Australia,residential
+ADR-0146,Unit 27 / 150 Glenferrie Road,New Farm,QLD,4005,Australia,residential
+ADR-0147,44 Melaleuca Way,Chatswood,NSW,2067,Australia,residential
+ADR-0148,Unit 29 / 36 Plenty Road,Williamstown,VIC,3016,Australia,residential
+ADR-0149,150 Bourke Street,Miranda,NSW,2228,Australia,residential
+ADR-0150,Unit 2 / 45 Nicholson Street,Wynnum,QLD,4178,Australia,residential
+ADR-0151,96 Pittwater Road,New Farm,QLD,4005,Australia,residential
+ADR-0152,182 Toorak Road,Penrith,NSW,2750,Australia,residential
+ADR-0153,37 Crown Street,Toorak,VIC,3142,Australia,residential
+ADR-0154,106 Nicholson Street,Brunswick,VIC,3056,Australia,residential
+ADR-0155,Unit 4 / 6 Oxford Street,Glen Waverley,VIC,3150,Australia,residential
+ADR-0156,179 Toorak Road,Brighton,VIC,3186,Australia,residential
+ADR-0157,Unit 10 / 7 Collins Street,Fitzroy,VIC,3065,Australia,residential
+ADR-0158,95 Main Street,Rockingham,WA,6168,Australia,residential
+ADR-0159,77 Victoria Street,Robina,QLD,4226,Australia,residential
+ADR-0160,187 Acacia Close,Doncaster,VIC,3108,Australia,residential
+ADR-0161,89 Grevillea Place,Prahran,VIC,3181,Australia,residential
+ADR-0162,80 Spring Street,Wynnum,QLD,4178,Australia,residential
+ADR-0163,Unit 10 / 132 Sunrise Boulevard,Fortitude Valley,QLD,4006,Australia,residential
+ADR-0164,Unit 12 / 93 Pittwater Road,South Yarra,VIC,3141,Australia,residential
+ADR-0165,147 Rocky Point Road,Penrith,NSW,2750,Australia,residential
+ADR-0166,Unit 15 / 90 Brunswick Street,Frenchs Forest,NSW,2086,Australia,residential
+ADR-0167,71 Lonsdale Street,Frenchs Forest,NSW,2086,Australia,residential
+ADR-0168,Unit 16 / 36 Warringah Road,Coogee,NSW,2034,Australia,residential
+ADR-0169,121 Church Street,Fitzroy,VIC,3065,Australia,residential
+ADR-0170,Unit 22 / 50 Hoddle Street,Toorak,VIC,3142,Australia,residential
+ADR-0171,Unit 25 / 116 Spring Street,South Brisbane,QLD,4101,Australia,residential
+ADR-0172,58 Epping Road,Scarborough,WA,6019,Australia,residential
+ADR-0173,59 Bourke Street,Parramatta,NSW,2150,Australia,residential
+ADR-0174,Unit 23 / 32 Toorak Road,Castle Hill,NSW,2154,Australia,residential
+ADR-0175,134 Chapel Street,Brookvale,NSW,2100,Australia,residential
+ADR-0176,147 Mowbray Road,Paddington,QLD,4064,Australia,residential
+ADR-0177,92 Wattle Street,Doncaster,VIC,3108,Australia,residential
+ADR-0178,Unit 13 / 174 Sydney Road,Collingwood,VIC,3066,Australia,residential
+ADR-0179,17 Lonsdale Street,Fortitude Valley,QLD,4006,Australia,residential
+ADR-0180,Unit 28 / 165 Melaleuca Way,Richmond,VIC,3121,Australia,residential
+ADR-0181,Unit 13 / 191 Pacific Highway,Toorak,VIC,3142,Australia,residential
+ADR-0182,169 Anzac Parade,Maroubra,NSW,2035,Australia,residential
+ADR-0183,56 Brunswick Street,Holland Park,QLD,4121,Australia,residential
+ADR-0184,Unit 27 / 178 Glenferrie Road,Indooroopilly,QLD,4068,Australia,commercial
+ADR-0185,76 Sydney Road,Doncaster,VIC,3108,Australia,residential
+ADR-0186,139 Epping Road,Southbank,VIC,3006,Australia,residential
+ADR-0187,Unit 22 / 7 Parramatta Road,Paddington,QLD,4064,Australia,residential
+ADR-0188,131 Sunrise Boulevard,Chermside,QLD,4032,Australia,residential
+ADR-0189,200 Bottlebrush Court,Adelaide,SA,5000,Australia,residential
+ADR-0190,Unit 23 / 66 High Street,Newtown,NSW,2042,Australia,residential
+ADR-0191,90 Bourke Street,Hurstville,NSW,2220,Australia,residential
+ADR-0192,Unit 24 / 30 Parramatta Road,Castle Hill,NSW,2154,Australia,residential
+ADR-0193,25 Bridge Road,St Kilda,VIC,3182,Australia,residential
+ADR-0194,14 Main Street,New Farm,QLD,4005,Australia,residential
+ADR-0195,176 Exhibition Street,Wynnum,QLD,4178,Australia,residential
+ADR-0196,11 High Street,Paddington,QLD,4064,Australia,residential
+ADR-0197,Unit 22 / 166 Toorak Road,Broadbeach,QLD,4218,Australia,residential
+ADR-0198,82 Nicholson Street,Liverpool,NSW,2170,Australia,residential
+ADR-0199,Unit 18 / 92 Rocky Point Road,Cronulla,NSW,2230,Australia,residential
+ADR-0200,Unit 19 / 130 Military Road,Parramatta,NSW,2150,Australia,residential
+ADR-0201,62 Jacaranda Avenue,Coogee,NSW,2034,Australia,residential
+ADR-0202,Unit 9 / 195 Nicholson Street,Blacktown,NSW,2148,Australia,residential
+ADR-0203,65 Parramatta Road,Southbank,VIC,3006,Australia,residential
+ADR-0204,Unit 22 / 85 Warringah Road,Brighton,VIC,3186,Australia,residential
+ADR-0205,Unit 9 / 147 Park Road,Chatswood,NSW,2067,Australia,residential
+ADR-0206,43 Warringah Road,Ryde,NSW,2112,Australia,residential
+ADR-0207,122 Wattle Street,Penrith,NSW,2750,Australia,residential
+ADR-0208,35 Lonsdale Street,Hornsby,NSW,2077,Australia,residential
+ADR-0209,138 Bell Street,Nundah,QLD,4012,Australia,residential
+ADR-0210,55 Hoddle Street,Fitzroy,VIC,3065,Australia,residential
+ADR-0211,158 Pacific Highway,Williamstown,VIC,3016,Australia,residential
+ADR-0212,131 Punt Road,Northcote,VIC,3070,Australia,residential
+ADR-0213,71 Bourke Street,Mount Gravatt,QLD,4122,Australia,residential
+ADR-0214,175 Brunswick Street,Malvern,VIC,3144,Australia,residential
+ADR-0215,88 Elizabeth Street,Essendon,VIC,3040,Australia,commercial
+ADR-0216,Unit 4 / 159 Cleveland Street,Camberwell,VIC,3124,Australia,residential
+ADR-0217,109 Smith Street,Armadale,WA,6112,Australia,residential
+ADR-0218,157 Crown Street,Toorak,VIC,3142,Australia,residential
+ADR-0219,35 Wattle Street,Mandurah,WA,6210,Australia,residential
+ADR-0220,Unit 28 / 6 Plenty Road,Footscray,VIC,3011,Australia,residential
+ADR-0221,Unit 11 / 21 Bridge Road,St Kilda,VIC,3182,Australia,residential
+ADR-0222,Unit 6 / 180 Condamine Street,Essendon,VIC,3040,Australia,residential
+ADR-0223,40 Victoria Street,Surry Hills,NSW,2010,Australia,residential
+ADR-0224,135 Military Road,Rockingham,WA,6168,Australia,residential
+ADR-0225,Unit 1 / 75 Burke Road,Rockingham,WA,6168,Australia,residential
+ADR-0226,Unit 25 / 109 Military Road,Hurstville,NSW,2220,Australia,residential
+ADR-0227,6 Main Street,Marrickville,NSW,2204,Australia,residential
+ADR-0228,80 Sunrise Boulevard,Hornsby,NSW,2077,Australia,commercial
+ADR-0229,Unit 25 / 98 Eucalyptus Lane,Brookvale,NSW,2100,Australia,residential
+ADR-0230,Unit 12 / 124 Military Road,Joondalup,WA,6027,Australia,residential
+ADR-0231,24 Lane Cove Road,Robina,QLD,4226,Australia,residential
+ADR-0232,181 Sydney Road,Mosman,NSW,2088,Australia,residential
+ADR-0233,5 Camberwell Road,Indooroopilly,QLD,4068,Australia,residential
+ADR-0234,Unit 21 / 50 Albert Street,Toorak,VIC,3142,Australia,residential
+ADR-0235,Unit 3 / 69 Punt Road,Northcote,VIC,3070,Australia,residential
+ADR-0236,Unit 13 / 43 Sunrise Boulevard,Paddington,QLD,4064,Australia,residential
+ADR-0237,102 High Street,Cronulla,NSW,2230,Australia,residential
+ADR-0238,68 Anzac Parade,Carlton,VIC,3053,Australia,residential
+ADR-0239,200 Queen Street,St Kilda,VIC,3182,Australia,residential
+ADR-0240,193 Burke Road,Malvern,VIC,3144,Australia,residential
+ADR-0241,144 Camberwell Road,Carindale,QLD,4152,Australia,residential
+ADR-0242,160 Park Road,Broadbeach,QLD,4218,Australia,residential
+ADR-0243,88 Epping Road,Subiaco,WA,6008,Australia,residential
+ADR-0244,52 Sunrise Boulevard,Glen Waverley,VIC,3150,Australia,residential
+ADR-0245,51 Hoddle Street,Brunswick,VIC,3056,Australia,residential
+ADR-0246,Unit 17 / 161 Exhibition Street,Epping,NSW,2121,Australia,residential
+ADR-0247,Unit 10 / 62 Malvern Road,Hornsby,NSW,2077,Australia,residential
+ADR-0248,111 Acacia Close,Carlton,VIC,3053,Australia,residential
+ADR-0249,Unit 20 / 34 Main Street,Fitzroy,VIC,3065,Australia,residential
+ADR-0250,58 King Street,Carindale,QLD,4152,Australia,residential
+ADR-0251,134 Albert Street,Fortitude Valley,QLD,4006,Australia,residential
+ADR-0252,Unit 25 / 185 Hoddle Street,St Kilda,VIC,3182,Australia,residential
+ADR-0253,181 Sydney Road,Fitzroy,VIC,3065,Australia,residential
+ADR-0254,38 Main Street,Claremont,WA,6010,Australia,residential
+ADR-0255,Unit 20 / 105 Sydney Road,Broadbeach,QLD,4218,Australia,residential
+ADR-0256,173 Russell Street,Claremont,WA,6010,Australia,residential
+ADR-0257,135 Collins Street,Hornsby,NSW,2077,Australia,residential
+ADR-0258,47 Grevillea Place,Toorak,VIC,3142,Australia,residential
+ADR-0259,73 Lonsdale Street,Coburg,VIC,3058,Australia,residential
+ADR-0260,Unit 11 / 8 Eucalyptus Lane,Northcote,VIC,3070,Australia,commercial
+ADR-0261,15 Eucalyptus Lane,Essendon,VIC,3040,Australia,residential
+ADR-0262,9 Spring Street,Coburg,VIC,3058,Australia,residential
+ADR-0263,Unit 17 / 197 Bottlebrush Court,Manly,NSW,2095,Australia,residential
+ADR-0264,Unit 10 / 54 Oxford Street,Randwick,NSW,2031,Australia,residential
+ADR-0265,Unit 20 / 63 Bridge Road,Newtown,NSW,2042,Australia,residential
+ADR-0266,Unit 27 / 158 Cleveland Street,Broadbeach,QLD,4218,Australia,residential
+ADR-0267,84 Brunswick Street,Dee Why,NSW,2099,Australia,residential
+ADR-0268,Unit 7 / 124 Parramatta Road,Indooroopilly,QLD,4068,Australia,residential
+ADR-0269,104 Elizabeth Street,Wynnum,QLD,4178,Australia,residential
+ADR-0270,170 Park Road,Carlton,VIC,3053,Australia,residential
+ADR-0271,95 Wattle Street,Norwood,SA,5067,Australia,residential
+ADR-0272,Unit 28 / 107 Park Road,Brookvale,NSW,2100,Australia,residential
+ADR-0273,Unit 20 / 91 Bourke Street,Rockingham,WA,6168,Australia,residential
+ADR-0274,133 Victoria Street,Mandurah,WA,6210,Australia,residential
+ADR-0275,Unit 15 / 137 Rocky Point Road,Sunnybank,QLD,4109,Australia,residential
+ADR-0276,Unit 16 / 189 Camberwell Road,Dee Why,NSW,2099,Australia,residential
+ADR-0277,88 Victoria Street,Fortitude Valley,QLD,4006,Australia,residential
+ADR-0278,175 Pittwater Road,Castle Hill,NSW,2154,Australia,residential
+ADR-0279,70 Spring Street,Burwood,NSW,2134,Australia,residential
+ADR-0280,141 High Street,Burwood,NSW,2134,Australia,residential
+ADR-0281,31 Victoria Street,Maroubra,NSW,2035,Australia,residential
+ADR-0282,197 Bell Street,Nundah,QLD,4012,Australia,residential
+ADR-0283,Unit 21 / 197 Bell Street,Armadale,WA,6112,Australia,residential
+ADR-0284,198 Nicholson Street,Maroubra,NSW,2035,Australia,residential
+ADR-0285,Unit 7 / 195 Rocky Point Road,Malvern,VIC,3144,Australia,residential
+ADR-0286,Unit 18 / 139 Pacific Highway,Dee Why,NSW,2099,Australia,residential
+ADR-0287,5 Smith Street,Preston,VIC,3072,Australia,residential
+ADR-0288,Unit 22 / 174 Canterbury Road,Essendon,VIC,3040,Australia,residential
+ADR-0289,Unit 6 / 125 Victoria Street,Subiaco,WA,6008,Australia,residential
+ADR-0290,108 High Street,Epping,NSW,2121,Australia,residential
+ADR-0291,Unit 20 / 54 Bell Street,Unley,SA,5061,Australia,residential
+ADR-0292,52 Parramatta Road,Rockingham,WA,6168,Australia,residential
+ADR-0293,120 Brunswick Street,Bondi,NSW,2026,Australia,residential
+ADR-0294,Unit 30 / 112 Glenferrie Road,Doncaster,VIC,3108,Australia,residential
+ADR-0295,Unit 22 / 166 Victoria Street,Camberwell,VIC,3124,Australia,residential
+ADR-0296,76 Bell Street,South Yarra,VIC,3141,Australia,commercial
+ADR-0297,Unit 12 / 120 Camberwell Road,Mount Gravatt,QLD,4122,Australia,residential
+ADR-0298,96 Cleveland Street,Hurstville,NSW,2220,Australia,residential
+ADR-0299,Unit 23 / 28 Bridge Road,Hurstville,NSW,2220,Australia,residential
+ADR-0300,114 Condamine Street,Hornsby,NSW,2077,Australia,residential
+ADR-0301,Unit 6 / 38 Cleveland Street,Subiaco,WA,6008,Australia,residential
+ADR-0302,139 Bridge Road,Cronulla,NSW,2230,Australia,residential
+ADR-0303,Unit 22 / 123 Wattle Street,North Adelaide,SA,5006,Australia,residential
+ADR-0304,126 Oxford Street,Liverpool,NSW,2170,Australia,residential
+ADR-0305,187 Wattle Street,Dee Why,NSW,2099,Australia,residential
+ADR-0306,105 Military Road,Richmond,VIC,3121,Australia,residential
+ADR-0307,168 Mowbray Road,Bondi,NSW,2026,Australia,residential
+ADR-0308,Unit 11 / 42 Glenferrie Road,Box Hill,VIC,3128,Australia,residential
+ADR-0309,176 Epping Road,Ryde,NSW,2112,Australia,residential
+ADR-0310,137 Pittwater Road,Frenchs Forest,NSW,2086,Australia,residential
+ADR-0311,114 Grevillea Place,Toowong,QLD,4066,Australia,residential
+ADR-0312,Unit 4 / 194 Bell Street,Robina,QLD,4226,Australia,residential
+ADR-0313,52 Main Street,Newtown,NSW,2042,Australia,residential
+ADR-0314,130 Jacaranda Avenue,Hawthorn,VIC,3122,Australia,residential
+ADR-0315,Unit 16 / 185 King Street,Prahran,VIC,3181,Australia,residential
+ADR-0316,102 Sydney Road,Paddington,QLD,4064,Australia,residential
+ADR-0317,165 Canterbury Road,Miranda,NSW,2228,Australia,residential
+ADR-0318,98 Burke Road,Penrith,NSW,2750,Australia,residential
+ADR-0319,130 Lonsdale Street,Robina,QLD,4226,Australia,residential
+ADR-0320,Unit 13 / 111 Church Street,Robina,QLD,4226,Australia,residential
+ADR-0321,68 Nicholson Street,Holland Park,QLD,4121,Australia,residential
+ADR-0322,Unit 3 / 61 Pacific Highway,Camberwell,VIC,3124,Australia,residential
+ADR-0323,147 Albert Street,Doncaster,VIC,3108,Australia,residential
+ADR-0324,Unit 2 / 138 Collins Street,New Farm,QLD,4005,Australia,residential
+ADR-0325,Unit 17 / 107 Canterbury Road,Liverpool,NSW,2170,Australia,residential
+ADR-0326,Unit 5 / 94 Brunswick Street,Hawthorn,VIC,3122,Australia,residential
+ADR-0327,63 Banksia Drive,Richmond,VIC,3121,Australia,residential
+ADR-0328,11 Warringah Road,Randwick,NSW,2031,Australia,residential
+ADR-0329,Unit 20 / 128 Grevillea Place,Ryde,NSW,2112,Australia,residential
+ADR-0330,55 Spring Street,Indooroopilly,QLD,4068,Australia,residential
+ADR-0331,170 Banksia Drive,Essendon,VIC,3040,Australia,residential
+ADR-0332,42 Acacia Close,Hawthorn,VIC,3122,Australia,residential
+ADR-0333,178 George Street,Broadbeach,QLD,4218,Australia,residential
+ADR-0334,Unit 12 / 73 Chapel Street,Sunnybank,QLD,4109,Australia,residential
+ADR-0335,135 Bell Street,Maroubra,NSW,2035,Australia,residential
+ADR-0336,68 Flinders Street,Bankstown,NSW,2200,Australia,residential
+ADR-0337,156 Mowbray Road,Epping,NSW,2121,Australia,residential
+ADR-0338,Unit 4 / 136 Bell Street,Coburg,VIC,3058,Australia,residential
+ADR-0339,Unit 16 / 14 Bourke Street,Toowong,QLD,4066,Australia,residential
+ADR-0340,2 Punt Road,Newtown,NSW,2042,Australia,residential
+ADR-0341,Unit 2 / 169 High Street,Surry Hills,NSW,2010,Australia,residential
+ADR-0342,54 Bridge Road,Frenchs Forest,NSW,2086,Australia,residential
+ADR-0343,Unit 15 / 95 Hoddle Street,Paddington,QLD,4064,Australia,residential
+ADR-0344,135 Military Road,Robina,QLD,4226,Australia,residential
+ADR-0345,146 Queen Street,Bankstown,NSW,2200,Australia,residential
+ADR-0346,Unit 24 / 181 Exhibition Street,Hornsby,NSW,2077,Australia,residential
+ADR-0347,Unit 13 / 112 St Kilda Road,Fremantle,WA,6160,Australia,residential
+ADR-0348,5 Epping Road,Paddington,QLD,4064,Australia,residential
+ADR-0349,52 Russell Street,Scarborough,WA,6019,Australia,residential
+ADR-0350,183 Queen Street,Scarborough,WA,6019,Australia,residential
+ADR-0351,42 Russell Street,Richmond,VIC,3121,Australia,residential
+ADR-0352,Unit 16 / 177 Condamine Street,Wynnum,QLD,4178,Australia,residential
+ADR-0353,Unit 18 / 30 Camberwell Road,Hornsby,NSW,2077,Australia,residential
+ADR-0354,Unit 21 / 11 Hoddle Street,Prahran,VIC,3181,Australia,residential
+ADR-0355,Unit 9 / 74 Hoddle Street,Burwood,NSW,2134,Australia,residential
+ADR-0356,Unit 25 / 22 Crown Street,St Kilda,VIC,3182,Australia,residential
+ADR-0357,136 Camberwell Road,Nundah,QLD,4012,Australia,residential
+ADR-0358,24 Hoddle Street,Liverpool,NSW,2170,Australia,residential
+ADR-0359,87 Flinders Street,Cronulla,NSW,2230,Australia,residential
+ADR-0360,183 Bell Street,Manly,NSW,2095,Australia,residential
+ADR-0361,68 Glenferrie Road,Williamstown,VIC,3016,Australia,residential
+ADR-0362,31 Anzac Parade,Bondi,NSW,2026,Australia,residential
+ADR-0363,12 Plenty Road,Hurstville,NSW,2220,Australia,residential
+ADR-0364,102 Crown Street,Blacktown,NSW,2148,Australia,residential
+ADR-0365,Unit 20 / 144 Victoria Street,Randwick,NSW,2031,Australia,residential
+ADR-0366,151 King Street,Holland Park,QLD,4121,Australia,residential
+ADR-0367,Unit 23 / 158 Oxford Street,Fortitude Valley,QLD,4006,Australia,residential
+ADR-0368,131 Forest Road,Mosman,NSW,2088,Australia,residential
+ADR-0369,22 Jacaranda Avenue,Cronulla,NSW,2230,Australia,residential
+ADR-0370,162 Collins Street,Epping,NSW,2121,Australia,residential
+ADR-0371,Unit 22 / 182 Sydney Road,Miranda,NSW,2228,Australia,residential
+ADR-0372,106 Toorak Road,Claremont,WA,6010,Australia,residential
+ADR-0373,Unit 9 / 57 Condamine Street,South Brisbane,QLD,4101,Australia,residential
+ADR-0374,Unit 24 / 44 Toorak Road,Robina,QLD,4226,Australia,residential
+ADR-0375,178 Lane Cove Road,South Brisbane,QLD,4101,Australia,residential
+ADR-0376,72 Acacia Close,Fortitude Valley,QLD,4006,Australia,residential
+ADR-0377,Unit 21 / 43 Crown Street,Hawthorn,VIC,3122,Australia,residential
+ADR-0378,32 Victoria Street,Newtown,NSW,2042,Australia,residential
+ADR-0379,99 Brunswick Street,Cronulla,NSW,2230,Australia,residential
+ADR-0380,Unit 2 / 48 Flinders Street,Mandurah,WA,6210,Australia,residential
+ADR-0381,Unit 12 / 144 Jacaranda Avenue,Armadale,WA,6112,Australia,residential
+ADR-0382,Unit 4 / 77 Plenty Road,Northcote,VIC,3070,Australia,residential
+ADR-0383,Unit 15 / 143 Station Road,Richmond,VIC,3121,Australia,residential
+ADR-0384,Unit 9 / 51 George Street,Penrith,NSW,2750,Australia,residential
+ADR-0385,49 Chapel Street,Glenelg,SA,5045,Australia,residential
+ADR-0386,187 Victoria Street,Glenelg,SA,5045,Australia,residential
+ADR-0387,183 Anzac Parade,Midland,WA,6056,Australia,residential
+ADR-0388,Unit 17 / 193 Victoria Street,Claremont,WA,6010,Australia,residential
+ADR-0389,22 Russell Street,Midland,WA,6056,Australia,residential
+ADR-0390,78 Condamine Street,Ryde,NSW,2112,Australia,residential
+ADR-0391,192 Collins Street,Kogarah,NSW,2217,Australia,residential
+ADR-0392,189 High Street,Bankstown,NSW,2200,Australia,residential
+ADR-0393,36 Park Road,Fortitude Valley,QLD,4006,Australia,residential
+ADR-0394,51 Elizabeth Street,Penrith,NSW,2750,Australia,residential
+ADR-0395,53 Church Street,Frenchs Forest,NSW,2086,Australia,residential
+ADR-0396,115 Elizabeth Street,Carlton,VIC,3053,Australia,residential
+ADR-0397,188 Bell Street,Surry Hills,NSW,2010,Australia,residential
+ADR-0398,Unit 17 / 116 Bridge Road,Surfers Paradise,QLD,4217,Australia,residential
+ADR-0399,22 Toorak Road,New Farm,QLD,4005,Australia,residential
+ADR-0400,20 Mowbray Road,Penrith,NSW,2750,Australia,residential
+ADR-0401,Unit 1 / 52 Victoria Street,Blacktown,NSW,2148,Australia,residential
+ADR-0402,Unit 11 / 60 Collins Street,Bondi,NSW,2026,Australia,residential
+ADR-0403,138 Sunrise Boulevard,Maroubra,NSW,2035,Australia,residential
+ADR-0404,195 Grevillea Place,North Adelaide,SA,5006,Australia,residential
+ADR-0405,Unit 12 / 159 Victoria Street,Glenelg,SA,5045,Australia,residential
+ADR-0406,165 Sunrise Boulevard,Burwood,NSW,2134,Australia,residential
+ADR-0407,126 Elizabeth Street,Hurstville,NSW,2220,Australia,residential
+ADR-0408,148 Sydney Road,Bankstown,NSW,2200,Australia,residential
+ADR-0409,6 Forest Road,Toorak,VIC,3142,Australia,residential
+ADR-0410,129 Warringah Road,Richmond,VIC,3121,Australia,residential
+ADR-0411,Unit 14 / 145 Bridge Road,Williamstown,VIC,3016,Australia,residential
+ADR-0412,Unit 19 / 38 Lonsdale Street,Reservoir,VIC,3073,Australia,residential
+ADR-0413,106 Forest Road,Essendon,VIC,3040,Australia,residential
+ADR-0414,Unit 14 / 107 Pacific Highway,Southbank,VIC,3006,Australia,residential
+ADR-0415,192 Main Street,Chatswood,NSW,2067,Australia,residential
+ADR-0416,150 Sunrise Boulevard,Reservoir,VIC,3073,Australia,residential
+ADR-0417,Unit 15 / 85 Banksia Drive,Epping,NSW,2121,Australia,residential
+ADR-0418,Unit 26 / 93 Bottlebrush Court,Preston,VIC,3072,Australia,residential
+ADR-0419,23 Exhibition Street,Mosman,NSW,2088,Australia,residential
+ADR-0420,185 Lonsdale Street,Blacktown,NSW,2148,Australia,residential
+ADR-0421,184 Condamine Street,Holland Park,QLD,4121,Australia,residential
+ADR-0422,Unit 12 / 100 Bell Street,Frenchs Forest,NSW,2086,Australia,residential
+ADR-0423,Unit 28 / 129 Epping Road,Glen Waverley,VIC,3150,Australia,residential
+ADR-0424,Unit 22 / 141 Canterbury Road,Subiaco,WA,6008,Australia,residential
+ADR-0425,Unit 5 / 179 Smith Street,Mandurah,WA,6210,Australia,residential
+ADR-0426,Unit 14 / 132 Pacific Highway,Fremantle,WA,6160,Australia,residential
+ADR-0427,22 Station Road,Paddington,QLD,4064,Australia,residential
+ADR-0428,101 Toorak Road,South Brisbane,QLD,4101,Australia,residential
+ADR-0429,Unit 18 / 154 Epping Road,Brunswick,VIC,3056,Australia,residential
+ADR-0430,133 Wattle Street,South Yarra,VIC,3141,Australia,residential
+ADR-0431,Unit 20 / 92 Spring Street,Collingwood,VIC,3066,Australia,residential
+ADR-0432,53 Elizabeth Street,Marrickville,NSW,2204,Australia,residential
+ADR-0433,164 Victoria Street,Burwood,NSW,2134,Australia,residential
+ADR-0434,44 Oxford Street,Chatswood,NSW,2067,Australia,residential
+ADR-0435,118 Main Street,Coburg,VIC,3058,Australia,residential
+ADR-0436,74 Toorak Road,Kogarah,NSW,2217,Australia,residential
+ADR-0437,Unit 15 / 176 Burke Road,Armadale,WA,6112,Australia,residential
+ADR-0438,Unit 24 / 76 Lonsdale Street,Robina,QLD,4226,Australia,residential
+ADR-0439,Unit 17 / 126 Chapel Street,Brighton,VIC,3186,Australia,residential
+ADR-0440,92 Grevillea Place,Richmond,VIC,3121,Australia,residential
+ADR-0441,108 Nicholson Street,Paddington,QLD,4064,Australia,residential
+ADR-0442,Unit 16 / 112 Smith Street,South Brisbane,QLD,4101,Australia,commercial
+ADR-0443,122 Pittwater Road,Liverpool,NSW,2170,Australia,residential
+ADR-0444,Unit 14 / 163 Bourke Street,Coburg,VIC,3058,Australia,residential
+ADR-0445,72 Acacia Close,Toorak,VIC,3142,Australia,residential
+ADR-0446,93 Condamine Street,Kogarah,NSW,2217,Australia,residential
+ADR-0447,186 Smith Street,Wynnum,QLD,4178,Australia,residential
+ADR-0448,75 King Street,Toowong,QLD,4066,Australia,residential
+ADR-0449,200 Parramatta Road,Prahran,VIC,3181,Australia,residential
+ADR-0450,Unit 29 / 11 Military Road,Wynnum,QLD,4178,Australia,residential
+ADR-0451,15 Military Road,Sunnybank,QLD,4109,Australia,residential
+ADR-0452,66 Bottlebrush Court,North Adelaide,SA,5006,Australia,residential
+ADR-0453,146 Nicholson Street,Glenelg,SA,5045,Australia,residential
+ADR-0454,117 Acacia Close,Chermside,QLD,4032,Australia,residential
+ADR-0455,139 Condamine Street,Paddington,QLD,4064,Australia,residential
+ADR-0456,Unit 18 / 140 Epping Road,Subiaco,WA,6008,Australia,residential
+ADR-0457,Unit 10 / 44 Station Road,Mandurah,WA,6210,Australia,residential
+ADR-0458,Unit 22 / 174 Bell Street,Claremont,WA,6010,Australia,residential
+ADR-0459,Unit 5 / 38 Victoria Street,Nundah,QLD,4012,Australia,residential
+ADR-0460,148 Rocky Point Road,Southbank,VIC,3006,Australia,residential
+ADR-0461,Unit 24 / 54 Waratah Crescent,Scarborough,WA,6019,Australia,residential
+ADR-0462,196 Main Street,Claremont,WA,6010,Australia,residential
+ADR-0463,16 Grevillea Place,Toowong,QLD,4066,Australia,residential
+ADR-0464,15 Bourke Street,Surry Hills,NSW,2010,Australia,residential
+ADR-0465,Unit 7 / 42 St Kilda Road,Bankstown,NSW,2200,Australia,residential
+ADR-0466,50 Oxford Street,Neutral Bay,NSW,2089,Australia,residential
+ADR-0467,151 Bottlebrush Court,Mandurah,WA,6210,Australia,residential
+ADR-0468,156 Elizabeth Street,Surry Hills,NSW,2010,Australia,residential
+ADR-0469,122 Lonsdale Street,Ryde,NSW,2112,Australia,residential
+ADR-0470,160 Oxford Street,Southbank,VIC,3006,Australia,residential
+ADR-0471,100 Bottlebrush Court,Camberwell,VIC,3124,Australia,residential
+ADR-0472,Unit 20 / 17 Oxford Street,Doncaster,VIC,3108,Australia,residential
+ADR-0473,6 Forest Road,Hawthorn,VIC,3122,Australia,residential
+ADR-0474,14 Victoria Street,Penrith,NSW,2750,Australia,residential
+ADR-0475,4 Park Road,Midland,WA,6056,Australia,residential
+ADR-0476,90 Collins Street,Scarborough,WA,6019,Australia,residential
+ADR-0477,106 Plenty Road,Mandurah,WA,6210,Australia,commercial
+ADR-0478,177 Lane Cove Road,Reservoir,VIC,3073,Australia,residential
+ADR-0479,30 Chapel Street,Holland Park,QLD,4121,Australia,residential
+ADR-0480,133 Waratah Crescent,Footscray,VIC,3011,Australia,residential
+ADR-0481,Unit 26 / 112 Bourke Street,Brunswick,VIC,3056,Australia,residential
+ADR-0482,24 George Street,New Farm,QLD,4005,Australia,residential
+ADR-0483,198 Lonsdale Street,Holland Park,QLD,4121,Australia,residential
+ADR-0484,Unit 28 / 47 Victoria Street,Joondalup,WA,6027,Australia,residential
+ADR-0485,89 Smith Street,Burwood,NSW,2134,Australia,residential
+ADR-0486,Unit 18 / 52 Victoria Street,Mosman,NSW,2088,Australia,residential
+ADR-0487,115 Bell Street,Hornsby,NSW,2077,Australia,residential
+ADR-0488,65 Glenferrie Road,Neutral Bay,NSW,2089,Australia,residential
+ADR-0489,Unit 3 / 83 Wattle Street,Newtown,NSW,2042,Australia,residential
+ADR-0490,31 Station Road,Surfers Paradise,QLD,4217,Australia,residential
+ADR-0491,193 Cleveland Street,Sunnybank,QLD,4109,Australia,commercial
+ADR-0492,58 Queen Street,Richmond,VIC,3121,Australia,residential
+ADR-0493,177 Camberwell Road,Doncaster,VIC,3108,Australia,residential
+ADR-0494,136 Flinders Street,Neutral Bay,NSW,2089,Australia,residential
+ADR-0495,Unit 19 / 27 Crown Street,Toorak,VIC,3142,Australia,residential
+ADR-0496,79 Bottlebrush Court,Reservoir,VIC,3073,Australia,residential
+ADR-0497,86 Queen Street,Southbank,VIC,3006,Australia,residential
+ADR-0498,Unit 18 / 148 Spring Street,South Yarra,VIC,3141,Australia,residential
+ADR-0499,Unit 20 / 89 Military Road,Hawthorn,VIC,3122,Australia,residential
+ADR-0500,44 Lane Cove Road,Norwood,SA,5067,Australia,residential
+ADR-0501,Unit 16 / 90 St Kilda Road,Kogarah,NSW,2217,Australia,residential
+ADR-0502,57 Mowbray Road,Frenchs Forest,NSW,2086,Australia,residential
+ADR-0503,161 Lane Cove Road,Box Hill,VIC,3128,Australia,residential
+ADR-0504,176 Park Road,Robina,QLD,4226,Australia,residential
+ADR-0505,Unit 28 / 90 Grevillea Place,Carlton,VIC,3053,Australia,residential
+ADR-0506,145 Bell Street,Indooroopilly,QLD,4068,Australia,residential
+ADR-0507,176 Pittwater Road,Armadale,WA,6112,Australia,residential
+ADR-0508,172 High Street,Williamstown,VIC,3016,Australia,residential
+ADR-0509,37 Toorak Road,Neutral Bay,NSW,2089,Australia,residential
+ADR-0510,122 George Street,Bondi,NSW,2026,Australia,residential
+ADR-0511,Unit 5 / 169 Camberwell Road,Frenchs Forest,NSW,2086,Australia,residential
+ADR-0512,8 Russell Street,Toowong,QLD,4066,Australia,residential
+ADR-0513,Unit 5 / 132 Elizabeth Street,Castle Hill,NSW,2154,Australia,residential
+ADR-0514,Unit 20 / 151 Glenferrie Road,Sunnybank,QLD,4109,Australia,residential
+ADR-0515,10 Jacaranda Avenue,Fremantle,WA,6160,Australia,residential
+ADR-0516,136 Banksia Drive,Rockingham,WA,6168,Australia,residential
+ADR-0517,48 Lane Cove Road,Burwood,NSW,2134,Australia,residential
+ADR-0518,60 Queen Street,Mandurah,WA,6210,Australia,residential
+ADR-0519,Unit 25 / 67 Chapel Street,Surfers Paradise,QLD,4217,Australia,residential
+ADR-0520,90 Bell Street,Randwick,NSW,2031,Australia,residential
+ADR-0521,50 Crown Street,Footscray,VIC,3011,Australia,residential
+ADR-0522,Unit 10 / 168 Grevillea Place,Northcote,VIC,3070,Australia,residential
+ADR-0523,78 Anzac Parade,Maroubra,NSW,2035,Australia,residential
+ADR-0524,96 Warringah Road,Bondi,NSW,2026,Australia,residential
+ADR-0525,Unit 20 / 22 Queen Street,Unley,SA,5061,Australia,residential
+ADR-0526,Unit 24 / 56 Forest Road,Adelaide,SA,5000,Australia,residential
+ADR-0527,109 Malvern Road,Broadbeach,QLD,4218,Australia,residential
+ADR-0528,65 Sunrise Boulevard,Coogee,NSW,2034,Australia,residential
+ADR-0529,Unit 3 / 157 Toorak Road,Box Hill,VIC,3128,Australia,residential
+ADR-0530,Unit 23 / 142 Pittwater Road,South Yarra,VIC,3141,Australia,residential
+ADR-0531,Unit 7 / 29 Hoddle Street,Malvern,VIC,3144,Australia,residential
+ADR-0532,Unit 19 / 75 Melaleuca Way,South Yarra,VIC,3141,Australia,residential
+ADR-0533,Unit 16 / 136 Banksia Drive,Paddington,QLD,4064,Australia,residential
+ADR-0534,93 Pacific Highway,Hurstville,NSW,2220,Australia,residential
+ADR-0535,Unit 9 / 4 Bridge Road,Malvern,VIC,3144,Australia,residential
+ADR-0536,Unit 24 / 156 Camberwell Road,Collingwood,VIC,3066,Australia,residential
+ADR-0537,46 Hoddle Street,Malvern,VIC,3144,Australia,residential
+ADR-0538,Unit 5 / 82 Forest Road,Williamstown,VIC,3016,Australia,residential
+ADR-0539,25 Collins Street,Manly,NSW,2095,Australia,residential
+ADR-0540,117 Russell Street,Brookvale,NSW,2100,Australia,residential
+ADR-0541,Unit 6 / 57 Warringah Road,Kogarah,NSW,2217,Australia,residential
+ADR-0542,36 Glenferrie Road,Blacktown,NSW,2148,Australia,residential
+ADR-0543,Unit 13 / 108 Epping Road,Chatswood,NSW,2067,Australia,residential
+ADR-0544,162 Canterbury Road,Prospect,SA,5082,Australia,residential
+ADR-0545,Unit 17 / 61 George Street,Coogee,NSW,2034,Australia,residential
+ADR-0546,53 Rocky Point Road,Prahran,VIC,3181,Australia,residential
+ADR-0547,96 Crown Street,Brunswick,VIC,3056,Australia,residential
+ADR-0548,20 Elizabeth Street,St Kilda,VIC,3182,Australia,residential
+ADR-0549,109 Hoddle Street,Doncaster,VIC,3108,Australia,residential
+ADR-0550,58 Malvern Road,Malvern,VIC,3144,Australia,residential
+ADR-0551,186 Eucalyptus Lane,Armadale,WA,6112,Australia,residential
+ADR-0552,83 Brunswick Street,Scarborough,WA,6019,Australia,residential
+ADR-0553,30 King Street,Cronulla,NSW,2230,Australia,residential
+ADR-0554,183 Anzac Parade,Northcote,VIC,3070,Australia,residential
+ADR-0555,18 Cleveland Street,Indooroopilly,QLD,4068,Australia,residential
+ADR-0556,134 Glenferrie Road,Toowong,QLD,4066,Australia,residential
+ADR-0557,Unit 26 / 60 Collins Street,Norwood,SA,5067,Australia,residential
+ADR-0558,80 Eucalyptus Lane,Epping,NSW,2121,Australia,residential
+ADR-0559,109 Collins Street,Essendon,VIC,3040,Australia,residential
+ADR-0560,Unit 21 / 179 Pittwater Road,South Yarra,VIC,3141,Australia,commercial
+ADR-0561,8 Camberwell Road,Footscray,VIC,3011,Australia,residential
+ADR-0562,151 Warringah Road,Claremont,WA,6010,Australia,residential
+ADR-0563,88 Brunswick Street,Fitzroy,VIC,3065,Australia,residential
+ADR-0564,Unit 22 / 186 Flinders Street,St Kilda,VIC,3182,Australia,residential
+ADR-0565,77 King Street,Holland Park,QLD,4121,Australia,residential
+ADR-0566,168 Main Street,Williamstown,VIC,3016,Australia,residential
+ADR-0567,Unit 3 / 190 Canterbury Road,Prahran,VIC,3181,Australia,residential
+ADR-0568,156 Warringah Road,Carlton,VIC,3053,Australia,commercial
+ADR-0569,192 Exhibition Street,Preston,VIC,3072,Australia,commercial
+ADR-0570,7 Central Avenue,Yangon,,0000,Myanmar,residential
+ADR-0571,Unit 7 / 73 Spring Street,Coogee,NSW,2034,Australia,residential
+ADR-0572,118 Glenferrie Road,Surry Hills,NSW,2010,Australia,commercial
+ADR-0573,Unit 27 / 88 Crown Street,Parramatta,NSW,2150,Australia,commercial
+ADR-0574,27 Harbor Drive,Yangon,,0000,Vanuatu,residential
+ADR-0575,111 Plenty Road,Collingwood,VIC,3066,Australia,residential
+ADR-0576,197 Rocky Point Road,Brunswick,VIC,3056,Australia,residential
+ADR-0577,74 Waratah Crescent,Malvern,VIC,3144,Australia,residential
+ADR-0578,157 Camberwell Road,Carlton,VIC,3053,Australia,residential
+ADR-0579,45 Smith Street,Chermside,QLD,4032,Australia,residential
+ADR-0580,63 Brunswick Street,Indooroopilly,QLD,4068,Australia,residential
+ADR-0581,Unit 13 / 186 Queen Street,Robina,QLD,4226,Australia,residential
+ADR-0582,Unit 21 / 54 Lonsdale Street,Robina,QLD,4226,Australia,residential
+ADR-0583,57 Grevillea Place,Parramatta,NSW,2150,Australia,residential
+ADR-0584,Unit 10 / 8 Jacaranda Avenue,Blacktown,NSW,2148,Australia,commercial
+ADR-0585,134 Anzac Parade,Doncaster,VIC,3108,Australia,residential
+ADR-0586,51 Cleveland Street,Preston,VIC,3072,Australia,commercial
+ADR-0587,142 St Kilda Road,Nundah,QLD,4012,Australia,residential
+ADR-0588,3 Glenferrie Road,Newtown,NSW,2042,Australia,residential
+ADR-0589,79 Oxford Street,Neutral Bay,NSW,2089,Australia,residential
+ADR-0590,Unit 7 / 144 Condamine Street,Prahran,VIC,3181,Australia,residential
+ADR-0591,Unit 7 / 39 Glenferrie Road,Carlton,VIC,3053,Australia,residential
+ADR-0592,5 Malvern Road,Footscray,VIC,3011,Australia,residential
+ADR-0593,167 Chapel Street,Northcote,VIC,3070,Australia,commercial
+ADR-0594,148 Crown Street,Preston,VIC,3072,Australia,residential
+ADR-0595,52 Rocky Point Road,Reservoir,VIC,3073,Australia,commercial
+ADR-0596,Unit 5 / 155 Jacaranda Avenue,Marrickville,NSW,2204,Australia,residential
+ADR-0597,191 Jacaranda Avenue,Cronulla,NSW,2230,Australia,commercial
+ADR-0598,45 Hoddle Street,St Kilda,VIC,3182,Australia,residential
+ADR-0599,98 Banksia Drive,Richmond,VIC,3121,Australia,commercial
+ADR-0600,187 Pacific Highway,Ryde,NSW,2112,Australia,residential
+ADR-0601,133 Park Road,Penrith,NSW,2750,Australia,commercial
+ADR-0602,104 Military Road,Glen Waverley,VIC,3150,Australia,residential
+ADR-0603,Unit 14 / 90 Wattle Street,Richmond,VIC,3121,Australia,commercial
+ADR-0604,122 Smith Street,Glen Waverley,VIC,3150,Australia,residential
+ADR-0605,Unit 13 / 22 Condamine Street,Reservoir,VIC,3073,Australia,commercial
+ADR-0606,152 Punt Road,Coogee,NSW,2034,Australia,residential
+ADR-0607,83 High Street,Castle Hill,NSW,2154,Australia,commercial
+ADR-0608,68 St Kilda Road,Surry Hills,NSW,2010,Australia,commercial
+ADR-0609,102 Waratah Crescent,Brunswick,VIC,3056,Australia,commercial

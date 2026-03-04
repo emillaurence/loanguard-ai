@@ -1,0 +1,15 @@
+industry_id,code,name,division,risk_category,aml_sensitivity
+IND-6210,6210,Depository Financial Intermediation,K - Financial and Insurance Services,medium,high
+IND-6921,6921,Accounting Services,M - Professional Services,low,medium
+IND-4110,4110,Building Construction,E - Construction,medium,low
+IND-6910,6910,Scientific Research Services,M - Professional Services,low,low
+IND-7000,7000,Computer System Design,M - Professional Services,low,low
+IND-5120,5120,Liquor and Tobacco Product Wholesaling,F - Wholesale Trade,medium,high
+IND-9530,9530,Gambling Activities,R - Arts and Recreation,high,high
+IND-6631,6631,Real Estate Services,L - Rental Hiring and Real Estate,medium,medium
+IND-8401,8401,Hospitals,Q - Health Care,low,low
+IND-8010,8010,Preschool and School Education,P - Education,low,low
+IND-4520,4520,House Construction,E - Construction,medium,low
+IND-5411,5411,Supermarket and Grocery Stores,G - Retail Trade,low,low
+IND-4400,4400,Mining Services,B - Mining,medium,medium
+IND-6240,6240,Financial Asset Investing,K - Financial and Insurance Services,high,high

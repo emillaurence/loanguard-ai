@@ -1,0 +1,467 @@
+collateral_id,type,description,estimated_value,currency,valuation_date,valuation_source,encumbered
+COL-0001,residential_property,"51 Pittwater Road, Prahran VIC 3181",912698,AUD,2026-07-13,bank_panel_valuer,false
+COL-0002,residential_property,"Unit 4 / 21 Jacaranda Avenue, Glen Waverley VIC 3150",947368,AUD,2026-01-25,bank_panel_valuer,false
+COL-0003,residential_property,"Unit 7 / 81 Canterbury Road, Dee Why NSW 2099",3535714,AUD,2026-08-04,bank_panel_valuer,false
+COL-0004,residential_property,"Unit 29 / 175 Warringah Road, Norwood SA 5067",2784810,AUD,2026-07-04,bank_panel_valuer,false
+COL-0005,residential_property,"Unit 11 / 136 Acacia Close, Miranda NSW 2228",1567796,AUD,2026-05-16,independent_valuer,false
+COL-0006,residential_property,"Unit 8 / 151 Toorak Road, Parramatta NSW 2150",3026315,AUD,2025-01-08,independent_valuer,false
+COL-0007,residential_property,"111 Cleveland Street, Coogee NSW 2034",1343750,AUD,2026-04-24,independent_valuer,false
+COL-0008,residential_property,"4 Victoria Street, Marrickville NSW 2204",673076,AUD,2025-08-31,independent_valuer,false
+COL-0009,residential_property,"Unit 2 / 16 Condamine Street, Armadale WA 6112",3135593,AUD,2026-08-22,bank_panel_valuer,false
+COL-0010,residential_property,"134 Oxford Street, Newtown NSW 2042",477528,AUD,2025-07-29,bank_panel_valuer,false
+COL-0011,residential_property,"Unit 18 / 30 Grevillea Place, Joondalup WA 6027",2971014,AUD,2025-06-09,bank_panel_valuer,false
+COL-0012,residential_property,"7 Main Street, Hornsby NSW 2077",1192307,AUD,2025-12-07,bank_panel_valuer,false
+COL-0013,residential_property,"198 Spring Street, New Farm QLD 4005",407608,AUD,2026-06-06,bank_panel_valuer,false
+COL-0014,residential_property,"112 High Street, Maroubra NSW 2035",878378,AUD,2026-07-06,independent_valuer,false
+COL-0015,residential_property,"104 Toorak Road, Wynnum QLD 4178",1766304,AUD,2025-11-08,bank_panel_valuer,false
+COL-0016,residential_property,"Unit 21 / 127 Canterbury Road, Williamstown VIC 3016",1805555,AUD,2026-12-06,independent_valuer,false
+COL-0017,residential_property,"110 Eucalyptus Lane, Armadale WA 6112",2323529,AUD,2026-04-02,independent_valuer,false
+COL-0018,residential_property,"Unit 14 / 40 Pittwater Road, Maroubra NSW 2035",3681818,AUD,2026-02-22,bank_panel_valuer,false
+COL-0019,residential_property,"125 George Street, Hornsby NSW 2077",2301136,AUD,2026-11-16,bank_panel_valuer,false
+COL-0020,residential_property,"193 Eucalyptus Lane, Joondalup WA 6027",2103174,AUD,2025-03-25,bank_panel_valuer,false
+COL-0021,residential_property,"27 Epping Road, Scarborough WA 6019",1712962,AUD,2026-12-02,independent_valuer,false
+COL-0022,residential_property,"158 Banksia Drive, Ryde NSW 2112",1006493,AUD,2026-05-11,bank_panel_valuer,false
+COL-0023,residential_property,"72 Grevillea Place, Burwood NSW 2134",2172131,AUD,2025-10-10,independent_valuer,false
+COL-0024,residential_property,"122 Toorak Road, Epping NSW 2121",1675531,AUD,2026-03-12,bank_panel_valuer,false
+COL-0025,residential_property,"78 High Street, Penrith NSW 2750",2142857,AUD,2025-05-10,bank_panel_valuer,false
+COL-0026,residential_property,"199 Punt Road, Blacktown NSW 2148",2730263,AUD,2026-03-30,bank_panel_valuer,false
+COL-0027,residential_property,"60 Russell Street, Chatswood NSW 2067",2051282,AUD,2026-12-21,bank_panel_valuer,false
+COL-0028,residential_property,"Unit 3 / 83 Burke Road, Essendon VIC 3040",3090909,AUD,2025-08-23,independent_valuer,false
+COL-0029,residential_property,"42 Crown Street, Frenchs Forest NSW 2086",1842105,AUD,2026-05-23,bank_panel_valuer,false
+COL-0030,residential_property,"161 Sydney Road, Robina QLD 4226",3018867,AUD,2025-07-28,bank_panel_valuer,false
+COL-0031,residential_property,"184 Russell Street, Toorak VIC 3142",822784,AUD,2025-10-07,bank_panel_valuer,false
+COL-0032,residential_property,"151 Glenferrie Road, Brookvale NSW 2100",2835820,AUD,2026-05-17,independent_valuer,false
+COL-0033,residential_property,"167 Park Road, Dee Why NSW 2099",1894736,AUD,2025-02-07,independent_valuer,false
+COL-0034,residential_property,"85 Jacaranda Avenue, Fremantle WA 6160",1584507,AUD,2026-07-01,bank_panel_valuer,false
+COL-0035,residential_property,"15 Russell Street, Midland WA 6056",877659,AUD,2026-03-18,independent_valuer,false
+COL-0036,residential_property,"98 Malvern Road, Chermside QLD 4032",2016129,AUD,2025-10-30,bank_panel_valuer,false
+COL-0037,residential_property,"139 Grevillea Place, Toowong QLD 4066",1750000,AUD,2026-06-28,bank_panel_valuer,false
+COL-0038,residential_property,"138 Station Road, Nundah QLD 4012",2842465,AUD,2026-11-20,bank_panel_valuer,false
+COL-0039,residential_property,"Unit 29 / 127 Station Road, Joondalup WA 6027",2807017,AUD,2026-07-05,independent_valuer,false
+COL-0040,residential_property,"140 Wattle Street, Midland WA 6056",2179487,AUD,2026-01-03,independent_valuer,false
+COL-0041,residential_property,"199 Park Road, Burwood NSW 2134",3253968,AUD,2026-09-03,independent_valuer,false
+COL-0042,residential_property,"16 Smith Street, Parramatta NSW 2150",461956,AUD,2026-03-13,independent_valuer,false
+COL-0043,residential_property,"180 Station Road, Dee Why NSW 2099",1550632,AUD,2026-10-29,independent_valuer,false
+COL-0044,residential_property,"143 Queen Street, Carlton VIC 3053",1045454,AUD,2026-07-30,bank_panel_valuer,false
+COL-0045,residential_property,"110 Jacaranda Avenue, Scarborough WA 6019",868055,AUD,2026-09-29,independent_valuer,false
+COL-0046,residential_property,"Unit 12 / 108 Brunswick Street, Holland Park QLD 4121",4558823,AUD,2025-11-16,bank_panel_valuer,false
+COL-0047,residential_property,"174 Lane Cove Road, Bankstown NSW 2200",1189024,AUD,2026-06-24,bank_panel_valuer,false
+COL-0048,residential_property,"Unit 1 / 107 Russell Street, Randwick NSW 2031",1511627,AUD,2025-11-29,independent_valuer,false
+COL-0049,residential_property,"131 Chapel Street, Armadale WA 6112",2250000,AUD,2025-12-24,bank_panel_valuer,false
+COL-0050,residential_property,"Unit 3 / 161 Oxford Street, Sunnybank QLD 4109",2756410,AUD,2026-04-26,bank_panel_valuer,false
+COL-0051,residential_property,"11 Sydney Road, Essendon VIC 3040",2682926,AUD,2026-08-09,independent_valuer,false
+COL-0052,residential_property,"199 Crown Street, Hornsby NSW 2077",1095890,AUD,2025-02-23,bank_panel_valuer,false
+COL-0053,residential_property,"76 Jacaranda Avenue, Hurstville NSW 2220",2983870,AUD,2026-06-04,independent_valuer,false
+COL-0054,residential_property,"62 Exhibition Street, Prahran VIC 3181",3308823,AUD,2026-04-26,independent_valuer,false
+COL-0055,residential_property,"Unit 3 / 133 Jacaranda Avenue, North Adelaide SA 5006",2937500,AUD,2025-06-14,bank_panel_valuer,false
+COL-0056,residential_property,"Unit 30 / 38 Church Street, Midland WA 6056",535714,AUD,2026-04-29,independent_valuer,false
+COL-0057,residential_property,"138 George Street, Northcote VIC 3070",2612359,AUD,2026-08-12,independent_valuer,false
+COL-0058,residential_property,"Unit 26 / 65 Condamine Street, Epping NSW 2121",472972,AUD,2025-03-11,bank_panel_valuer,false
+COL-0059,residential_property,"74 Cleveland Street, Liverpool NSW 2170",2531250,AUD,2025-02-18,bank_panel_valuer,false
+COL-0060,residential_property,"112 Spring Street, Northcote VIC 3070",3205128,AUD,2025-02-28,independent_valuer,false
+COL-0061,residential_property,"Unit 5 / 114 Forest Road, Footscray VIC 3011",454545,AUD,2026-06-27,bank_panel_valuer,false
+COL-0062,residential_property,"45 Wattle Street, Cronulla NSW 2230",2983870,AUD,2025-03-31,bank_panel_valuer,false
+COL-0063,residential_property,"142 Church Street, Malvern VIC 3144",3676470,AUD,2025-03-30,independent_valuer,false
+COL-0064,residential_property,"129 Acacia Close, Surfers Paradise QLD 4217",2277777,AUD,2025-05-08,independent_valuer,false
+COL-0065,residential_property,"169 Camberwell Road, Claremont WA 6010",3916666,AUD,2026-09-12,bank_panel_valuer,false
+COL-0066,residential_property,"Unit 2 / 77 Brunswick Street, Holland Park QLD 4121",1562500,AUD,2025-06-11,bank_panel_valuer,false
+COL-0067,residential_property,"99 Bottlebrush Court, Bankstown NSW 2200",1474358,AUD,2025-09-12,independent_valuer,false
+COL-0068,residential_property,"Unit 4 / 74 St Kilda Road, Robina QLD 4226",2986111,AUD,2026-03-18,independent_valuer,false
+COL-0069,residential_property,"96 Sunrise Boulevard, Holland Park QLD 4121",2446236,AUD,2026-07-26,bank_panel_valuer,false
+COL-0070,residential_property,"87 Hoddle Street, Collingwood VIC 3066",2166666,AUD,2026-06-30,bank_panel_valuer,false
+COL-0071,residential_property,"38 Waratah Crescent, Holland Park QLD 4121",1933962,AUD,2025-02-02,independent_valuer,false
+COL-0072,residential_property,"Unit 7 / 77 Rocky Point Road, Blacktown NSW 2148",2943548,AUD,2026-12-08,bank_panel_valuer,false
+COL-0073,residential_property,"52 Waratah Crescent, Scarborough WA 6019",763888,AUD,2026-07-30,bank_panel_valuer,false
+COL-0074,residential_property,"Unit 26 / 130 Brunswick Street, Carlton VIC 3053",1518987,AUD,2025-04-26,bank_panel_valuer,false
+COL-0075,residential_property,"Unit 10 / 16 Mowbray Road, Camberwell VIC 3124",4250000,AUD,2025-06-13,bank_panel_valuer,false
+COL-0076,residential_property,"196 Flinders Street, Scarborough WA 6019",1728723,AUD,2026-09-03,independent_valuer,false
+COL-0077,residential_property,"Unit 14 / 15 Brunswick Street, Malvern VIC 3144",1000000,AUD,2026-04-13,independent_valuer,false
+COL-0078,residential_property,"165 Warringah Road, Miranda NSW 2228",588235,AUD,2026-03-07,bank_panel_valuer,false
+COL-0079,residential_property,"137 Parramatta Road, Rockingham WA 6168",588235,AUD,2025-09-11,bank_panel_valuer,false
+COL-0080,residential_property,"36 Hoddle Street, Subiaco WA 6008",566666,AUD,2025-08-28,bank_panel_valuer,false
+COL-0081,residential_property,"135 Oxford Street, Holland Park QLD 4121",3181818,AUD,2026-02-23,independent_valuer,false
+COL-0082,residential_property,"86 Exhibition Street, Frenchs Forest NSW 2086",2364130,AUD,2025-01-16,independent_valuer,false
+COL-0083,residential_property,"26 Banksia Drive, Cronulla NSW 2230",2065217,AUD,2026-04-26,bank_panel_valuer,false
+COL-0084,residential_property,"Unit 25 / 168 Lane Cove Road, Prahran VIC 3181",1385135,AUD,2026-05-16,bank_panel_valuer,false
+COL-0085,residential_property,"Unit 17 / 182 Park Road, St Kilda VIC 3182",394736,AUD,2026-04-12,bank_panel_valuer,false
+COL-0086,residential_property,"Unit 22 / 63 Epping Road, Newtown NSW 2042",2818181,AUD,2025-03-24,independent_valuer,false
+COL-0087,residential_property,"Unit 8 / 20 Exhibition Street, Rockingham WA 6168",2549019,AUD,2026-08-04,bank_panel_valuer,false
+COL-0088,residential_property,"59 Cleveland Street, Toorak VIC 3142",2214285,AUD,2026-01-20,bank_panel_valuer,false
+COL-0089,residential_property,"84 Bottlebrush Court, Surry Hills NSW 2010",681818,AUD,2025-10-26,bank_panel_valuer,false
+COL-0090,residential_property,"65 Flinders Street, Midland WA 6056",1546052,AUD,2026-05-23,independent_valuer,false
+COL-0091,residential_property,"178 Military Road, Kogarah NSW 2217",2131147,AUD,2026-08-13,independent_valuer,false
+COL-0092,residential_property,"62 Lonsdale Street, Wynnum QLD 4178",4629629,AUD,2026-03-10,bank_panel_valuer,false
+COL-0093,residential_property,"119 Rocky Point Road, Holland Park QLD 4121",2287234,AUD,2026-12-09,independent_valuer,false
+COL-0094,residential_property,"Unit 4 / 6 Jacaranda Avenue, Bondi NSW 2026",2464285,AUD,2026-11-25,independent_valuer,false
+COL-0095,residential_property,"Unit 25 / 181 Collins Street, Richmond VIC 3121",3629032,AUD,2026-12-22,independent_valuer,false
+COL-0096,residential_property,"77 Acacia Close, Coburg VIC 3058",1944444,AUD,2025-03-28,independent_valuer,false
+COL-0097,residential_property,"Unit 12 / 116 Camberwell Road, Brookvale NSW 2100",1018518,AUD,2025-01-10,bank_panel_valuer,false
+COL-0098,residential_property,"Unit 27 / 56 Bell Street, Marrickville NSW 2204",1726190,AUD,2026-11-01,independent_valuer,false
+COL-0099,residential_property,"35 Forest Road, Fitzroy VIC 3065",3171641,AUD,2025-03-02,bank_panel_valuer,false
+COL-0100,residential_property,"125 Oxford Street, Mandurah WA 6210",2873134,AUD,2025-04-06,bank_panel_valuer,false
+COL-0101,residential_property,"161 Sunrise Boulevard, Fremantle WA 6160",2605633,AUD,2025-01-17,independent_valuer,false
+COL-0102,residential_property,"Unit 21 / 180 Forest Road, Essendon VIC 3040",3958333,AUD,2025-04-04,independent_valuer,false
+COL-0103,residential_property,"106 Camberwell Road, Toowong QLD 4066",1057692,AUD,2025-08-11,independent_valuer,false
+COL-0104,residential_property,"Unit 13 / 156 Hoddle Street, Neutral Bay NSW 2089",4901960,AUD,2025-10-30,independent_valuer,false
+COL-0105,residential_property,"19 George Street, Miranda NSW 2228",1726190,AUD,2025-01-15,bank_panel_valuer,false
+COL-0106,residential_property,"117 Camberwell Road, Bondi NSW 2026",2576923,AUD,2025-11-13,independent_valuer,false
+COL-0107,residential_property,"Unit 4 / 95 Bridge Road, Indooroopilly QLD 4068",2636986,AUD,2026-08-11,independent_valuer,false
+COL-0108,residential_property,"Unit 3 / 199 Jacaranda Avenue, Glen Waverley VIC 3150",3750000,AUD,2026-07-21,bank_panel_valuer,false
+COL-0109,residential_property,"Unit 30 / 183 Spring Street, Claremont WA 6010",1144578,AUD,2025-08-26,bank_panel_valuer,false
+COL-0110,residential_property,"Unit 7 / 116 Spring Street, Unley SA 5061",1733333,AUD,2025-05-20,independent_valuer,false
+COL-0111,residential_property,"119 Albert Street, Paddington QLD 4064",2019230,AUD,2025-05-24,independent_valuer,false
+COL-0112,residential_property,"Unit 29 / 48 Spring Street, Liverpool NSW 2170",506756,AUD,2025-06-02,independent_valuer,false
+COL-0113,residential_property,"140 Sunrise Boulevard, Toorak VIC 3142",3970588,AUD,2026-08-03,bank_panel_valuer,false
+COL-0114,residential_property,"Unit 11 / 45 Main Street, Epping NSW 2121",3773584,AUD,2026-12-16,bank_panel_valuer,false
+COL-0115,residential_property,"34 Crown Street, Carindale QLD 4152",2468750,AUD,2025-11-28,independent_valuer,false
+COL-0116,residential_property,"33 Main Street, Bankstown NSW 2200",2787356,AUD,2026-12-20,bank_panel_valuer,false
+COL-0117,residential_property,"Unit 23 / 3 Lonsdale Street, Malvern VIC 3144",4227272,AUD,2025-03-11,bank_panel_valuer,false
+COL-0118,residential_property,"153 Camberwell Road, Doncaster VIC 3108",1481481,AUD,2026-12-23,independent_valuer,false
+COL-0119,residential_property,"141 Eucalyptus Lane, Collingwood VIC 3066",1739130,AUD,2025-02-25,bank_panel_valuer,false
+COL-0120,residential_property,"Unit 18 / 22 Mowbray Road, Fremantle WA 6160",1492537,AUD,2026-02-28,independent_valuer,false
+COL-0121,residential_property,"31 Forest Road, Toowong QLD 4066",2560240,AUD,2025-06-21,independent_valuer,false
+COL-0122,residential_property,"160 Glenferrie Road, Coburg VIC 3058",2928571,AUD,2026-03-06,independent_valuer,false
+COL-0123,residential_property,"159 Burke Road, Carlton VIC 3053",2781250,AUD,2026-02-16,independent_valuer,false
+COL-0124,residential_property,"69 Warringah Road, Sunnybank QLD 4109",1767241,AUD,2026-10-24,independent_valuer,false
+COL-0125,residential_property,"Unit 28 / 153 Sydney Road, Toorak VIC 3142",4078947,AUD,2026-05-01,bank_panel_valuer,false
+COL-0126,residential_property,"200 Rocky Point Road, Frenchs Forest NSW 2086",1417910,AUD,2026-05-01,independent_valuer,false
+COL-0127,residential_property,"96 Toorak Road, Coogee NSW 2034",3033333,AUD,2026-09-16,bank_panel_valuer,false
+COL-0128,residential_property,"49 Crown Street, Brookvale NSW 2100",2932692,AUD,2025-08-16,bank_panel_valuer,false
+COL-0129,residential_property,"58 Condamine Street, Footscray VIC 3011",940860,AUD,2026-03-07,bank_panel_valuer,false
+COL-0130,residential_property,"146 Wattle Street, Brighton VIC 3186",762711,AUD,2026-04-14,independent_valuer,false
+COL-0131,residential_property,"110 Smith Street, Holland Park QLD 4121",991379,AUD,2025-02-08,independent_valuer,false
+COL-0132,residential_property,"75 Brunswick Street, Joondalup WA 6027",2183908,AUD,2026-09-03,bank_panel_valuer,false
+COL-0133,residential_property,"10 Parramatta Road, Dee Why NSW 2099",3166666,AUD,2025-09-19,independent_valuer,false
+COL-0134,residential_property,"Unit 27 / 156 Epping Road, Surry Hills NSW 2010",1766304,AUD,2025-04-18,independent_valuer,false
+COL-0135,residential_property,"Unit 6 / 119 Queen Street, Nundah QLD 4012",909090,AUD,2025-02-10,bank_panel_valuer,false
+COL-0136,residential_property,"99 Epping Road, Box Hill VIC 3128",2254098,AUD,2026-03-08,independent_valuer,false
+COL-0137,residential_property,"133 Punt Road, Sunnybank QLD 4109",2470930,AUD,2026-09-26,independent_valuer,false
+COL-0138,residential_property,"Unit 21 / 13 Hoddle Street, Box Hill VIC 3128",1527777,AUD,2026-01-23,bank_panel_valuer,false
+COL-0139,residential_property,"Unit 22 / 131 Toorak Road, Glen Waverley VIC 3150",545454,AUD,2026-04-13,bank_panel_valuer,false
+COL-0140,residential_property,"134 Anzac Parade, Marrickville NSW 2204",1909722,AUD,2025-02-16,independent_valuer,false
+COL-0141,residential_property,"198 Wattle Street, Paddington QLD 4064",3125000,AUD,2026-11-06,independent_valuer,false
+COL-0142,residential_property,"189 Melaleuca Way, Coburg VIC 3058",2789855,AUD,2025-08-11,independent_valuer,false
+COL-0143,residential_property,"53 Forest Road, Wynnum QLD 4178",1176470,AUD,2026-01-03,bank_panel_valuer,false
+COL-0144,residential_property,"115 Main Street, Unley SA 5061",2589285,AUD,2025-03-18,independent_valuer,false
+COL-0145,residential_property,"126 Sunrise Boulevard, Bankstown NSW 2200",4150943,AUD,2026-01-02,independent_valuer,false
+COL-0146,residential_property,"Unit 22 / 193 Pacific Highway, Brookvale NSW 2100",1944444,AUD,2025-12-21,bank_panel_valuer,false
+COL-0147,residential_property,"Unit 18 / 109 Eucalyptus Lane, Reservoir VIC 3073",4259259,AUD,2026-12-21,bank_panel_valuer,false
+COL-0148,residential_property,"Unit 22 / 111 Oxford Street, Holland Park QLD 4121",1553030,AUD,2025-05-02,independent_valuer,false
+COL-0149,residential_property,"35 Condamine Street, Chermside QLD 4032",1684782,AUD,2026-07-13,bank_panel_valuer,false
+COL-0150,residential_property,"106 Wattle Street, Carindale QLD 4152",2023809,AUD,2026-06-09,independent_valuer,false
+COL-0151,residential_property,"Unit 26 / 44 High Street, Hornsby NSW 2077",3644067,AUD,2025-08-15,bank_panel_valuer,false
+COL-0152,residential_property,"Unit 13 / 168 Rocky Point Road, Mosman NSW 2088",470588,AUD,2025-08-17,bank_panel_valuer,false
+COL-0153,residential_property,"Unit 23 / 11 Pacific Highway, Chatswood NSW 2067",1144578,AUD,2026-06-18,bank_panel_valuer,false
+COL-0154,residential_property,"Unit 3 / 36 Sydney Road, Southbank VIC 3006",1728395,AUD,2026-06-11,bank_panel_valuer,false
+COL-0155,residential_property,"Unit 20 / 73 Victoria Street, Brookvale NSW 2100",2333333,AUD,2026-04-28,bank_panel_valuer,false
+COL-0156,residential_property,"1 Wattle Street, Marrickville NSW 2204",1227272,AUD,2026-11-26,bank_panel_valuer,false
+COL-0157,residential_property,"Unit 17 / 191 Sunrise Boulevard, Maroubra NSW 2035",2619047,AUD,2025-05-01,independent_valuer,false
+COL-0158,residential_property,"95 Toorak Road, Indooroopilly QLD 4068",1250000,AUD,2025-09-17,bank_panel_valuer,false
+COL-0159,residential_property,"Unit 30 / 24 Waratah Crescent, Richmond VIC 3121",2605263,AUD,2026-09-07,bank_panel_valuer,false
+COL-0160,residential_property,"200 Canterbury Road, Box Hill VIC 3128",1153846,AUD,2026-02-09,bank_panel_valuer,false
+COL-0161,residential_property,"Unit 4 / 129 Russell Street, New Farm QLD 4005",454545,AUD,2026-06-10,bank_panel_valuer,false
+COL-0162,residential_property,"180 Bourke Street, Reservoir VIC 3073",2083333,AUD,2026-02-27,bank_panel_valuer,false
+COL-0163,residential_property,"81 Nicholson Street, Northcote VIC 3070",357142,AUD,2026-08-12,bank_panel_valuer,false
+COL-0164,residential_property,"118 Oxford Street, Armadale WA 6112",4057377,AUD,2025-01-13,independent_valuer,false
+COL-0165,residential_property,"34 Malvern Road, Collingwood VIC 3066",2020547,AUD,2025-04-13,bank_panel_valuer,false
+COL-0166,residential_property,"102 Albert Street, Subiaco WA 6008",2681159,AUD,2025-03-03,independent_valuer,false
+COL-0167,residential_property,"84 Lane Cove Road, Footscray VIC 3011",2335164,AUD,2026-04-03,independent_valuer,false
+COL-0168,residential_property,"192 Glenferrie Road, Footscray VIC 3011",1306818,AUD,2026-04-07,bank_panel_valuer,false
+COL-0169,residential_property,"Unit 12 / 44 George Street, Neutral Bay NSW 2089",1580882,AUD,2025-11-30,bank_panel_valuer,false
+COL-0170,residential_property,"Unit 17 / 40 Exhibition Street, Joondalup WA 6027",1863636,AUD,2025-05-20,bank_panel_valuer,false
+COL-0171,residential_property,"Unit 15 / 35 Russell Street, Penrith NSW 2750",2827380,AUD,2026-09-25,bank_panel_valuer,false
+COL-0172,residential_property,"Unit 22 / 189 Rocky Point Road, Cronulla NSW 2230",2615384,AUD,2025-08-02,bank_panel_valuer,false
+COL-0173,residential_property,"150 Station Road, Joondalup WA 6027",1166666,AUD,2025-09-06,independent_valuer,false
+COL-0174,residential_property,"Unit 18 / 125 Bourke Street, Toowong QLD 4066",1565934,AUD,2026-10-23,bank_panel_valuer,false
+COL-0175,residential_property,"154 Acacia Close, Ryde NSW 2112",3442622,AUD,2025-06-14,independent_valuer,false
+COL-0176,residential_property,"Unit 10 / 197 Toorak Road, Robina QLD 4226",543478,AUD,2025-11-27,bank_panel_valuer,false
+COL-0177,residential_property,"Unit 30 / 156 Pittwater Road, Camberwell VIC 3124",2420212,AUD,2025-08-02,bank_panel_valuer,false
+COL-0178,residential_property,"49 Chapel Street, Williamstown VIC 3016",3482142,AUD,2025-09-12,independent_valuer,false
+COL-0179,residential_property,"96 Plenty Road, Sunnybank QLD 4109",2820512,AUD,2026-03-17,bank_panel_valuer,false
+COL-0180,residential_property,"81 George Street, Liverpool NSW 2170",1050724,AUD,2026-12-08,bank_panel_valuer,false
+COL-0181,residential_property,"Unit 16 / 20 Warringah Road, Essendon VIC 3040",2272727,AUD,2025-06-27,bank_panel_valuer,false
+COL-0182,residential_property,"163 Rocky Point Road, Richmond VIC 3121",1054687,AUD,2025-02-25,bank_panel_valuer,false
+COL-0183,residential_property,"191 Queen Street, Collingwood VIC 3066",2627118,AUD,2025-09-26,independent_valuer,false
+COL-0184,residential_property,"29 Mowbray Road, New Farm QLD 4005",1493506,AUD,2026-01-10,bank_panel_valuer,false
+COL-0185,residential_property,"Unit 16 / 134 Forest Road, Armadale WA 6112",2142857,AUD,2026-09-30,independent_valuer,false
+COL-0186,residential_property,"Unit 10 / 93 Bottlebrush Court, Reservoir VIC 3073",601851,AUD,2026-10-27,bank_panel_valuer,false
+COL-0187,residential_property,"39 Crown Street, Blacktown NSW 2148",1486486,AUD,2026-11-04,independent_valuer,false
+COL-0188,residential_property,"82 Eucalyptus Lane, Brunswick VIC 3056",2407407,AUD,2025-01-31,bank_panel_valuer,false
+COL-0189,residential_property,"92 Victoria Street, Richmond VIC 3121",3515625,AUD,2026-05-04,independent_valuer,false
+COL-0190,residential_property,"177 Oxford Street, Robina QLD 4226",3911290,AUD,2025-09-10,bank_panel_valuer,false
+COL-0191,residential_property,"49 Russell Street, Fortitude Valley QLD 4006",2666666,AUD,2025-11-08,bank_panel_valuer,false
+COL-0192,residential_property,"152 Wattle Street, Malvern VIC 3144",2039473,AUD,2025-07-26,bank_panel_valuer,false
+COL-0193,residential_property,"1 Camberwell Road, Scarborough WA 6019",2536764,AUD,2025-01-13,bank_panel_valuer,false
+COL-0194,residential_property,"Unit 12 / 48 Park Road, Fortitude Valley QLD 4006",2527777,AUD,2025-02-07,independent_valuer,false
+COL-0195,residential_property,"Unit 12 / 24 Rocky Point Road, Subiaco WA 6008",3401639,AUD,2026-01-24,independent_valuer,false
+COL-0196,residential_property,"181 Russell Street, Surry Hills NSW 2010",2771084,AUD,2025-11-21,bank_panel_valuer,false
+COL-0197,residential_property,"54 Banksia Drive, Essendon VIC 3040",1323529,AUD,2026-03-01,bank_panel_valuer,false
+COL-0198,residential_property,"Unit 1 / 17 Park Road, Footscray VIC 3011",3921568,AUD,2025-12-14,bank_panel_valuer,false
+COL-0199,residential_property,"Unit 3 / 10 Rocky Point Road, Footscray VIC 3011",1984126,AUD,2026-03-31,independent_valuer,false
+COL-0200,residential_property,"2 Exhibition Street, Bondi NSW 2026",506329,AUD,2026-12-05,independent_valuer,false
+COL-0201,residential_property,"30 High Street, Ryde NSW 2112",1847826,AUD,2026-07-28,independent_valuer,false
+COL-0202,residential_property,"Unit 21 / 25 Brunswick Street, Broadbeach QLD 4218",2063953,AUD,2026-12-29,bank_panel_valuer,false
+COL-0203,residential_property,"148 Church Street, Surry Hills NSW 2010",2310126,AUD,2026-02-20,independent_valuer,false
+COL-0204,residential_property,"Unit 30 / 170 Mowbray Road, Indooroopilly QLD 4068",1947674,AUD,2026-12-30,bank_panel_valuer,false
+COL-0205,residential_property,"146 Sunrise Boulevard, Glen Waverley VIC 3150",2782258,AUD,2025-11-08,bank_panel_valuer,false
+COL-0206,residential_property,"180 Glenferrie Road, Prospect SA 5082",2500000,AUD,2025-11-22,bank_panel_valuer,false
+COL-0207,residential_property,"Unit 21 / 112 Church Street, Coogee NSW 2034",576923,AUD,2026-03-02,bank_panel_valuer,false
+COL-0208,residential_property,"9 King Street, Midland WA 6056",1105263,AUD,2026-12-23,bank_panel_valuer,false
+COL-0209,residential_property,"43 King Street, Wynnum QLD 4178",1776315,AUD,2026-09-04,bank_panel_valuer,false
+COL-0210,residential_property,"66 High Street, Frenchs Forest NSW 2086",1780303,AUD,2026-09-11,independent_valuer,false
+COL-0211,residential_property,"54 Malvern Road, Indooroopilly QLD 4068",2467105,AUD,2025-12-20,independent_valuer,false
+COL-0212,residential_property,"174 Oxford Street, Castle Hill NSW 2154",3350000,AUD,2026-12-01,independent_valuer,false
+COL-0213,residential_property,"Unit 2 / 186 Russell Street, Blacktown NSW 2148",722891,AUD,2025-01-25,independent_valuer,false
+COL-0214,residential_property,"Unit 27 / 86 Queen Street, Holland Park QLD 4121",1481481,AUD,2025-09-29,independent_valuer,false
+COL-0215,residential_property,"5 Wattle Street, Mandurah WA 6210",740740,AUD,2026-10-31,independent_valuer,false
+COL-0216,residential_property,"146 St Kilda Road, Bondi NSW 2026",2000000,AUD,2026-01-03,bank_panel_valuer,false
+COL-0217,residential_property,"177 Cleveland Street, Preston VIC 3072",3870967,AUD,2026-10-10,bank_panel_valuer,false
+COL-0218,residential_property,"31 Collins Street, Castle Hill NSW 2154",563380,AUD,2026-11-15,bank_panel_valuer,false
+COL-0219,residential_property,"25 Brunswick Street, Glen Waverley VIC 3150",4094827,AUD,2026-08-29,independent_valuer,false
+COL-0220,residential_property,"71 Park Road, Fitzroy VIC 3065",1875000,AUD,2025-06-22,bank_panel_valuer,false
+COL-0221,residential_property,"164 Spring Street, Claremont WA 6010",1728723,AUD,2026-02-26,independent_valuer,false
+COL-0222,residential_property,"Unit 2 / 161 Mowbray Road, Miranda NSW 2228",3116438,AUD,2025-07-18,independent_valuer,false
+COL-0223,residential_property,"Unit 8 / 132 Station Road, Prospect SA 5082",1179245,AUD,2026-04-01,bank_panel_valuer,false
+COL-0224,residential_property,"46 Parramatta Road, Mandurah WA 6210",584415,AUD,2026-04-14,independent_valuer,false
+COL-0225,residential_property,"Unit 14 / 142 Jacaranda Avenue, Newtown NSW 2042",3708333,AUD,2026-06-19,bank_panel_valuer,false
+COL-0226,residential_property,"109 Punt Road, South Yarra VIC 3141",3125000,AUD,2026-12-15,independent_valuer,false
+COL-0227,residential_property,"Unit 28 / 181 Canterbury Road, Carlton VIC 3053",2442528,AUD,2026-01-15,bank_panel_valuer,false
+COL-0228,residential_property,"Unit 16 / 62 St Kilda Road, Sunnybank QLD 4109",588235,AUD,2026-08-18,independent_valuer,false
+COL-0229,residential_property,"95 Banksia Drive, Surry Hills NSW 2010",2150537,AUD,2026-12-11,independent_valuer,false
+COL-0230,residential_property,"168 Pacific Highway, Burwood NSW 2134",1234939,AUD,2026-05-13,bank_panel_valuer,false
+COL-0231,residential_property,"Unit 11 / 42 Flinders Street, Claremont WA 6010",1434426,AUD,2026-08-12,independent_valuer,false
+COL-0232,residential_property,"85 Pacific Highway, Neutral Bay NSW 2089",949367,AUD,2026-05-01,bank_panel_valuer,false
+COL-0233,residential_property,"15 Burke Road, Unley SA 5061",1769662,AUD,2026-08-21,independent_valuer,false
+COL-0234,residential_property,"73 Cleveland Street, Parramatta NSW 2150",789473,AUD,2026-04-02,independent_valuer,false
+COL-0235,residential_property,"Unit 27 / 142 Nicholson Street, Glen Waverley VIC 3150",3620689,AUD,2025-11-06,bank_panel_valuer,false
+COL-0236,residential_property,"18 Burke Road, Mosman NSW 2088",3615384,AUD,2026-08-19,bank_panel_valuer,false
+COL-0237,residential_property,"Unit 21 / 13 Russell Street, Footscray VIC 3011",1509433,AUD,2025-03-20,independent_valuer,false
+COL-0238,residential_property,"Unit 30 / 125 Plenty Road, Miranda NSW 2228",1500000,AUD,2025-06-16,independent_valuer,false
+COL-0239,residential_property,"178 Park Road, Toowong QLD 4066",2450980,AUD,2025-11-11,independent_valuer,false
+COL-0240,residential_property,"Unit 19 / 187 Camberwell Road, Miranda NSW 2228",1350574,AUD,2025-03-11,independent_valuer,false
+COL-0241,residential_property,"109 Collins Street, Williamstown VIC 3016",1827956,AUD,2026-02-22,independent_valuer,false
+COL-0242,residential_property,"Unit 28 / 142 Plenty Road, Camberwell VIC 3124",3188405,AUD,2026-03-15,independent_valuer,false
+COL-0243,residential_property,"17 Anzac Parade, Indooroopilly QLD 4068",2066666,AUD,2025-12-13,independent_valuer,false
+COL-0244,residential_property,"65 Nicholson Street, Bondi NSW 2026",2873134,AUD,2026-10-06,independent_valuer,false
+COL-0245,residential_property,"116 Oxford Street, Holland Park QLD 4121",673076,AUD,2026-03-30,bank_panel_valuer,false
+COL-0246,residential_property,"94 Cleveland Street, Toowong QLD 4066",1714285,AUD,2026-08-21,independent_valuer,false
+COL-0247,residential_property,"169 Bottlebrush Court, Malvern VIC 3144",2291666,AUD,2026-06-12,bank_panel_valuer,false
+COL-0248,residential_property,"Unit 19 / 152 Crown Street, Paddington QLD 4064",1123595,AUD,2026-06-28,bank_panel_valuer,false
+COL-0249,residential_property,"128 Collins Street, Newtown NSW 2042",388888,AUD,2026-04-24,bank_panel_valuer,false
+COL-0250,residential_property,"53 Jacaranda Avenue, Preston VIC 3072",2203947,AUD,2025-10-21,independent_valuer,false
+COL-0251,residential_property,"172 Mowbray Road, Epping NSW 2121",3224637,AUD,2026-02-11,independent_valuer,false
+COL-0252,residential_property,"140 Bell Street, Sunnybank QLD 4109",2202380,AUD,2025-09-10,bank_panel_valuer,false
+COL-0253,residential_property,"176 Station Road, Footscray VIC 3011",2770270,AUD,2025-08-31,bank_panel_valuer,false
+COL-0254,residential_property,"189 Plenty Road, Toorak VIC 3142",597014,AUD,2025-12-07,bank_panel_valuer,false
+COL-0255,residential_property,"Unit 6 / 81 Malvern Road, Wynnum QLD 4178",1868131,AUD,2025-09-13,independent_valuer,false
+COL-0256,residential_property,"Unit 23 / 23 Brunswick Street, Chermside QLD 4032",3320312,AUD,2025-06-22,independent_valuer,false
+COL-0257,residential_property,"192 Nicholson Street, Bankstown NSW 2200",1052631,AUD,2026-03-18,independent_valuer,false
+COL-0258,residential_property,"83 Epping Road, Frenchs Forest NSW 2086",2974683,AUD,2025-08-06,bank_panel_valuer,false
+COL-0259,residential_property,"95 Church Street, Coogee NSW 2034",1341463,AUD,2026-07-27,independent_valuer,false
+COL-0260,residential_property,"Unit 11 / 195 Melaleuca Way, Northcote VIC 3070",1609589,AUD,2026-03-23,independent_valuer,false
+COL-0261,residential_property,"Unit 24 / 118 Nicholson Street, Robina QLD 4226",802469,AUD,2025-06-01,independent_valuer,false
+COL-0262,residential_property,"Unit 12 / 175 Lane Cove Road, Bankstown NSW 2200",2016129,AUD,2026-08-28,independent_valuer,false
+COL-0263,residential_property,"Unit 3 / 83 Banksia Drive, Bankstown NSW 2200",3620689,AUD,2026-07-15,bank_panel_valuer,false
+COL-0264,residential_property,"158 Main Street, Mount Gravatt QLD 4122",2386363,AUD,2026-03-13,independent_valuer,false
+COL-0265,residential_property,"Unit 3 / 65 Cleveland Street, Brookvale NSW 2100",2171052,AUD,2026-05-31,independent_valuer,false
+COL-0266,residential_property,"78 Camberwell Road, Mandurah WA 6210",2310126,AUD,2026-09-24,bank_panel_valuer,false
+COL-0267,residential_property,"23 Exhibition Street, Carindale QLD 4152",4025423,AUD,2025-06-01,bank_panel_valuer,false
+COL-0268,residential_property,"127 Condamine Street, Rockingham WA 6168",580357,AUD,2026-07-22,bank_panel_valuer,false
+COL-0269,residential_property,"184 Mowbray Road, Northcote VIC 3070",2968750,AUD,2025-10-28,bank_panel_valuer,false
+COL-0270,residential_property,"61 Collins Street, Wynnum QLD 4178",2746913,AUD,2025-01-19,bank_panel_valuer,false
+COL-0271,residential_property,"177 Bottlebrush Court, Frenchs Forest NSW 2086",2740384,AUD,2026-11-17,independent_valuer,false
+COL-0272,residential_property,"Unit 21 / 188 Bottlebrush Court, Toorak VIC 3142",1176470,AUD,2026-01-08,bank_panel_valuer,false
+COL-0273,residential_property,"59 Church Street, Hornsby NSW 2077",2500000,AUD,2026-02-28,bank_panel_valuer,false
+COL-0274,residential_property,"162 Pittwater Road, South Yarra VIC 3141",434782,AUD,2026-06-17,bank_panel_valuer,false
+COL-0275,residential_property,"179 Cleveland Street, Broadbeach QLD 4218",1130952,AUD,2026-10-27,bank_panel_valuer,false
+COL-0276,residential_property,"Unit 2 / 109 Hoddle Street, Kogarah NSW 2217",446428,AUD,2026-01-17,bank_panel_valuer,false
+COL-0277,residential_property,"184 Malvern Road, Dee Why NSW 2099",3437500,AUD,2026-01-22,independent_valuer,false
+COL-0278,residential_property,"118 Church Street, Coburg VIC 3058",2708333,AUD,2026-06-10,independent_valuer,false
+COL-0279,residential_property,"37 Park Road, Parramatta NSW 2150",2137681,AUD,2026-03-08,independent_valuer,false
+COL-0280,residential_property,"36 Hoddle Street, Miranda NSW 2228",1875000,AUD,2026-04-06,bank_panel_valuer,false
+COL-0281,residential_property,"169 Melaleuca Way, Bondi NSW 2026",3145161,AUD,2025-01-20,bank_panel_valuer,false
+COL-0282,residential_property,"30 Albert Street, New Farm QLD 4005",3186274,AUD,2025-10-20,independent_valuer,false
+COL-0283,residential_property,"163 Bourke Street, Hornsby NSW 2077",2088235,AUD,2025-01-20,bank_panel_valuer,false
+COL-0284,residential_property,"Unit 15 / 116 King Street, Marrickville NSW 2204",3375000,AUD,2026-09-28,bank_panel_valuer,false
+COL-0285,residential_property,"Unit 18 / 32 Eucalyptus Lane, Maroubra NSW 2035",2325581,AUD,2025-10-14,bank_panel_valuer,false
+COL-0286,residential_property,"173 Station Road, Mandurah WA 6210",604395,AUD,2026-01-21,bank_panel_valuer,false
+COL-0287,residential_property,"Unit 16 / 127 Anzac Parade, Chermside QLD 4032",646067,AUD,2026-12-22,independent_valuer,false
+COL-0288,residential_property,"83 Bell Street, Fortitude Valley QLD 4006",389610,AUD,2026-02-21,bank_panel_valuer,false
+COL-0289,residential_property,"64 Albert Street, Box Hill VIC 3128",3284313,AUD,2025-12-15,independent_valuer,false
+COL-0290,residential_property,"78 Camberwell Road, Chatswood NSW 2067",4629629,AUD,2025-03-09,independent_valuer,false
+COL-0291,residential_property,"Unit 4 / 85 Glenferrie Road, Neutral Bay NSW 2089",1510989,AUD,2025-01-13,independent_valuer,false
+COL-0292,residential_property,"Unit 10 / 199 Park Road, Armadale WA 6112",2042682,AUD,2026-09-10,bank_panel_valuer,false
+COL-0293,residential_property,"Unit 24 / 160 Collins Street, Malvern VIC 3144",2000000,AUD,2025-12-06,bank_panel_valuer,false
+COL-0294,residential_property,"62 Anzac Parade, Cronulla NSW 2230",4166666,AUD,2026-11-08,independent_valuer,false
+COL-0295,residential_property,"49 Jacaranda Avenue, Adelaide SA 5000",1833333,AUD,2025-06-02,bank_panel_valuer,false
+COL-0296,residential_property,"54 Bourke Street, Subiaco WA 6008",1321839,AUD,2026-04-08,independent_valuer,false
+COL-0297,residential_property,"111 Plenty Road, Mandurah WA 6210",2164634,AUD,2026-05-25,bank_panel_valuer,false
+COL-0298,residential_property,"Unit 12 / 198 Exhibition Street, Parramatta NSW 2150",3836206,AUD,2026-02-18,bank_panel_valuer,false
+COL-0299,residential_property,"49 Bell Street, Frenchs Forest NSW 2086",2246835,AUD,2026-12-16,bank_panel_valuer,false
+COL-0300,residential_property,"Unit 4 / 137 Parramatta Road, New Farm QLD 4005",2833333,AUD,2025-12-03,bank_panel_valuer,false
+COL-0301,residential_property,"Unit 28 / 133 High Street, Epping NSW 2121",1331521,AUD,2026-02-25,bank_panel_valuer,false
+COL-0302,residential_property,"Unit 29 / 189 Victoria Street, South Yarra VIC 3141",1569767,AUD,2026-04-13,bank_panel_valuer,false
+COL-0303,residential_property,"Unit 30 / 161 St Kilda Road, Ryde NSW 2112",1648936,AUD,2025-03-10,independent_valuer,false
+COL-0304,residential_property,"191 Canterbury Road, Sunnybank QLD 4109",2473404,AUD,2026-02-11,independent_valuer,false
+COL-0305,residential_property,"56 Sydney Road, Marrickville NSW 2204",2336065,AUD,2026-10-13,independent_valuer,false
+COL-0306,residential_property,"171 Bridge Road, Dee Why NSW 2099",4490740,AUD,2025-02-15,bank_panel_valuer,false
+COL-0307,residential_property,"Unit 20 / 169 Waratah Crescent, Hurstville NSW 2220",2600000,AUD,2026-01-13,independent_valuer,false
+COL-0308,residential_property,"131 Military Road, Prospect SA 5082",2647058,AUD,2026-05-31,independent_valuer,false
+COL-0309,residential_property,"63 Collins Street, Burwood NSW 2134",2352941,AUD,2026-11-12,independent_valuer,false
+COL-0310,residential_property,"130 Victoria Street, Blacktown NSW 2148",1272727,AUD,2026-04-24,bank_panel_valuer,false
+COL-0311,residential_property,"119 Exhibition Street, Williamstown VIC 3016",3389830,AUD,2026-01-20,bank_panel_valuer,false
+COL-0312,residential_property,"99 Melaleuca Way, Preston VIC 3072",2055555,AUD,2025-09-10,independent_valuer,false
+COL-0313,residential_property,"181 Glenferrie Road, Williamstown VIC 3016",1181818,AUD,2025-03-24,independent_valuer,false
+COL-0314,residential_property,"54 Melaleuca Way, Essendon VIC 3040",2703488,AUD,2026-12-17,bank_panel_valuer,false
+COL-0315,residential_property,"76 Victoria Street, Hurstville NSW 2220",2584269,AUD,2025-10-11,independent_valuer,false
+COL-0316,residential_property,"Unit 14 / 122 Forest Road, Toorak VIC 3142",405405,AUD,2025-12-11,bank_panel_valuer,false
+COL-0317,residential_property,"180 Forest Road, Ryde NSW 2112",1421568,AUD,2026-01-13,bank_panel_valuer,false
+COL-0318,residential_property,"110 Melaleuca Way, Footscray VIC 3011",2746913,AUD,2026-05-03,independent_valuer,false
+COL-0319,residential_property,"55 Bridge Road, Blacktown NSW 2148",3026315,AUD,2026-11-07,independent_valuer,false
+COL-0320,residential_property,"Unit 19 / 29 Victoria Street, New Farm QLD 4005",2617187,AUD,2025-07-12,independent_valuer,false
+COL-0321,residential_property,"138 Jacaranda Avenue, Parramatta NSW 2150",2727272,AUD,2025-05-29,bank_panel_valuer,false
+COL-0322,residential_property,"86 Park Road, South Yarra VIC 3141",1203703,AUD,2025-08-04,independent_valuer,false
+COL-0323,residential_property,"180 Jacaranda Avenue, Scarborough WA 6019",632530,AUD,2025-04-10,independent_valuer,false
+COL-0324,residential_property,"174 Sunrise Boulevard, Fremantle WA 6160",4750000,AUD,2025-06-01,bank_panel_valuer,false
+COL-0325,residential_property,"168 Condamine Street, Claremont WA 6010",701754,AUD,2026-12-10,independent_valuer,false
+COL-0326,residential_property,"152 Main Street, Paddington QLD 4064",2529069,AUD,2026-10-23,bank_panel_valuer,false
+COL-0327,residential_property,"144 Lonsdale Street, St Kilda VIC 3182",732758,AUD,2025-02-05,independent_valuer,false
+COL-0328,residential_property,"Unit 4 / 138 Hoddle Street, Northcote VIC 3070",2623456,AUD,2026-11-10,independent_valuer,false
+COL-0329,residential_property,"42 Plenty Road, Surry Hills NSW 2010",1715116,AUD,2025-11-20,bank_panel_valuer,false
+COL-0330,residential_property,"27 Sunrise Boulevard, Castle Hill NSW 2154",1492537,AUD,2025-06-29,bank_panel_valuer,false
+COL-0331,residential_property,"Unit 22 / 152 Church Street, Mosman NSW 2088",2916666,AUD,2026-06-10,independent_valuer,false
+COL-0332,residential_property,"Unit 10 / 163 Jacaranda Avenue, Glen Waverley VIC 3150",1791044,AUD,2026-02-21,bank_panel_valuer,false
+COL-0333,residential_property,"176 Lane Cove Road, Neutral Bay NSW 2089",2987804,AUD,2026-12-16,independent_valuer,false
+COL-0334,residential_property,"14 Bell Street, Midland WA 6056",1574074,AUD,2025-06-24,bank_panel_valuer,false
+COL-0335,residential_property,"159 Jacaranda Avenue, Broadbeach QLD 4218",1401098,AUD,2025-12-31,independent_valuer,false
+COL-0336,residential_property,"96 Exhibition Street, Williamstown VIC 3016",508474,AUD,2025-07-06,bank_panel_valuer,false
+COL-0337,residential_property,"29 Albert Street, Toowong QLD 4066",1920731,AUD,2025-05-10,independent_valuer,false
+COL-0338,residential_property,"31 Church Street, Blacktown NSW 2148",1411290,AUD,2025-10-08,independent_valuer,false
+COL-0339,residential_property,"90 Pittwater Road, Box Hill VIC 3128",4433962,AUD,2025-11-24,independent_valuer,false
+COL-0340,residential_property,"34 Military Road, Bondi NSW 2026",3544776,AUD,2025-05-04,independent_valuer,false
+COL-0341,residential_property,"94 Sydney Road, Mount Gravatt QLD 4122",1129032,AUD,2025-05-01,bank_panel_valuer,false
+COL-0342,residential_property,"117 Hoddle Street, Southbank VIC 3006",930232,AUD,2026-06-22,bank_panel_valuer,false
+COL-0343,residential_property,"Unit 20 / 1 Pacific Highway, Paddington QLD 4064",494505,AUD,2026-01-13,bank_panel_valuer,false
+COL-0344,residential_property,"Unit 8 / 193 Canterbury Road, North Adelaide SA 5006",2656250,AUD,2026-03-21,bank_panel_valuer,false
+COL-0345,residential_property,"4 Forest Road, Paddington QLD 4064",369318,AUD,2025-02-14,independent_valuer,false
+COL-0346,residential_property,"Unit 8 / 1 Acacia Close, Claremont WA 6010",2977941,AUD,2026-03-14,bank_panel_valuer,false
+COL-0347,residential_property,"1 Bottlebrush Court, Fremantle WA 6160",932835,AUD,2025-06-02,independent_valuer,false
+COL-0348,residential_property,"36 Banksia Drive, Sunnybank QLD 4109",1604938,AUD,2025-09-09,bank_panel_valuer,false
+COL-0349,residential_property,"143 Smith Street, Footscray VIC 3011",2900000,AUD,2025-04-23,independent_valuer,false
+COL-0350,residential_property,"Unit 27 / 170 Glenferrie Road, Fremantle WA 6160",398936,AUD,2026-09-01,independent_valuer,false
+COL-0351,residential_property,"142 Pittwater Road, Broadbeach QLD 4218",1600000,AUD,2026-08-09,bank_panel_valuer,false
+COL-0352,residential_property,"104 Waratah Crescent, Randwick NSW 2031",558510,AUD,2025-02-25,bank_panel_valuer,false
+COL-0353,residential_property,"22 Malvern Road, Ryde NSW 2112",3306451,AUD,2026-08-01,bank_panel_valuer,false
+COL-0354,residential_property,"Unit 23 / 175 Pacific Highway, Scarborough WA 6019",3227272,AUD,2025-06-14,bank_panel_valuer,false
+COL-0355,residential_property,"Unit 30 / 25 Brunswick Street, Mosman NSW 2088",550847,AUD,2025-10-30,independent_valuer,false
+COL-0356,residential_property,"Unit 27 / 190 Sunrise Boulevard, South Yarra VIC 3141",1209677,AUD,2026-07-29,independent_valuer,false
+COL-0357,residential_property,"Unit 2 / 164 Collins Street, Carlton VIC 3053",1487341,AUD,2026-09-08,bank_panel_valuer,false
+COL-0358,residential_property,"42 Epping Road, Maroubra NSW 2035",1284722,AUD,2026-12-11,bank_panel_valuer,false
+COL-0359,residential_property,"33 Military Road, Mandurah WA 6210",3223684,AUD,2026-08-16,independent_valuer,false
+COL-0360,residential_property,"106 Albert Street, Northcote VIC 3070",1090909,AUD,2026-10-01,independent_valuer,false
+COL-0361,residential_property,"Unit 22 / 130 Russell Street, Chermside QLD 4032",2473684,AUD,2025-09-28,bank_panel_valuer,false
+COL-0362,residential_property,"165 Canterbury Road, Northcote VIC 3070",2576923,AUD,2026-08-15,bank_panel_valuer,false
+COL-0363,residential_property,"7 Condamine Street, Holland Park QLD 4121",421348,AUD,2026-04-10,bank_panel_valuer,false
+COL-0364,residential_property,"54 Lane Cove Road, Fremantle WA 6160",740740,AUD,2025-11-18,bank_panel_valuer,false
+COL-0365,residential_property,"6 Punt Road, Marrickville NSW 2204",2954545,AUD,2025-06-06,independent_valuer,false
+COL-0366,residential_property,"45 Chapel Street, Ryde NSW 2112",2435064,AUD,2025-10-15,bank_panel_valuer,false
+COL-0367,residential_property,"Unit 7 / 48 Cleveland Street, Hornsby NSW 2077",3039215,AUD,2026-11-04,bank_panel_valuer,false
+COL-0368,residential_property,"172 Elizabeth Street, Dee Why NSW 2099",3134920,AUD,2026-10-24,bank_panel_valuer,false
+COL-0369,residential_property,"Unit 13 / 119 Russell Street, South Brisbane QLD 4101",1220930,AUD,2025-02-07,independent_valuer,false
+COL-0370,residential_property,"95 Waratah Crescent, Essendon VIC 3040",3246753,AUD,2025-01-06,independent_valuer,false
+COL-0371,residential_property,"22 Cleveland Street, Maroubra NSW 2035",2851562,AUD,2025-09-06,independent_valuer,false
+COL-0372,residential_property,"Unit 30 / 28 Acacia Close, Southbank VIC 3006",1884057,AUD,2026-01-08,bank_panel_valuer,false
+COL-0373,residential_property,"69 George Street, Brunswick VIC 3056",1096491,AUD,2026-06-28,bank_panel_valuer,false
+COL-0374,residential_property,"153 Spring Street, Brunswick VIC 3056",1948051,AUD,2026-05-21,bank_panel_valuer,false
+COL-0375,residential_property,"Unit 3 / 62 Bridge Road, Coburg VIC 3058",1067073,AUD,2025-06-20,independent_valuer,false
+COL-0376,residential_property,"Unit 22 / 12 Waratah Crescent, Norwood SA 5067",4300000,AUD,2025-10-25,independent_valuer,false
+COL-0377,residential_property,"170 Jacaranda Avenue, Miranda NSW 2228",2065217,AUD,2026-09-03,bank_panel_valuer,false
+COL-0378,residential_property,"Unit 17 / 80 Chapel Street, Box Hill VIC 3128",3402777,AUD,2026-12-20,bank_panel_valuer,false
+COL-0379,residential_property,"76 High Street, New Farm QLD 4005",2255434,AUD,2025-08-11,bank_panel_valuer,false
+COL-0380,residential_property,"Unit 8 / 150 Acacia Close, Brighton VIC 3186",605263,AUD,2025-02-02,bank_panel_valuer,false
+COL-0381,residential_property,"Unit 19 / 78 Exhibition Street, Carindale QLD 4152",3991935,AUD,2026-10-06,bank_panel_valuer,false
+COL-0382,residential_property,"Unit 30 / 23 Forest Road, Rockingham WA 6168",2025316,AUD,2025-11-06,independent_valuer,false
+COL-0383,residential_property,"Unit 10 / 86 Burke Road, Fitzroy VIC 3065",818181,AUD,2026-08-03,bank_panel_valuer,false
+COL-0384,residential_property,"125 Camberwell Road, Dee Why NSW 2099",3940677,AUD,2025-04-28,independent_valuer,false
+COL-0385,residential_property,"52 Smith Street, Marrickville NSW 2204",3692307,AUD,2025-10-24,independent_valuer,false
+COL-0386,residential_property,"11 Acacia Close, Broadbeach QLD 4218",2403846,AUD,2025-05-23,bank_panel_valuer,false
+COL-0387,residential_property,"101 Elizabeth Street, Bankstown NSW 2200",1842105,AUD,2026-10-23,bank_panel_valuer,false
+COL-0388,residential_property,"Unit 8 / 174 Smith Street, Robina QLD 4226",625000,AUD,2025-08-31,independent_valuer,false
+COL-0389,residential_property,"97 Church Street, Mandurah WA 6210",4509803,AUD,2026-08-11,independent_valuer,false
+COL-0390,residential_property,"92 Camberwell Road, Epping NSW 2121",1428571,AUD,2025-05-22,independent_valuer,false
+COL-0391,residential_property,"74 Elizabeth Street, Claremont WA 6010",1856060,AUD,2025-09-05,bank_panel_valuer,false
+COL-0392,residential_property,"89 Elizabeth Street, Fortitude Valley QLD 4006",1467391,AUD,2026-09-05,independent_valuer,false
+COL-0393,residential_property,"Unit 16 / 176 Condamine Street, Coogee NSW 2034",931372,AUD,2025-02-23,bank_panel_valuer,false
+COL-0394,residential_property,"Unit 24 / 12 Banksia Drive, Collingwood VIC 3066",4350000,AUD,2025-09-13,independent_valuer,false
+COL-0395,residential_property,"89 Wattle Street, Chatswood NSW 2067",1642857,AUD,2026-09-29,bank_panel_valuer,false
+COL-0396,residential_property,"48 Mowbray Road, Prospect SA 5082",2027027,AUD,2025-02-23,bank_panel_valuer,false
+COL-0397,residential_property,"4 Spring Street, Toowong QLD 4066",1898734,AUD,2025-10-08,independent_valuer,false
+COL-0398,residential_property,"46 Sydney Road, Frenchs Forest NSW 2086",1482558,AUD,2026-03-27,independent_valuer,false
+COL-0399,residential_property,"38 Bottlebrush Court, Brunswick VIC 3056",1780303,AUD,2025-02-20,independent_valuer,false
+COL-0400,residential_property,"7 Oxford Street, Carlton VIC 3053",3256578,AUD,2026-01-04,bank_panel_valuer,false
+COL-0401,residential_property,"183 Cleveland Street, Collingwood VIC 3066",1585365,AUD,2026-01-23,independent_valuer,false
+COL-0402,residential_property,"85 Flinders Street, Chermside QLD 4032",1940298,AUD,2026-01-06,independent_valuer,false
+COL-0403,residential_property,"Unit 9 / 150 Mowbray Road, Coogee NSW 2034",3620689,AUD,2025-10-21,bank_panel_valuer,false
+COL-0404,residential_property,"Unit 28 / 43 Elizabeth Street, Coburg VIC 3058",1034482,AUD,2026-06-27,bank_panel_valuer,false
+COL-0405,residential_property,"194 Smith Street, Glen Waverley VIC 3150",1777777,AUD,2025-07-07,independent_valuer,false
+COL-0406,residential_property,"Unit 10 / 89 Russell Street, Fitzroy VIC 3065",2910447,AUD,2025-10-08,bank_panel_valuer,false
+COL-0407,residential_property,"126 Eucalyptus Lane, Parramatta NSW 2150",4230769,AUD,2026-01-14,independent_valuer,false
+COL-0408,residential_property,"81 Wattle Street, Maroubra NSW 2035",2804878,AUD,2026-03-20,independent_valuer,false
+COL-0409,residential_property,"34 Chapel Street, Bankstown NSW 2200",3050847,AUD,2025-04-01,independent_valuer,false
+COL-0410,residential_property,"64 Mowbray Road, Unley SA 5061",1754385,AUD,2025-06-30,bank_panel_valuer,false
+COL-0411,residential_property,"114 Bell Street, Castle Hill NSW 2154",2964285,AUD,2025-02-25,bank_panel_valuer,false
+COL-0412,residential_property,"24 Rocky Point Road, Williamstown VIC 3016",2648809,AUD,2025-12-28,independent_valuer,false
+COL-0413,residential_property,"Unit 1 / 11 Bridge Road, Toorak VIC 3142",784313,AUD,2025-08-24,independent_valuer,false
+COL-0414,residential_property,"Unit 14 / 110 Victoria Street, Glen Waverley VIC 3150",909090,AUD,2026-07-29,bank_panel_valuer,false
+COL-0415,residential_property,"37 Banksia Drive, Doncaster VIC 3108",1843750,AUD,2025-03-27,independent_valuer,false
+COL-0416,residential_property,"83 Epping Road, Subiaco WA 6008",2318840,AUD,2026-02-21,independent_valuer,false
+COL-0417,residential_property,"112 Russell Street, Bondi NSW 2026",852941,AUD,2026-11-24,bank_panel_valuer,false
+COL-0418,residential_property,"Unit 16 / 82 Plenty Road, Richmond VIC 3121",2327586,AUD,2025-03-10,independent_valuer,false
+COL-0419,residential_property,"95 Camberwell Road, Wynnum QLD 4178",524193,AUD,2025-09-18,independent_valuer,false
+COL-0420,residential_property,"131 Banksia Drive, Glenelg SA 5045",3600000,AUD,2026-11-12,bank_panel_valuer,false
+COL-0421,residential_property,"112 Toorak Road, Manly NSW 2095",1625000,AUD,2026-12-13,bank_panel_valuer,false
+COL-0422,residential_property,"Unit 4 / 2 Glenferrie Road, Hawthorn VIC 3122",1700000,AUD,2026-01-13,bank_panel_valuer,false
+COL-0423,residential_property,"114 Military Road, South Yarra VIC 3141",1272727,AUD,2025-11-18,independent_valuer,false
+COL-0424,residential_property,"Unit 15 / 187 Spring Street, Claremont WA 6010",2635869,AUD,2025-02-15,bank_panel_valuer,false
+COL-0425,residential_property,"82 Glenferrie Road, Brunswick VIC 3056",1008771,AUD,2025-01-21,independent_valuer,false
+COL-0426,residential_property,"Unit 10 / 70 Grevillea Place, Hawthorn VIC 3122",1034482,AUD,2025-09-23,bank_panel_valuer,false
+COL-0427,residential_property,"40 St Kilda Road, Williamstown VIC 3016",967741,AUD,2026-12-21,bank_panel_valuer,false
+COL-0428,residential_property,"Unit 22 / 9 Melaleuca Way, Box Hill VIC 3128",548780,AUD,2026-10-09,independent_valuer,false
+COL-0429,residential_property,"Unit 21 / 108 Smith Street, Brunswick VIC 3056",691489,AUD,2025-04-13,independent_valuer,false
+COL-0430,residential_property,"63 Lonsdale Street, Toorak VIC 3142",988372,AUD,2026-09-08,bank_panel_valuer,false
+COL-0431,residential_property,"Unit 22 / 146 Forest Road, Carindale QLD 4152",1666666,AUD,2025-12-08,independent_valuer,false
+COL-0432,residential_property,"Unit 7 / 21 Main Street, Wynnum QLD 4178",1525423,AUD,2026-03-24,independent_valuer,false
+COL-0433,residential_property,"172 Parramatta Road, Robina QLD 4226",882352,AUD,2026-12-25,independent_valuer,false
+COL-0434,residential_property,"126 Mowbray Road, Mount Gravatt QLD 4122",1168831,AUD,2026-08-24,independent_valuer,false
+COL-0435,residential_property,"Unit 7 / 36 Nicholson Street, Chermside QLD 4032",965909,AUD,2025-11-06,bank_panel_valuer,false
+COL-0436,residential_property,"Unit 28 / 176 Warringah Road, Footscray VIC 3011",1084337,AUD,2026-02-19,independent_valuer,false
+COL-0437,residential_property,"155 Banksia Drive, Fitzroy VIC 3065",1320754,AUD,2026-04-07,bank_panel_valuer,false
+COL-0438,residential_property,"Unit 27 / 152 Lonsdale Street, Coburg VIC 3058",752688,AUD,2026-09-22,bank_panel_valuer,false
+COL-0439,residential_property,"Unit 14 / 69 Main Street, Prahran VIC 3181",779220,AUD,2025-01-18,bank_panel_valuer,false
+COL-0440,residential_property,"118 Epping Road, Footscray VIC 3011",1111111,AUD,2026-06-21,bank_panel_valuer,false
+COL-0441,residential_property,"Unit 23 / 25 Bourke Street, Burwood NSW 2134",1492537,AUD,2025-11-29,independent_valuer,false
+COL-0442,residential_property,"97 Burke Road, Carlton VIC 3053",1296296,AUD,2025-05-07,independent_valuer,false
+COL-0443,residential_property,"198 Anzac Parade, Doncaster VIC 3108",1746031,AUD,2026-11-12,bank_panel_valuer,false
+COL-0444,residential_property,"45 Lane Cove Road, Preston VIC 3072",1400000,AUD,2026-01-28,bank_panel_valuer,false
+COL-0445,residential_property,"161 Smith Street, Collingwood VIC 3066",1568627,AUD,2026-01-15,independent_valuer,false
+COL-0446,residential_property,"176 Burke Road, Chermside QLD 4032",1078431,AUD,2025-09-05,independent_valuer,false
+COL-0447,residential_property,"107 Lonsdale Street, New Farm QLD 4005",1315789,AUD,2026-07-05,independent_valuer,false
+COL-0448,residential_property,"Unit 9 / 32 Albert Street, Surfers Paradise QLD 4217",842105,AUD,2026-08-17,independent_valuer,false
+COL-0449,residential_property,"85 Sunrise Boulevard, Broadbeach QLD 4218",1307692,AUD,2025-09-22,bank_panel_valuer,false
+COL-0450,residential_property,"76 Park Road, Coogee NSW 2034",1279069,AUD,2026-12-13,independent_valuer,false
+COL-0451,residential_property,"Unit 10 / 172 Elizabeth Street, Richmond VIC 3121",2125000,AUD,2025-07-31,independent_valuer,false
+COL-0452,residential_property,"190 Main Street, Nundah QLD 4012",576923,AUD,2026-10-29,independent_valuer,false
+COL-0453,residential_property,"65 Forest Road, Parramatta NSW 2150",689655,AUD,2025-10-05,bank_panel_valuer,false
+COL-0454,residential_property,"197 Canterbury Road, Liverpool NSW 2170",697674,AUD,2025-06-11,independent_valuer,false
+COL-0455,residential_property,"123 Warringah Road, Essendon VIC 3040",2857142,AUD,2025-02-17,bank_panel_valuer,false
+COL-0456,residential_property,"Unit 1 / 136 Waratah Crescent, Prahran VIC 3181",1976744,AUD,2025-05-24,independent_valuer,false
+COL-0457,residential_property,"189 Elizabeth Street, St Kilda VIC 3182",1790123,AUD,2026-07-26,independent_valuer,false
+COL-0458,residential_property,"Unit 5 / 3 Bourke Street, Richmond VIC 3121",1395348,AUD,2025-09-23,independent_valuer,false
+COL-0459,residential_property,"Unit 30 / 109 Spring Street, Penrith NSW 2750",1718750,AUD,2025-08-11,bank_panel_valuer,false
+COL-0460,residential_property,"Unit 3 / 82 Plenty Road, Essendon VIC 3040",1578947,AUD,2026-06-04,bank_panel_valuer,false
+COL-0461,residential_property,"Unit 20 / 121 Forest Road, Maroubra NSW 2035",3000000,AUD,2025-08-03,bank_panel_valuer,false
+COL-0462,residential_property,"Unit 14 / 189 Bottlebrush Court, South Yarra VIC 3141",1176470,AUD,2025-02-17,bank_panel_valuer,false
+COL-0463,residential_property,"127 Condamine Street, Toorak VIC 3142",1986301,AUD,2026-08-08,independent_valuer,false
+COL-0464,residential_property,"Unit 7 / 99 Military Road, Kogarah NSW 2217",1712328,AUD,2025-07-06,independent_valuer,false
+COL-0465,residential_property,"88 Banksia Drive, Ryde NSW 2112",3571428,AUD,2026-07-17,bank_panel_valuer,false
+COL-0466,residential_property,"Unit 28 / 154 Rocky Point Road, Southbank VIC 3006",2142857,AUD,2026-06-28,independent_valuer,false

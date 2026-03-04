@@ -1,0 +1,20 @@
+officer_id,name,date_of_birth,nationality,is_pep,pep_detail,sanctions_match
+OFF-0001,Rosa Nguyen,1956-03-16,Australian,false,,false
+OFF-0002,Suresh Baker,1957-01-20,Australian,false,,false
+OFF-0003,Marco Watanabe,1971-09-16,Australian,false,,false
+OFF-0004,Sebastian Jung,1974-04-04,Australian,false,,false
+OFF-0005,Jessica Collins,1986-03-16,Australian,false,,false
+OFF-0006,Priya Singh,1989-11-27,Australian,false,,false
+OFF-0007,Diana Wright,1986-11-14,Australian,false,,false
+OFF-0008,Leo Lewis,1959-04-06,Australian,false,,false
+OFF-0009,Brian Garcia,1980-08-22,Australian,false,,false
+OFF-0010,Giuseppe Taylor,1966-06-02,Australian,false,,false
+OFF-0011,Bianca Schmidt,1961-11-08,Australian,false,,false
+OFF-0012,Sakura Campbell,1978-08-12,Foreign,false,,false
+OFF-0013,Khalid Jung,1972-05-29,Foreign,false,,false
+OFF-0014,Ross Fischer,1959-09-22,Australian,true,Former State Minister for Planning NSW (2014-2019),false
+OFF-0015,Rosa Hoffman,1958-04-27,Australian,true,Former Deputy Director - AUSTRAC Compliance Division (2012-2018),false
+OFF-0016,Celeste Williams,1983-03-03,Australian,false,,false
+OFF-0017,Paul Thomas,1964-11-29,Australian,false,,false
+OFF-0018,Anna Edwards,1958-05-15,Australian,false,,false
+OFF-0019,Rebecca Rahman,1977-12-22,Australian,false,,false

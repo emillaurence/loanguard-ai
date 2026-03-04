@@ -1,0 +1,13 @@
+owner_id,owned_id,ownership_percentage,ownership_type,effective_date
+BRW-0580,BRW-0579,100,wholly_owned_subsidiary,2020-03-09
+BRW-0581,BRW-0580,70,majority_owned_subsidiary,2017-08-27
+BRW-0582,BRW-0581,60,individual_shareholder,2020-11-22
+BRW-0585,BRW-0584,100,wholly_owned_subsidiary,2018-08-04
+BRW-0586,BRW-0585,70,majority_owned_subsidiary,2018-06-08
+BRW-0587,BRW-0586,70,individual_shareholder,2017-06-20
+BRW-0598,BRW-0597,60,individual_shareholder,2022-06-20
+BRW-0601,BRW-0600,51,individual_shareholder,2021-01-14
+BRW-0625,BRW-0623,100,individual_shareholder,2025-12-31
+BRW-0625,BRW-0624,70,individual_shareholder,2015-09-16
+BRW-0628,BRW-0626,100,individual_shareholder,2025-11-09
+BRW-0628,BRW-0627,70,individual_shareholder,2016-02-19

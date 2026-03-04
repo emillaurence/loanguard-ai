@@ -1,0 +1,792 @@
+account_id,bank_name,account_type,currency,country,opened_date,status,average_monthly_balance
+ACC-0001,Bank of Queensland,personal_transaction,AUD,Australia,2010-09-18,active,8905
+ACC-0002,Westpac,personal_transaction,AUD,Australia,2012-01-30,active,54797
+ACC-0003,AMP Bank,personal_transaction,AUD,Australia,2018-02-10,active,80674
+ACC-0004,BankSA,personal_transaction,AUD,Australia,2022-06-29,active,33785
+ACC-0005,St George Bank,personal_transaction,AUD,Australia,2019-08-11,active,81484
+ACC-0006,Westpac,personal_transaction,AUD,Australia,2018-08-19,active,55019
+ACC-0007,BankSA,personal_transaction,AUD,Australia,2021-05-21,active,84818
+ACC-0008,ING Australia,personal_transaction,AUD,Australia,2012-10-27,active,21828
+ACC-0009,Bendigo Bank,personal_transaction,AUD,Australia,2019-10-29,active,72839
+ACC-0010,St George Bank,personal_transaction,AUD,Australia,2022-12-04,active,66953
+ACC-0011,Suncorp,personal_transaction,AUD,Australia,2015-08-09,active,119620
+ACC-0012,ME Bank,personal_transaction,AUD,Australia,2022-06-19,active,91752
+ACC-0013,NAB,personal_transaction,AUD,Australia,2022-12-26,active,82924
+ACC-0014,Westpac,personal_transaction,AUD,Australia,2011-08-24,active,75468
+ACC-0015,ING Australia,personal_transaction,AUD,Australia,2010-03-06,active,92538
+ACC-0016,Westpac,personal_transaction,AUD,Australia,2019-07-02,active,113704
+ACC-0017,Bankwest,business_transaction,AUD,Australia,2008-08-16,active,128147
+ACC-0018,AMP Bank,personal_transaction,AUD,Australia,2019-02-12,active,86351
+ACC-0019,Macquarie Bank,personal_transaction,AUD,Australia,2015-02-08,active,34219
+ACC-0020,Bank of Queensland,personal_transaction,AUD,Australia,2023-08-07,active,72033
+ACC-0021,ING Australia,personal_transaction,AUD,Australia,2012-11-08,active,30144
+ACC-0022,ME Bank,personal_transaction,AUD,Australia,2013-10-22,active,91356
+ACC-0023,AMP Bank,personal_transaction,AUD,Australia,2011-08-20,active,64692
+ACC-0024,ANZ,personal_transaction,AUD,Australia,2020-06-03,active,92500
+ACC-0025,Macquarie Bank,personal_transaction,AUD,Australia,2017-07-14,active,46904
+ACC-0026,AMP Bank,personal_transaction,AUD,Australia,2019-05-26,active,75545
+ACC-0027,Commonwealth Bank,personal_transaction,AUD,Australia,2015-11-02,active,54689
+ACC-0028,ANZ,personal_transaction,AUD,Australia,2015-05-09,active,21544
+ACC-0029,St George Bank,personal_transaction,AUD,Australia,2018-06-02,active,56990
+ACC-0030,Bendigo Bank,personal_transaction,AUD,Australia,2020-04-24,active,97708
+ACC-0031,Bendigo Bank,personal_transaction,AUD,Australia,2010-08-24,active,69789
+ACC-0032,Westpac,personal_transaction,AUD,Australia,2016-08-07,active,34045
+ACC-0033,St George Bank,personal_transaction,AUD,Australia,2021-10-07,active,83222
+ACC-0034,Bendigo Bank,personal_transaction,AUD,Australia,2014-02-19,active,11734
+ACC-0035,Westpac,personal_transaction,AUD,Australia,2015-07-27,active,20525
+ACC-0036,Westpac,personal_transaction,AUD,Australia,2013-07-06,active,5350
+ACC-0037,AMP Bank,personal_transaction,AUD,Australia,2013-03-11,active,14359
+ACC-0038,ING Australia,personal_transaction,AUD,Australia,2022-02-10,active,69722
+ACC-0039,Suncorp,personal_transaction,AUD,Australia,2012-01-18,active,66605
+ACC-0040,AMP Bank,personal_transaction,AUD,Australia,2022-03-03,active,65552
+ACC-0041,Bank of Queensland,personal_transaction,AUD,Australia,2012-02-03,active,34451
+ACC-0042,Bank of Queensland,personal_transaction,AUD,Australia,2017-08-16,active,108247
+ACC-0043,Commonwealth Bank,personal_transaction,AUD,Australia,2017-02-19,active,102609
+ACC-0044,Westpac,personal_transaction,AUD,Australia,2020-07-13,active,107436
+ACC-0045,BankSA,personal_transaction,AUD,Australia,2012-04-03,active,63153
+ACC-0046,ANZ,personal_transaction,AUD,Australia,2015-03-18,active,65443
+ACC-0047,Macquarie Bank,personal_transaction,AUD,Australia,2020-03-31,active,115795
+ACC-0048,ME Bank,personal_transaction,AUD,Australia,2017-11-26,active,33705
+ACC-0049,Bendigo Bank,personal_transaction,AUD,Australia,2012-12-12,active,16813
+ACC-0050,BankSA,personal_transaction,AUD,Australia,2018-11-30,active,115853
+ACC-0051,Bankwest,personal_transaction,AUD,Australia,2016-10-11,active,90097
+ACC-0052,Commonwealth Bank,personal_transaction,AUD,Australia,2018-04-24,active,33477
+ACC-0053,St George Bank,personal_transaction,AUD,Australia,2014-08-09,active,13992
+ACC-0054,NAB,personal_transaction,AUD,Australia,2023-03-17,active,47437
+ACC-0055,ING Australia,personal_transaction,AUD,Australia,2014-12-20,active,85623
+ACC-0056,Bank of Queensland,personal_transaction,AUD,Australia,2023-05-26,active,74541
+ACC-0057,BankSA,personal_transaction,AUD,Australia,2020-08-21,active,13799
+ACC-0058,BankSA,personal_transaction,AUD,Australia,2020-10-25,active,34392
+ACC-0059,Westpac,personal_transaction,AUD,Australia,2013-03-08,active,102120
+ACC-0060,Suncorp,personal_transaction,AUD,Australia,2019-04-16,active,40804
+ACC-0061,Bendigo Bank,personal_transaction,AUD,Australia,2012-09-09,active,6013
+ACC-0062,Commonwealth Bank,personal_transaction,AUD,Australia,2020-04-24,active,15205
+ACC-0063,Bankwest,personal_transaction,AUD,Australia,2017-08-13,active,34041
+ACC-0064,ME Bank,personal_transaction,AUD,Australia,2022-08-24,active,104598
+ACC-0065,AMP Bank,personal_transaction,AUD,Australia,2012-01-10,active,85610
+ACC-0066,ING Australia,personal_transaction,AUD,Australia,2021-09-22,active,84928
+ACC-0067,Macquarie Bank,personal_transaction,AUD,Australia,2018-10-16,active,21901
+ACC-0068,NAB,personal_transaction,AUD,Australia,2017-08-31,active,105421
+ACC-0069,Bankwest,personal_transaction,AUD,Australia,2015-04-30,active,63222
+ACC-0070,AMP Bank,personal_transaction,AUD,Australia,2015-08-11,active,11839
+ACC-0071,Westpac,personal_transaction,AUD,Australia,2018-05-30,active,34430
+ACC-0072,Commonwealth Bank,personal_transaction,AUD,Australia,2015-05-08,active,60027
+ACC-0073,ING Australia,personal_transaction,AUD,Australia,2021-05-21,active,77633
+ACC-0074,AMP Bank,personal_transaction,AUD,Australia,2020-06-03,active,96146
+ACC-0075,ING Australia,personal_transaction,AUD,Australia,2018-12-07,active,111876
+ACC-0076,ING Australia,personal_transaction,AUD,Australia,2015-12-25,active,110008
+ACC-0077,Bankwest,personal_transaction,AUD,Australia,2019-07-23,active,26842
+ACC-0078,Bendigo Bank,personal_transaction,AUD,Australia,2018-08-03,active,79349
+ACC-0079,St George Bank,personal_transaction,AUD,Australia,2016-05-28,active,95961
+ACC-0080,ANZ,personal_transaction,AUD,Australia,2015-04-24,active,108595
+ACC-0081,ING Australia,personal_transaction,AUD,Australia,2017-09-23,active,21821
+ACC-0082,ING Australia,personal_transaction,AUD,Australia,2012-02-05,active,70873
+ACC-0083,ING Australia,personal_transaction,AUD,Australia,2016-06-30,active,89136
+ACC-0084,NAB,personal_transaction,AUD,Australia,2020-06-18,active,21059
+ACC-0085,Suncorp,personal_transaction,AUD,Australia,2015-05-27,active,33199
+ACC-0086,ME Bank,personal_transaction,AUD,Australia,2022-05-02,active,41663
+ACC-0087,ANZ,personal_transaction,AUD,Australia,2017-05-10,active,85356
+ACC-0088,ME Bank,personal_transaction,AUD,Australia,2022-12-22,active,80711
+ACC-0089,AMP Bank,personal_transaction,AUD,Australia,2011-05-26,active,97507
+ACC-0090,AMP Bank,personal_transaction,AUD,Australia,2015-12-06,active,84963
+ACC-0091,Commonwealth Bank,personal_transaction,AUD,Australia,2016-06-14,active,98603
+ACC-0092,Suncorp,personal_transaction,AUD,Australia,2012-04-03,active,94285
+ACC-0093,Commonwealth Bank,business_transaction,AUD,Australia,2019-08-24,active,453033
+ACC-0094,St George Bank,personal_transaction,AUD,Australia,2012-05-29,active,48914
+ACC-0095,St George Bank,personal_transaction,AUD,Australia,2019-02-04,active,113395
+ACC-0096,Bendigo Bank,personal_transaction,AUD,Australia,2016-10-09,active,81344
+ACC-0097,Bankwest,personal_transaction,AUD,Australia,2023-08-03,active,53971
+ACC-0098,Suncorp,personal_transaction,AUD,Australia,2012-08-10,active,94167
+ACC-0099,Commonwealth Bank,personal_transaction,AUD,Australia,2011-07-20,active,66875
+ACC-0100,Bankwest,personal_transaction,AUD,Australia,2014-12-30,active,114421
+ACC-0101,St George Bank,personal_transaction,AUD,Australia,2011-02-03,active,37077
+ACC-0102,Bankwest,personal_transaction,AUD,Australia,2013-12-05,active,87050
+ACC-0103,ING Australia,personal_transaction,AUD,Australia,2021-11-20,active,22575
+ACC-0104,Commonwealth Bank,personal_transaction,AUD,Australia,2011-08-20,active,29662
+ACC-0105,Suncorp,personal_transaction,AUD,Australia,2021-12-20,active,90029
+ACC-0106,ANZ,personal_transaction,AUD,Australia,2014-05-27,active,48236
+ACC-0107,BankSA,personal_transaction,AUD,Australia,2011-02-02,active,105183
+ACC-0108,Commonwealth Bank,personal_transaction,AUD,Australia,2021-11-15,active,99659
+ACC-0109,AMP Bank,personal_transaction,AUD,Australia,2017-12-13,active,40038
+ACC-0110,BankSA,personal_transaction,AUD,Australia,2017-06-06,active,79167
+ACC-0111,St George Bank,personal_transaction,AUD,Australia,2010-09-27,active,28508
+ACC-0112,St George Bank,personal_transaction,AUD,Australia,2023-10-08,active,83067
+ACC-0113,ME Bank,personal_transaction,AUD,Australia,2013-06-17,active,101948
+ACC-0114,ING Australia,personal_transaction,AUD,Australia,2019-02-25,active,18538
+ACC-0115,Westpac,personal_transaction,AUD,Australia,2013-10-01,active,61973
+ACC-0116,Bankwest,personal_transaction,AUD,Australia,2014-07-04,active,67784
+ACC-0117,Suncorp,personal_transaction,AUD,Australia,2016-07-14,active,113957
+ACC-0118,Bankwest,personal_transaction,AUD,Australia,2022-01-16,active,82833
+ACC-0119,ING Australia,personal_transaction,AUD,Australia,2021-08-20,active,78137
+ACC-0120,Suncorp,personal_transaction,AUD,Australia,2012-03-10,active,62431
+ACC-0121,Bank of Queensland,personal_transaction,AUD,Australia,2010-08-28,active,101650
+ACC-0122,Bank of Queensland,personal_transaction,AUD,Australia,2023-03-02,active,19972
+ACC-0123,Bankwest,personal_transaction,AUD,Australia,2013-11-20,active,77733
+ACC-0124,Westpac,personal_transaction,AUD,Australia,2022-09-06,active,9044
+ACC-0125,ME Bank,personal_transaction,AUD,Australia,2022-03-08,active,112909
+ACC-0126,ME Bank,personal_transaction,AUD,Australia,2023-03-10,active,95326
+ACC-0127,Bankwest,personal_transaction,AUD,Australia,2016-07-25,active,42923
+ACC-0128,BankSA,personal_transaction,AUD,Australia,2012-02-02,active,57802
+ACC-0129,ANZ,personal_transaction,AUD,Australia,2022-09-12,active,116728
+ACC-0130,Westpac,personal_transaction,AUD,Australia,2018-05-05,active,92098
+ACC-0131,Bank of Queensland,personal_transaction,AUD,Australia,2012-12-18,active,67613
+ACC-0132,Commonwealth Bank,personal_transaction,AUD,Australia,2023-09-09,active,90199
+ACC-0133,Bankwest,personal_transaction,AUD,Australia,2023-08-18,active,42345
+ACC-0134,Bank of Queensland,personal_transaction,AUD,Australia,2022-10-01,active,60163
+ACC-0135,BankSA,personal_transaction,AUD,Australia,2022-01-13,active,75471
+ACC-0136,BankSA,personal_transaction,AUD,Australia,2011-06-26,active,45654
+ACC-0137,ANZ,personal_transaction,AUD,Australia,2018-05-05,active,21637
+ACC-0138,Westpac,personal_transaction,AUD,Australia,2021-02-16,active,64663
+ACC-0139,Commonwealth Bank,personal_transaction,AUD,Australia,2022-05-27,active,110265
+ACC-0140,ANZ,personal_transaction,AUD,Australia,2015-01-03,active,110426
+ACC-0141,NAB,personal_transaction,AUD,Australia,2022-04-05,active,104677
+ACC-0142,Bankwest,personal_transaction,AUD,Australia,2016-11-24,active,18624
+ACC-0143,NAB,personal_transaction,AUD,Australia,2016-07-17,active,39208
+ACC-0144,Westpac,personal_transaction,AUD,Australia,2012-01-11,active,25658
+ACC-0145,AMP Bank,personal_transaction,AUD,Australia,2013-11-25,active,9073
+ACC-0146,Commonwealth Bank,personal_transaction,AUD,Australia,2011-06-13,active,30919
+ACC-0147,Bankwest,personal_transaction,AUD,Australia,2018-11-10,active,70028
+ACC-0148,ING Australia,personal_transaction,AUD,Australia,2015-08-04,active,87674
+ACC-0149,NAB,personal_transaction,AUD,Australia,2015-05-30,active,39934
+ACC-0150,St George Bank,personal_transaction,AUD,Australia,2014-11-28,active,7612
+ACC-0151,St George Bank,personal_transaction,AUD,Australia,2012-04-07,active,49113
+ACC-0152,ME Bank,personal_transaction,AUD,Australia,2018-01-02,active,34260
+ACC-0153,Bendigo Bank,personal_transaction,AUD,Australia,2017-03-02,active,27005
+ACC-0154,ING Australia,personal_transaction,AUD,Australia,2018-06-02,active,18294
+ACC-0155,Bendigo Bank,personal_transaction,AUD,Australia,2013-10-25,active,54212
+ACC-0156,ING Australia,personal_transaction,AUD,Australia,2015-12-14,active,91585
+ACC-0157,Suncorp,personal_transaction,AUD,Australia,2012-08-04,active,45416
+ACC-0158,Suncorp,personal_transaction,AUD,Australia,2020-06-06,active,39524
+ACC-0159,Bankwest,personal_transaction,AUD,Australia,2010-10-12,active,70811
+ACC-0160,Bank of Queensland,personal_transaction,AUD,Australia,2022-06-24,active,57082
+ACC-0161,BankSA,personal_transaction,AUD,Australia,2020-11-21,active,79976
+ACC-0162,Bankwest,personal_transaction,AUD,Australia,2012-03-15,active,118888
+ACC-0163,ING Australia,personal_transaction,AUD,Australia,2019-01-18,active,22779
+ACC-0164,Suncorp,personal_transaction,AUD,Australia,2021-04-30,active,57028
+ACC-0165,NAB,personal_transaction,AUD,Australia,2015-01-19,active,93826
+ACC-0166,BankSA,personal_transaction,AUD,Australia,2021-09-05,active,113044
+ACC-0167,Macquarie Bank,personal_transaction,AUD,Australia,2014-03-24,active,24651
+ACC-0168,Macquarie Bank,personal_transaction,AUD,Australia,2019-05-22,active,58031
+ACC-0169,ME Bank,personal_transaction,AUD,Australia,2022-07-16,active,104997
+ACC-0170,ING Australia,personal_transaction,AUD,Australia,2016-09-10,active,59146
+ACC-0171,St George Bank,personal_transaction,AUD,Australia,2013-07-21,active,69169
+ACC-0172,ANZ,personal_transaction,AUD,Australia,2012-04-21,active,55272
+ACC-0173,NAB,personal_transaction,AUD,Australia,2010-06-29,active,82292
+ACC-0174,NAB,personal_transaction,AUD,Australia,2010-03-18,active,44467
+ACC-0175,Macquarie Bank,personal_transaction,AUD,Australia,2013-08-06,active,10164
+ACC-0176,ME Bank,personal_transaction,AUD,Australia,2021-06-23,active,14836
+ACC-0177,Macquarie Bank,personal_transaction,AUD,Australia,2012-02-01,active,53840
+ACC-0178,Bendigo Bank,personal_transaction,AUD,Australia,2023-09-18,active,8777
+ACC-0179,Bankwest,personal_transaction,AUD,Australia,2021-10-09,active,105601
+ACC-0180,AMP Bank,personal_transaction,AUD,Australia,2021-02-13,active,118956
+ACC-0181,Commonwealth Bank,personal_transaction,AUD,Australia,2022-07-01,active,76971
+ACC-0182,Westpac,personal_transaction,AUD,Australia,2014-12-22,active,5287
+ACC-0183,Bankwest,personal_transaction,AUD,Australia,2017-07-31,active,19125
+ACC-0184,ANZ,business_transaction,AUD,Australia,2014-09-16,active,104292
+ACC-0185,Bank of Queensland,personal_transaction,AUD,Australia,2023-07-07,active,96752
+ACC-0186,Westpac,personal_transaction,AUD,Australia,2017-11-25,active,78699
+ACC-0187,NAB,personal_transaction,AUD,Australia,2015-12-28,active,103328
+ACC-0188,Macquarie Bank,personal_transaction,AUD,Australia,2011-01-20,active,55014
+ACC-0189,NAB,personal_transaction,AUD,Australia,2018-04-01,active,103973
+ACC-0190,Commonwealth Bank,personal_transaction,AUD,Australia,2013-06-13,active,47287
+ACC-0191,Bendigo Bank,personal_transaction,AUD,Australia,2017-06-05,active,52290
+ACC-0192,Commonwealth Bank,personal_transaction,AUD,Australia,2021-08-05,active,112755
+ACC-0193,ING Australia,personal_transaction,AUD,Australia,2021-12-17,active,5960
+ACC-0194,Westpac,personal_transaction,AUD,Australia,2022-11-24,active,112691
+ACC-0195,ME Bank,personal_transaction,AUD,Australia,2019-10-26,active,54992
+ACC-0196,ING Australia,personal_transaction,AUD,Australia,2022-04-13,active,16157
+ACC-0197,Macquarie Bank,personal_transaction,AUD,Australia,2012-03-15,active,30875
+ACC-0198,BankSA,personal_transaction,AUD,Australia,2016-11-09,active,95892
+ACC-0199,ANZ,personal_transaction,AUD,Australia,2023-08-10,active,15744
+ACC-0200,Bank of Queensland,personal_transaction,AUD,Australia,2023-03-27,active,32886
+ACC-0201,BankSA,personal_transaction,AUD,Australia,2013-09-20,active,104248
+ACC-0202,NAB,personal_transaction,AUD,Australia,2010-12-17,active,92632
+ACC-0203,ING Australia,personal_transaction,AUD,Australia,2019-02-07,active,51255
+ACC-0204,Suncorp,personal_transaction,AUD,Australia,2014-09-23,active,82436
+ACC-0205,ING Australia,personal_transaction,AUD,Australia,2019-02-04,active,83558
+ACC-0206,St George Bank,personal_transaction,AUD,Australia,2023-04-01,active,14023
+ACC-0207,ME Bank,personal_transaction,AUD,Australia,2021-12-02,active,70972
+ACC-0208,AMP Bank,personal_transaction,AUD,Australia,2011-11-18,active,42128
+ACC-0209,Macquarie Bank,personal_transaction,AUD,Australia,2018-11-30,active,103955
+ACC-0210,ME Bank,personal_transaction,AUD,Australia,2022-05-08,active,85481
+ACC-0211,St George Bank,personal_transaction,AUD,Australia,2011-04-16,active,106398
+ACC-0212,ANZ,personal_transaction,AUD,Australia,2010-10-23,active,52151
+ACC-0213,Suncorp,personal_transaction,AUD,Australia,2019-01-23,active,80354
+ACC-0214,Commonwealth Bank,personal_transaction,AUD,Australia,2020-10-23,active,20239
+ACC-0215,ANZ,business_transaction,AUD,Australia,2007-02-01,active,299852
+ACC-0216,Westpac,personal_transaction,AUD,Australia,2021-01-18,active,85455
+ACC-0217,ING Australia,personal_transaction,AUD,Australia,2017-10-15,active,56605
+ACC-0218,Bank of Queensland,personal_transaction,AUD,Australia,2014-09-21,active,59931
+ACC-0219,ING Australia,personal_transaction,AUD,Australia,2017-01-30,active,107935
+ACC-0220,St George Bank,personal_transaction,AUD,Australia,2014-06-18,active,80609
+ACC-0221,BankSA,personal_transaction,AUD,Australia,2016-07-14,active,98117
+ACC-0222,Westpac,personal_transaction,AUD,Australia,2012-02-22,active,13361
+ACC-0223,Bank of Queensland,personal_transaction,AUD,Australia,2016-12-09,active,35062
+ACC-0224,Bendigo Bank,personal_transaction,AUD,Australia,2020-10-20,active,75735
+ACC-0225,Bendigo Bank,personal_transaction,AUD,Australia,2014-03-25,active,58967
+ACC-0226,St George Bank,personal_transaction,AUD,Australia,2016-02-06,active,42313
+ACC-0227,Macquarie Bank,personal_transaction,AUD,Australia,2012-10-21,active,98742
+ACC-0228,Bendigo Bank,business_transaction,AUD,Australia,2016-01-27,active,293104
+ACC-0229,NAB,personal_transaction,AUD,Australia,2018-08-19,active,106086
+ACC-0230,Commonwealth Bank,personal_transaction,AUD,Australia,2014-11-20,active,19801
+ACC-0231,BankSA,personal_transaction,AUD,Australia,2011-05-07,active,12834
+ACC-0232,Bankwest,personal_transaction,AUD,Australia,2020-12-28,active,29874
+ACC-0233,St George Bank,personal_transaction,AUD,Australia,2015-05-11,active,47034
+ACC-0234,Bank of Queensland,personal_transaction,AUD,Australia,2020-12-27,active,73920
+ACC-0235,Macquarie Bank,personal_transaction,AUD,Australia,2011-10-01,active,33298
+ACC-0236,Bendigo Bank,personal_transaction,AUD,Australia,2013-07-19,active,74979
+ACC-0237,St George Bank,personal_transaction,AUD,Australia,2010-05-14,active,72844
+ACC-0238,NAB,personal_transaction,AUD,Australia,2015-10-01,active,111309
+ACC-0239,Bendigo Bank,personal_transaction,AUD,Australia,2019-09-28,active,59594
+ACC-0240,NAB,personal_transaction,AUD,Australia,2019-09-09,active,42982
+ACC-0241,NAB,personal_transaction,AUD,Australia,2015-06-09,active,14390
+ACC-0242,NAB,personal_transaction,AUD,Australia,2014-06-24,active,94831
+ACC-0243,Suncorp,personal_transaction,AUD,Australia,2020-07-26,active,7981
+ACC-0244,Commonwealth Bank,personal_transaction,AUD,Australia,2020-06-05,active,90820
+ACC-0245,Bankwest,personal_transaction,AUD,Australia,2010-06-26,active,10210
+ACC-0246,ME Bank,personal_transaction,AUD,Australia,2011-05-23,active,87023
+ACC-0247,Bendigo Bank,personal_transaction,AUD,Australia,2020-01-28,active,76071
+ACC-0248,BankSA,personal_transaction,AUD,Australia,2022-09-02,active,25715
+ACC-0249,Macquarie Bank,personal_transaction,AUD,Australia,2023-08-02,active,79323
+ACC-0250,Macquarie Bank,personal_transaction,AUD,Australia,2019-04-07,active,34170
+ACC-0251,Commonwealth Bank,personal_transaction,AUD,Australia,2015-07-06,active,72987
+ACC-0252,Bankwest,personal_transaction,AUD,Australia,2022-04-04,active,22734
+ACC-0253,ING Australia,personal_transaction,AUD,Australia,2018-08-13,active,100272
+ACC-0254,Bank of Queensland,personal_transaction,AUD,Australia,2016-11-28,active,45569
+ACC-0255,NAB,personal_transaction,AUD,Australia,2022-04-11,active,41452
+ACC-0256,Bankwest,personal_transaction,AUD,Australia,2023-05-06,active,80010
+ACC-0257,Commonwealth Bank,personal_transaction,AUD,Australia,2012-06-14,active,79890
+ACC-0258,Macquarie Bank,personal_transaction,AUD,Australia,2014-05-05,active,5207
+ACC-0259,Macquarie Bank,personal_transaction,AUD,Australia,2021-05-13,active,77088
+ACC-0260,AMP Bank,business_transaction,AUD,Australia,2013-11-19,active,227176
+ACC-0261,Bankwest,personal_transaction,AUD,Australia,2017-01-28,active,77768
+ACC-0262,NAB,personal_transaction,AUD,Australia,2018-05-03,active,64232
+ACC-0263,ANZ,personal_transaction,AUD,Australia,2014-08-08,active,99970
+ACC-0264,ING Australia,personal_transaction,AUD,Australia,2017-02-27,active,106290
+ACC-0265,ING Australia,personal_transaction,AUD,Australia,2019-12-14,active,11648
+ACC-0266,Bankwest,personal_transaction,AUD,Australia,2021-12-19,active,15295
+ACC-0267,Suncorp,personal_transaction,AUD,Australia,2012-07-13,active,51064
+ACC-0268,Bankwest,personal_transaction,AUD,Australia,2023-04-04,active,61511
+ACC-0269,AMP Bank,personal_transaction,AUD,Australia,2023-05-18,active,106101
+ACC-0270,Bank of Queensland,personal_transaction,AUD,Australia,2023-10-22,active,80750
+ACC-0271,Commonwealth Bank,personal_transaction,AUD,Australia,2022-07-24,active,112577
+ACC-0272,ANZ,personal_transaction,AUD,Australia,2013-01-05,active,6520
+ACC-0273,St George Bank,personal_transaction,AUD,Australia,2021-03-04,active,115992
+ACC-0274,Westpac,personal_transaction,AUD,Australia,2015-07-02,active,66925
+ACC-0275,Suncorp,personal_transaction,AUD,Australia,2022-11-15,active,101182
+ACC-0276,ANZ,personal_transaction,AUD,Australia,2021-05-04,active,15074
+ACC-0277,AMP Bank,personal_transaction,AUD,Australia,2013-06-16,active,114787
+ACC-0278,ANZ,personal_transaction,AUD,Australia,2021-11-24,active,119069
+ACC-0279,BankSA,personal_transaction,AUD,Australia,2023-02-07,active,56269
+ACC-0280,Westpac,personal_transaction,AUD,Australia,2010-04-08,active,58903
+ACC-0281,Bank of Queensland,personal_transaction,AUD,Australia,2022-09-12,active,110277
+ACC-0282,ME Bank,personal_transaction,AUD,Australia,2017-04-03,active,38729
+ACC-0283,Suncorp,personal_transaction,AUD,Australia,2015-10-23,active,18538
+ACC-0284,AMP Bank,personal_transaction,AUD,Australia,2011-07-29,active,75795
+ACC-0285,ING Australia,personal_transaction,AUD,Australia,2010-11-19,active,55353
+ACC-0286,ME Bank,personal_transaction,AUD,Australia,2020-01-29,active,7151
+ACC-0287,Commonwealth Bank,personal_transaction,AUD,Australia,2015-06-12,active,96920
+ACC-0288,ING Australia,personal_transaction,AUD,Australia,2013-01-30,active,47151
+ACC-0289,Bankwest,personal_transaction,AUD,Australia,2023-04-26,active,42189
+ACC-0290,Westpac,personal_transaction,AUD,Australia,2021-11-22,active,17541
+ACC-0291,ME Bank,personal_transaction,AUD,Australia,2020-03-01,active,10677
+ACC-0292,Suncorp,personal_transaction,AUD,Australia,2023-02-15,active,68492
+ACC-0293,Bendigo Bank,personal_transaction,AUD,Australia,2014-12-07,active,43687
+ACC-0294,ANZ,personal_transaction,AUD,Australia,2022-11-13,active,5665
+ACC-0295,ANZ,personal_transaction,AUD,Australia,2020-04-20,active,117449
+ACC-0296,Bankwest,business_transaction,AUD,Australia,2020-06-29,active,371127
+ACC-0297,BankSA,personal_transaction,AUD,Australia,2022-07-14,active,97389
+ACC-0298,ING Australia,personal_transaction,AUD,Australia,2012-10-02,active,66625
+ACC-0299,Suncorp,personal_transaction,AUD,Australia,2013-05-17,active,119687
+ACC-0300,NAB,personal_transaction,AUD,Australia,2011-05-31,active,7888
+ACC-0301,ANZ,personal_transaction,AUD,Australia,2022-01-03,active,42387
+ACC-0302,Commonwealth Bank,personal_transaction,AUD,Australia,2019-01-28,active,70459
+ACC-0303,Westpac,personal_transaction,AUD,Australia,2016-11-28,active,8250
+ACC-0304,Commonwealth Bank,personal_transaction,AUD,Australia,2018-02-05,active,57108
+ACC-0305,ANZ,personal_transaction,AUD,Australia,2023-03-04,active,83372
+ACC-0306,ANZ,personal_transaction,AUD,Australia,2022-06-20,active,65570
+ACC-0307,ANZ,personal_transaction,AUD,Australia,2021-01-12,active,95156
+ACC-0308,Bankwest,personal_transaction,AUD,Australia,2013-01-14,active,51843
+ACC-0309,ING Australia,personal_transaction,AUD,Australia,2023-01-04,active,51088
+ACC-0310,ME Bank,personal_transaction,AUD,Australia,2012-07-22,active,59702
+ACC-0311,ME Bank,personal_transaction,AUD,Australia,2017-09-03,active,27571
+ACC-0312,ME Bank,personal_transaction,AUD,Australia,2021-07-08,active,82748
+ACC-0313,Westpac,personal_transaction,AUD,Australia,2013-04-07,active,115868
+ACC-0314,Bankwest,personal_transaction,AUD,Australia,2023-03-22,active,29264
+ACC-0315,Bank of Queensland,personal_transaction,AUD,Australia,2016-05-12,active,64892
+ACC-0316,Westpac,personal_transaction,AUD,Australia,2012-09-03,active,23791
+ACC-0317,St George Bank,personal_transaction,AUD,Australia,2019-01-27,active,68508
+ACC-0318,Macquarie Bank,personal_transaction,AUD,Australia,2023-12-14,active,86688
+ACC-0319,AMP Bank,personal_transaction,AUD,Australia,2022-02-15,active,76646
+ACC-0320,ME Bank,personal_transaction,AUD,Australia,2012-06-15,active,79560
+ACC-0321,St George Bank,personal_transaction,AUD,Australia,2017-11-29,active,105462
+ACC-0322,Westpac,personal_transaction,AUD,Australia,2016-11-02,active,20003
+ACC-0323,Bankwest,personal_transaction,AUD,Australia,2014-08-14,active,49035
+ACC-0324,St George Bank,personal_transaction,AUD,Australia,2019-01-07,active,110460
+ACC-0325,BankSA,personal_transaction,AUD,Australia,2022-04-13,active,28671
+ACC-0326,BankSA,personal_transaction,AUD,Australia,2016-09-25,active,115640
+ACC-0327,Suncorp,personal_transaction,AUD,Australia,2022-07-23,active,62164
+ACC-0328,Commonwealth Bank,personal_transaction,AUD,Australia,2011-11-19,active,46144
+ACC-0329,ME Bank,personal_transaction,AUD,Australia,2017-01-11,active,48160
+ACC-0330,AMP Bank,personal_transaction,AUD,Australia,2023-03-23,active,12330
+ACC-0331,ME Bank,personal_transaction,AUD,Australia,2015-05-18,active,38158
+ACC-0332,ME Bank,personal_transaction,AUD,Australia,2019-02-11,active,108457
+ACC-0333,BankSA,personal_transaction,AUD,Australia,2014-02-14,active,87595
+ACC-0334,Bank of Queensland,personal_transaction,AUD,Australia,2018-06-19,active,114403
+ACC-0335,AMP Bank,personal_transaction,AUD,Australia,2021-01-31,active,20533
+ACC-0336,Bendigo Bank,personal_transaction,AUD,Australia,2023-01-28,active,94688
+ACC-0337,Bankwest,personal_transaction,AUD,Australia,2011-01-08,active,5702
+ACC-0338,Commonwealth Bank,personal_transaction,AUD,Australia,2012-11-13,active,70432
+ACC-0339,ANZ,personal_transaction,AUD,Australia,2020-06-23,active,62203
+ACC-0340,Bank of Queensland,personal_transaction,AUD,Australia,2011-09-22,active,37264
+ACC-0341,St George Bank,personal_transaction,AUD,Australia,2020-02-29,active,47587
+ACC-0342,Macquarie Bank,personal_transaction,AUD,Australia,2013-06-16,active,20807
+ACC-0343,Bank of Queensland,personal_transaction,AUD,Australia,2020-09-07,active,40190
+ACC-0344,Macquarie Bank,personal_transaction,AUD,Australia,2020-07-02,active,62325
+ACC-0345,ING Australia,personal_transaction,AUD,Australia,2012-05-31,active,71932
+ACC-0346,ME Bank,personal_transaction,AUD,Australia,2020-02-03,active,86764
+ACC-0347,Commonwealth Bank,personal_transaction,AUD,Australia,2013-11-07,active,90957
+ACC-0348,Commonwealth Bank,personal_transaction,AUD,Australia,2014-09-11,active,68060
+ACC-0349,Bank of Queensland,personal_transaction,AUD,Australia,2011-02-22,active,48758
+ACC-0350,St George Bank,personal_transaction,AUD,Australia,2017-01-31,active,77516
+ACC-0351,Bendigo Bank,personal_transaction,AUD,Australia,2019-10-30,active,35422
+ACC-0352,ANZ,personal_transaction,AUD,Australia,2014-06-23,active,25488
+ACC-0353,Suncorp,personal_transaction,AUD,Australia,2015-10-14,active,49606
+ACC-0354,AMP Bank,personal_transaction,AUD,Australia,2014-08-10,active,52400
+ACC-0355,Bankwest,personal_transaction,AUD,Australia,2019-04-23,active,52270
+ACC-0356,Bank of Queensland,personal_transaction,AUD,Australia,2011-05-19,active,56546
+ACC-0357,Bank of Queensland,personal_transaction,AUD,Australia,2020-01-04,active,89394
+ACC-0358,Bendigo Bank,personal_transaction,AUD,Australia,2013-08-03,active,8069
+ACC-0359,St George Bank,personal_transaction,AUD,Australia,2021-12-17,active,115689
+ACC-0360,Westpac,personal_transaction,AUD,Australia,2011-05-25,active,60690
+ACC-0361,Suncorp,personal_transaction,AUD,Australia,2020-12-24,active,100907
+ACC-0362,ING Australia,personal_transaction,AUD,Australia,2013-06-09,active,20432
+ACC-0363,St George Bank,personal_transaction,AUD,Australia,2020-02-23,active,49279
+ACC-0364,Suncorp,personal_transaction,AUD,Australia,2016-03-22,active,89661
+ACC-0365,St George Bank,personal_transaction,AUD,Australia,2011-03-10,active,79743
+ACC-0366,Bendigo Bank,personal_transaction,AUD,Australia,2019-10-21,active,28659
+ACC-0367,Macquarie Bank,personal_transaction,AUD,Australia,2018-09-30,active,17942
+ACC-0368,Macquarie Bank,personal_transaction,AUD,Australia,2011-05-12,active,46724
+ACC-0369,ME Bank,personal_transaction,AUD,Australia,2013-03-12,active,53929
+ACC-0370,Macquarie Bank,personal_transaction,AUD,Australia,2011-01-08,active,26157
+ACC-0371,Bendigo Bank,personal_transaction,AUD,Australia,2014-09-22,active,65266
+ACC-0372,Suncorp,personal_transaction,AUD,Australia,2018-10-23,active,75533
+ACC-0373,Bankwest,personal_transaction,AUD,Australia,2018-01-10,active,30101
+ACC-0374,BankSA,personal_transaction,AUD,Australia,2023-07-11,active,79074
+ACC-0375,BankSA,personal_transaction,AUD,Australia,2022-07-25,active,64497
+ACC-0376,Bendigo Bank,personal_transaction,AUD,Australia,2010-02-12,active,56361
+ACC-0377,Westpac,personal_transaction,AUD,Australia,2010-08-17,active,67910
+ACC-0378,Bank of Queensland,personal_transaction,AUD,Australia,2017-01-10,active,116108
+ACC-0379,St George Bank,personal_transaction,AUD,Australia,2023-11-21,active,18274
+ACC-0380,ANZ,personal_transaction,AUD,Australia,2016-12-28,active,81614
+ACC-0381,NAB,personal_transaction,AUD,Australia,2014-07-07,active,107926
+ACC-0382,ME Bank,personal_transaction,AUD,Australia,2010-12-12,active,70002
+ACC-0383,BankSA,personal_transaction,AUD,Australia,2023-02-19,active,105339
+ACC-0384,Commonwealth Bank,personal_transaction,AUD,Australia,2013-01-29,active,54666
+ACC-0385,Bendigo Bank,personal_transaction,AUD,Australia,2017-02-17,active,83584
+ACC-0386,BankSA,personal_transaction,AUD,Australia,2023-10-17,active,13503
+ACC-0387,Bankwest,personal_transaction,AUD,Australia,2021-02-05,active,67096
+ACC-0388,NAB,personal_transaction,AUD,Australia,2023-02-05,active,10392
+ACC-0389,ING Australia,personal_transaction,AUD,Australia,2011-10-03,active,108005
+ACC-0390,AMP Bank,personal_transaction,AUD,Australia,2016-02-27,active,29987
+ACC-0391,St George Bank,personal_transaction,AUD,Australia,2022-05-25,active,104302
+ACC-0392,AMP Bank,personal_transaction,AUD,Australia,2017-12-15,active,49541
+ACC-0393,St George Bank,personal_transaction,AUD,Australia,2023-07-11,active,84670
+ACC-0394,Macquarie Bank,personal_transaction,AUD,Australia,2014-08-14,active,35544
+ACC-0395,Bank of Queensland,personal_transaction,AUD,Australia,2020-08-25,active,25811
+ACC-0396,ME Bank,personal_transaction,AUD,Australia,2015-07-16,active,73925
+ACC-0397,ANZ,personal_transaction,AUD,Australia,2022-10-03,active,17521
+ACC-0398,Suncorp,personal_transaction,AUD,Australia,2010-08-07,active,14593
+ACC-0399,Suncorp,personal_transaction,AUD,Australia,2013-02-22,active,66707
+ACC-0400,Macquarie Bank,personal_transaction,AUD,Australia,2013-06-11,active,62757
+ACC-0401,Bendigo Bank,personal_transaction,AUD,Australia,2014-04-24,active,94123
+ACC-0402,Commonwealth Bank,personal_transaction,AUD,Australia,2019-01-08,active,90720
+ACC-0403,St George Bank,personal_transaction,AUD,Australia,2013-11-05,active,38022
+ACC-0404,BankSA,personal_transaction,AUD,Australia,2020-10-24,active,13849
+ACC-0405,Macquarie Bank,personal_transaction,AUD,Australia,2014-07-13,active,24879
+ACC-0406,ME Bank,personal_transaction,AUD,Australia,2019-04-22,active,89940
+ACC-0407,BankSA,personal_transaction,AUD,Australia,2013-03-05,active,31767
+ACC-0408,Macquarie Bank,personal_transaction,AUD,Australia,2020-10-16,active,15487
+ACC-0409,Westpac,personal_transaction,AUD,Australia,2016-09-25,active,83011
+ACC-0410,Bank of Queensland,personal_transaction,AUD,Australia,2019-04-30,active,56727
+ACC-0411,ME Bank,personal_transaction,AUD,Australia,2017-10-26,active,71795
+ACC-0412,AMP Bank,personal_transaction,AUD,Australia,2013-08-15,active,6617
+ACC-0413,AMP Bank,personal_transaction,AUD,Australia,2011-12-30,active,19322
+ACC-0414,ANZ,personal_transaction,AUD,Australia,2018-05-28,active,29431
+ACC-0415,Macquarie Bank,personal_transaction,AUD,Australia,2019-03-03,active,62767
+ACC-0416,NAB,personal_transaction,AUD,Australia,2021-09-18,active,108781
+ACC-0417,Bankwest,personal_transaction,AUD,Australia,2019-01-05,active,100056
+ACC-0418,Bendigo Bank,personal_transaction,AUD,Australia,2019-12-19,active,35612
+ACC-0419,AMP Bank,personal_transaction,AUD,Australia,2020-06-21,active,27027
+ACC-0420,Westpac,personal_transaction,AUD,Australia,2013-01-17,active,75063
+ACC-0421,BankSA,personal_transaction,AUD,Australia,2022-08-09,active,117216
+ACC-0422,BankSA,personal_transaction,AUD,Australia,2012-10-31,active,73124
+ACC-0423,St George Bank,personal_transaction,AUD,Australia,2020-09-23,active,87716
+ACC-0424,Bendigo Bank,personal_transaction,AUD,Australia,2018-10-12,active,56257
+ACC-0425,NAB,personal_transaction,AUD,Australia,2014-05-22,active,101379
+ACC-0426,BankSA,personal_transaction,AUD,Australia,2019-01-23,active,37112
+ACC-0427,ING Australia,personal_transaction,AUD,Australia,2015-01-17,active,8018
+ACC-0428,ME Bank,personal_transaction,AUD,Australia,2021-11-21,active,69036
+ACC-0429,ME Bank,personal_transaction,AUD,Australia,2017-01-18,active,21127
+ACC-0430,ING Australia,personal_transaction,AUD,Australia,2019-12-24,active,23331
+ACC-0431,Westpac,personal_transaction,AUD,Australia,2022-05-02,active,38419
+ACC-0432,BankSA,personal_transaction,AUD,Australia,2014-04-28,active,98643
+ACC-0433,ME Bank,personal_transaction,AUD,Australia,2016-02-17,active,24179
+ACC-0434,ANZ,personal_transaction,AUD,Australia,2017-09-28,active,110655
+ACC-0435,ME Bank,personal_transaction,AUD,Australia,2020-07-06,active,70828
+ACC-0436,AMP Bank,personal_transaction,AUD,Australia,2010-03-29,active,60572
+ACC-0437,BankSA,personal_transaction,AUD,Australia,2021-09-28,active,34500
+ACC-0438,St George Bank,personal_transaction,AUD,Australia,2018-10-30,active,33503
+ACC-0439,Bank of Queensland,personal_transaction,AUD,Australia,2012-10-11,active,68886
+ACC-0440,Westpac,personal_transaction,AUD,Australia,2014-04-02,active,42342
+ACC-0441,BankSA,personal_transaction,AUD,Australia,2012-11-09,active,47583
+ACC-0442,Westpac,business_transaction,AUD,Australia,2020-03-19,active,448930
+ACC-0443,Bankwest,personal_transaction,AUD,Australia,2021-04-08,active,85098
+ACC-0444,Commonwealth Bank,personal_transaction,AUD,Australia,2021-06-08,active,60977
+ACC-0445,ANZ,personal_transaction,AUD,Australia,2015-08-29,active,69393
+ACC-0446,St George Bank,personal_transaction,AUD,Australia,2018-05-03,active,36228
+ACC-0447,ING Australia,personal_transaction,AUD,Australia,2013-06-12,active,10742
+ACC-0448,ME Bank,personal_transaction,AUD,Australia,2014-04-08,active,102087
+ACC-0449,NAB,personal_transaction,AUD,Australia,2014-02-16,active,5471
+ACC-0450,ANZ,personal_transaction,AUD,Australia,2016-01-25,active,119476
+ACC-0451,Bendigo Bank,personal_transaction,AUD,Australia,2014-12-02,active,100745
+ACC-0452,ING Australia,personal_transaction,AUD,Australia,2014-08-16,active,112065
+ACC-0453,BankSA,personal_transaction,AUD,Australia,2016-04-29,active,7758
+ACC-0454,Westpac,personal_transaction,AUD,Australia,2021-10-25,active,22995
+ACC-0455,Bankwest,personal_transaction,AUD,Australia,2011-11-28,active,31518
+ACC-0456,Commonwealth Bank,personal_transaction,AUD,Australia,2010-12-31,active,18476
+ACC-0457,Westpac,personal_transaction,AUD,Australia,2023-10-23,active,48741
+ACC-0458,Macquarie Bank,personal_transaction,AUD,Australia,2016-06-09,active,50663
+ACC-0459,ME Bank,personal_transaction,AUD,Australia,2018-08-21,active,51217
+ACC-0460,NAB,personal_transaction,AUD,Australia,2011-12-16,active,35827
+ACC-0461,Westpac,personal_transaction,AUD,Australia,2013-03-18,active,54474
+ACC-0462,Bankwest,personal_transaction,AUD,Australia,2021-10-30,active,96562
+ACC-0463,ME Bank,personal_transaction,AUD,Australia,2013-11-22,active,70967
+ACC-0464,Bankwest,personal_transaction,AUD,Australia,2022-07-18,active,84309
+ACC-0465,Commonwealth Bank,personal_transaction,AUD,Australia,2016-12-07,active,29607
+ACC-0466,Bendigo Bank,personal_transaction,AUD,Australia,2012-11-27,active,97098
+ACC-0467,ANZ,personal_transaction,AUD,Australia,2013-05-26,active,94440
+ACC-0468,BankSA,personal_transaction,AUD,Australia,2021-02-27,active,17767
+ACC-0469,BankSA,personal_transaction,AUD,Australia,2013-02-24,active,21248
+ACC-0470,Bank of Queensland,personal_transaction,AUD,Australia,2021-05-07,active,63994
+ACC-0471,Bendigo Bank,personal_transaction,AUD,Australia,2020-06-13,active,66405
+ACC-0472,NAB,personal_transaction,AUD,Australia,2020-09-06,active,19984
+ACC-0473,Macquarie Bank,personal_transaction,AUD,Australia,2013-12-13,active,15956
+ACC-0474,Bendigo Bank,personal_transaction,AUD,Australia,2016-08-29,active,26565
+ACC-0475,Suncorp,personal_transaction,AUD,Australia,2017-02-05,active,19890
+ACC-0476,St George Bank,personal_transaction,AUD,Australia,2010-04-28,active,53530
+ACC-0477,AMP Bank,business_transaction,AUD,Australia,2020-09-07,active,334408
+ACC-0478,Bankwest,personal_transaction,AUD,Australia,2023-12-01,active,117328
+ACC-0479,Bendigo Bank,personal_transaction,AUD,Australia,2020-05-28,active,59124
+ACC-0480,Bendigo Bank,personal_transaction,AUD,Australia,2013-10-28,active,79997
+ACC-0481,ING Australia,personal_transaction,AUD,Australia,2012-08-27,active,87764
+ACC-0482,ME Bank,personal_transaction,AUD,Australia,2023-04-23,active,25060
+ACC-0483,Westpac,personal_transaction,AUD,Australia,2013-03-23,active,87239
+ACC-0484,AMP Bank,personal_transaction,AUD,Australia,2014-08-31,active,56222
+ACC-0485,ING Australia,personal_transaction,AUD,Australia,2010-02-11,active,25760
+ACC-0486,Macquarie Bank,personal_transaction,AUD,Australia,2020-06-23,active,102674
+ACC-0487,AMP Bank,personal_transaction,AUD,Australia,2017-02-24,active,86646
+ACC-0488,AMP Bank,personal_transaction,AUD,Australia,2021-11-24,active,51170
+ACC-0489,Macquarie Bank,personal_transaction,AUD,Australia,2023-07-01,active,32810
+ACC-0490,Bendigo Bank,personal_transaction,AUD,Australia,2023-04-05,active,55181
+ACC-0491,ING Australia,business_transaction,AUD,Australia,2021-03-22,active,456120
+ACC-0492,Westpac,personal_transaction,AUD,Australia,2017-03-29,active,117903
+ACC-0493,Macquarie Bank,personal_transaction,AUD,Australia,2013-10-27,active,23056
+ACC-0494,Suncorp,personal_transaction,AUD,Australia,2016-04-17,active,47193
+ACC-0495,ING Australia,personal_transaction,AUD,Australia,2021-07-12,active,117519
+ACC-0496,ANZ,personal_transaction,AUD,Australia,2020-05-04,active,119844
+ACC-0497,Westpac,personal_transaction,AUD,Australia,2011-02-07,active,90016
+ACC-0498,Macquarie Bank,personal_transaction,AUD,Australia,2015-01-30,active,86293
+ACC-0499,Bankwest,personal_transaction,AUD,Australia,2010-01-26,active,17352
+ACC-0500,St George Bank,personal_transaction,AUD,Australia,2017-11-24,active,67105
+ACC-0501,Bendigo Bank,personal_transaction,AUD,Australia,2020-04-16,active,6777
+ACC-0502,Suncorp,personal_transaction,AUD,Australia,2010-09-11,active,37029
+ACC-0503,ING Australia,personal_transaction,AUD,Australia,2013-12-04,active,39774
+ACC-0504,ING Australia,personal_transaction,AUD,Australia,2016-07-01,active,86762
+ACC-0505,BankSA,personal_transaction,AUD,Australia,2022-07-30,active,25321
+ACC-0506,ME Bank,personal_transaction,AUD,Australia,2022-12-20,active,23242
+ACC-0507,Bank of Queensland,personal_transaction,AUD,Australia,2020-06-18,active,60116
+ACC-0508,AMP Bank,personal_transaction,AUD,Australia,2021-08-14,active,65322
+ACC-0509,ANZ,personal_transaction,AUD,Australia,2015-01-06,active,93562
+ACC-0510,Bank of Queensland,personal_transaction,AUD,Australia,2011-04-01,active,20966
+ACC-0511,Commonwealth Bank,personal_transaction,AUD,Australia,2014-02-22,active,23571
+ACC-0512,Bank of Queensland,personal_transaction,AUD,Australia,2010-04-01,active,81092
+ACC-0513,BankSA,personal_transaction,AUD,Australia,2022-08-19,active,49471
+ACC-0514,Bank of Queensland,personal_transaction,AUD,Australia,2011-07-08,active,10888
+ACC-0515,ME Bank,personal_transaction,AUD,Australia,2018-05-25,active,84499
+ACC-0516,St George Bank,personal_transaction,AUD,Australia,2010-07-18,active,87459
+ACC-0517,BankSA,personal_transaction,AUD,Australia,2021-11-05,active,70034
+ACC-0518,Commonwealth Bank,personal_transaction,AUD,Australia,2015-01-10,active,112653
+ACC-0519,ANZ,personal_transaction,AUD,Australia,2014-08-01,active,76707
+ACC-0520,AMP Bank,personal_transaction,AUD,Australia,2015-02-09,active,7810
+ACC-0521,NAB,personal_transaction,AUD,Australia,2015-03-16,active,17057
+ACC-0522,St George Bank,personal_transaction,AUD,Australia,2018-12-03,active,67744
+ACC-0523,AMP Bank,personal_transaction,AUD,Australia,2015-06-24,active,74054
+ACC-0524,Commonwealth Bank,personal_transaction,AUD,Australia,2015-04-10,active,96533
+ACC-0525,Suncorp,personal_transaction,AUD,Australia,2010-06-04,active,118085
+ACC-0526,St George Bank,personal_transaction,AUD,Australia,2019-09-26,active,118474
+ACC-0527,ING Australia,personal_transaction,AUD,Australia,2015-11-01,active,26305
+ACC-0528,St George Bank,personal_transaction,AUD,Australia,2010-04-12,active,21293
+ACC-0529,ANZ,personal_transaction,AUD,Australia,2015-10-15,active,105398
+ACC-0530,Macquarie Bank,personal_transaction,AUD,Australia,2010-05-13,active,93917
+ACC-0531,St George Bank,personal_transaction,AUD,Australia,2018-05-01,active,113676
+ACC-0532,Westpac,personal_transaction,AUD,Australia,2023-08-30,active,32719
+ACC-0533,ING Australia,personal_transaction,AUD,Australia,2021-09-02,active,62805
+ACC-0534,Suncorp,personal_transaction,AUD,Australia,2019-05-25,active,35115
+ACC-0535,ING Australia,personal_transaction,AUD,Australia,2020-07-16,active,102367
+ACC-0536,Westpac,personal_transaction,AUD,Australia,2017-12-17,active,63837
+ACC-0537,ME Bank,personal_transaction,AUD,Australia,2012-03-04,active,35443
+ACC-0538,AMP Bank,personal_transaction,AUD,Australia,2014-09-22,active,61431
+ACC-0539,ME Bank,personal_transaction,AUD,Australia,2013-10-15,active,8584
+ACC-0540,Bankwest,personal_transaction,AUD,Australia,2012-09-09,active,63249
+ACC-0541,Bendigo Bank,personal_transaction,AUD,Australia,2016-03-11,active,64436
+ACC-0542,BankSA,personal_transaction,AUD,Australia,2014-05-22,active,39771
+ACC-0543,St George Bank,personal_transaction,AUD,Australia,2015-04-07,active,88586
+ACC-0544,Suncorp,personal_transaction,AUD,Australia,2016-08-17,active,17652
+ACC-0545,AMP Bank,personal_transaction,AUD,Australia,2019-03-05,active,12969
+ACC-0546,St George Bank,personal_transaction,AUD,Australia,2017-05-24,active,21936
+ACC-0547,Bankwest,personal_transaction,AUD,Australia,2015-07-31,active,6787
+ACC-0548,ME Bank,personal_transaction,AUD,Australia,2019-04-26,active,7641
+ACC-0549,Macquarie Bank,personal_transaction,AUD,Australia,2020-04-17,active,31563
+ACC-0550,ME Bank,personal_transaction,AUD,Australia,2015-03-17,active,63600
+ACC-0551,Commonwealth Bank,personal_transaction,AUD,Australia,2021-01-25,active,38033
+ACC-0552,ING Australia,personal_transaction,AUD,Australia,2011-10-30,active,18768
+ACC-0553,ANZ,personal_transaction,AUD,Australia,2021-10-07,active,68857
+ACC-0554,Suncorp,personal_transaction,AUD,Australia,2020-05-19,active,32606
+ACC-0555,NAB,personal_transaction,AUD,Australia,2017-09-26,active,87420
+ACC-0556,Bendigo Bank,personal_transaction,AUD,Australia,2022-11-29,active,106184
+ACC-0557,ANZ,personal_transaction,AUD,Australia,2013-03-20,active,26603
+ACC-0558,Westpac,personal_transaction,AUD,Australia,2023-07-31,active,115387
+ACC-0559,NAB,personal_transaction,AUD,Australia,2018-07-31,active,54047
+ACC-0560,Commonwealth Bank,business_transaction,AUD,Australia,2019-05-24,active,349987
+ACC-0561,Bankwest,personal_transaction,AUD,Australia,2013-12-20,active,119152
+ACC-0562,Commonwealth Bank,personal_transaction,AUD,Australia,2019-01-16,active,59575
+ACC-0563,Westpac,personal_transaction,AUD,Australia,2022-09-13,active,65687
+ACC-0564,Bankwest,personal_transaction,AUD,Australia,2020-08-10,active,19665
+ACC-0565,BankSA,personal_transaction,AUD,Australia,2021-12-07,active,37469
+ACC-0566,ING Australia,personal_transaction,AUD,Australia,2023-08-27,active,25625
+ACC-0567,BankSA,personal_transaction,AUD,Australia,2022-04-20,active,10218
+ACC-0568,Commonwealth Bank,personal_transaction,AUD,Australia,2021-06-18,active,37913
+ACC-0569,Macquarie Bank,personal_transaction,AUD,Australia,2022-03-28,active,34263
+ACC-0570,ANZ,personal_transaction,AUD,Australia,2021-08-01,active,8055
+ACC-0571,ANZ,personal_transaction,AUD,Australia,2020-12-06,active,14547
+ACC-0572,ME Bank,personal_transaction,AUD,Australia,2020-10-31,active,26559
+ACC-0573,ING Australia,personal_transaction,AUD,Australia,2023-08-13,active,8104
+ACC-0574,ANZ,personal_transaction,AUD,Australia,2019-12-01,active,34097
+ACC-0575,Commonwealth Bank,personal_transaction,AUD,Australia,2021-09-22,active,34326
+ACC-0576,ANZ,personal_transaction,AUD,Australia,2021-05-18,active,42846
+ACC-0577,Bendigo Bank,personal_transaction,AUD,Australia,2019-04-13,active,32202
+ACC-0578,Westpac,personal_transaction,AUD,Australia,2012-10-29,active,100261
+ACC-0579,Westpac,business_transaction,AUD,Australia,2012-04-29,active,250232
+ACC-0580,Commonwealth Bank,business_transaction,AUD,Australia,2021-04-09,active,146432
+ACC-0581,ME Bank,personal_transaction,AUD,Australia,2019-04-18,active,91142
+ACC-0582,St George Bank,business_transaction,AUD,Australia,2011-06-16,active,222360
+ACC-0583,Suncorp,business_transaction,AUD,Australia,2013-09-23,active,129575
+ACC-0584,ME Bank,personal_transaction,AUD,Australia,2016-05-14,active,77933
+ACC-0585,ING Australia,personal_transaction,AUD,Australia,2019-03-01,active,51140
+ACC-0586,AMP Bank,personal_transaction,AUD,Australia,2013-12-26,active,57435
+ACC-0587,St George Bank,personal_transaction,AUD,Australia,2022-10-19,active,100964
+ACC-0588,Bendigo Bank,personal_transaction,AUD,Australia,2012-12-22,active,43401
+ACC-0589,Commonwealth Bank,personal_transaction,AUD,Australia,2010-09-22,active,94394
+ACC-0590,AMP Bank,personal_transaction,AUD,Australia,2010-11-23,active,52628
+ACC-0591,Westpac,personal_transaction,AUD,Australia,2020-04-11,active,97940
+ACC-0592,Bankwest,personal_transaction,AUD,Australia,2016-07-13,active,45194
+ACC-0593,ANZ,business_transaction,AUD,Australia,2013-08-14,active,356307
+ACC-0594,BankSA,personal_transaction,AUD,Australia,2013-10-17,active,119135
+ACC-0595,St George Bank,business_transaction,AUD,Australia,2022-06-14,active,384829
+ACC-0596,AMP Bank,personal_transaction,AUD,Australia,2011-10-13,active,109584
+ACC-0597,Suncorp,personal_transaction,AUD,Australia,2016-12-27,active,4318
+ACC-0598,Macquarie Bank,personal_transaction,AUD,Australia,2016-01-10,active,9226
+ACC-0599,ING Australia,personal_transaction,AUD,Australia,2018-05-25,active,4994
+ACC-0600,St George Bank,personal_transaction,AUD,Australia,2023-07-17,active,22047
+ACC-0601,ING Australia,personal_transaction,AUD,Australia,2023-10-06,active,4673
+ACC-0602,NAB,personal_transaction,AUD,Australia,2020-05-13,active,6814
+ACC-0603,Bankwest,personal_transaction,AUD,Australia,2019-12-06,active,106894
+ACC-0604,Suncorp,personal_transaction,AUD,Australia,2020-10-07,active,12298
+ACC-0605,AMP Bank,personal_transaction,AUD,Australia,2020-12-19,active,11159
+ACC-0606,ING Australia,personal_transaction,AUD,Australia,2018-06-18,active,23510
+ACC-0607,Suncorp,personal_transaction,AUD,Australia,2015-01-27,active,13459
+ACC-0608,Suncorp,personal_transaction,AUD,Australia,2016-10-30,active,8858
+ACC-0609,Westpac,personal_transaction,AUD,Australia,2019-12-21,active,14220
+ACC-0610,Westpac,personal_transaction,AUD,Australia,2016-09-24,active,84891
+ACC-0611,BankSA,personal_transaction,AUD,Australia,2021-09-04,active,16661
+ACC-0612,NAB,personal_transaction,AUD,Australia,2017-12-12,active,18465
+ACC-0613,ANZ,personal_transaction,AUD,Australia,2018-06-08,active,13935
+ACC-0614,Suncorp,personal_transaction,AUD,Australia,2018-06-15,active,16936
+ACC-0615,Commonwealth Bank,personal_transaction,AUD,Australia,2023-07-20,active,16240
+ACC-0616,BankSA,personal_transaction,AUD,Australia,2016-07-27,active,17971
+ACC-0617,AMP Bank,personal_transaction,AUD,Australia,2022-11-24,active,9626
+ACC-0618,ING Australia,personal_transaction,AUD,Australia,2019-11-15,active,117250
+ACC-0619,Bank of Malaysia,corporate_current,MYR,Malaysia,2021-05-27,active,714585
+ACC-0620,Bank of Vanuatu,corporate_current,VUV,Vanuatu,2020-02-08,active,162198
+ACC-0621,Bank of Singapore,corporate_current,SGD,Singapore,2021-08-02,active,459338
+ACC-0622,Westpac,personal_transaction,AUD,Australia,2019-10-31,active,37142
+ACC-0623,Bank of Hong Kong,corporate_current,HKD,Hong Kong,2022-03-11,active,325247
+ACC-0624,Bank of Singapore,corporate_current,SGD,Singapore,2019-01-13,active,436873
+ACC-0625,Bank of Malaysia,corporate_current,MYR,Malaysia,2020-08-01,active,479798
+ACC-0626,ING Australia,personal_transaction,AUD,Australia,2017-05-03,active,108564
+ACC-0627,ME Bank,business_transaction,AUD,Australia,2006-12-20,active,408588
+ACC-0628,Bankwest,personal_transaction,AUD,Australia,2019-09-13,active,7815
+ACC-0629,Bendigo Bank,business_transaction,AUD,Australia,2016-12-10,active,424815
+ACC-0630,Bendigo Bank,personal_transaction,AUD,Australia,2011-07-22,active,47920
+ACC-0631,Bank of Queensland,business_transaction,AUD,Australia,2007-10-06,active,75802
+ACC-0632,ING Australia,personal_transaction,AUD,Australia,2012-09-23,active,26349
+ACC-0633,AMP Bank,business_transaction,AUD,Australia,2007-07-07,active,102463
+ACC-0634,ANZ,personal_transaction,AUD,Australia,2015-08-02,active,28246
+ACC-0635,ME Bank,business_transaction,AUD,Australia,2008-07-14,active,400574
+ACC-0636,Macquarie Bank,personal_transaction,AUD,Australia,2023-12-13,active,47083
+ACC-0637,Westpac,business_transaction,AUD,Australia,2008-10-22,active,108935
+ACC-0638,ANZ,personal_transaction,AUD,Australia,2017-03-30,active,91032
+ACC-0639,Macquarie Bank,business_transaction,AUD,Australia,2007-11-30,active,372444
+ACC-0640,Macquarie Bank,personal_transaction,AUD,Australia,2012-12-14,active,47984
+ACC-0641,Suncorp,business_transaction,AUD,Australia,2022-10-29,active,499671
+ACC-0642,Bankwest,business_transaction,AUD,Australia,2015-02-21,active,196436
+ACC-0643,ING Australia,business_transaction,AUD,Australia,2017-05-30,active,152172
+ACC-0644,Westpac,business_transaction,AUD,Australia,2018-08-27,active,759077
+ACC-0645,Macquarie Bank,business_transaction,AUD,Australia,2019-03-22,active,230929
+ACC-0646,Macquarie Bank,business_transaction,AUD,Australia,2020-08-25,active,142961
+ACC-0647,Bank of Queensland,business_transaction,AUD,Australia,2016-07-24,active,276638
+ACC-0648,Bankwest,business_transaction,AUD,Australia,2016-10-07,active,728146
+ACC-0649,AMP Bank,business_transaction,AUD,Australia,2017-11-13,active,553485
+ACC-0650,AMP Bank,business_transaction,AUD,Australia,2018-02-13,active,868021
+ACC-0651,Bank of Queensland,business_transaction,AUD,Australia,2017-06-24,active,976920
+ACC-0652,Westpac,business_transaction,AUD,Australia,2017-12-30,active,945143
+ACC-0653,St George Bank,business_transaction,AUD,Australia,2014-11-12,active,797962
+ACC-0654,ING Australia,business_transaction,AUD,Australia,2016-10-20,active,978090
+ACC-0655,St George Bank,business_transaction,AUD,Australia,2011-03-18,active,719019
+ACC-0656,ME Bank,business_transaction,AUD,Australia,2012-09-04,active,478222
+ACC-0657,BankSA,business_transaction,AUD,Australia,2018-11-03,active,561630
+ACC-0658,Bank of Queensland,business_transaction,AUD,Australia,2019-02-13,active,944334
+ACC-0659,St George Bank,business_transaction,AUD,Australia,2012-01-11,active,125317
+ACC-0660,Bankwest,business_transaction,AUD,Australia,2015-02-14,active,990691
+ACC-0661,Bendigo Bank,business_transaction,AUD,Australia,2020-12-01,active,360781
+ACC-0662,Bankwest,business_transaction,AUD,Australia,2017-02-13,active,375957
+ACC-0663,Bankwest,business_transaction,AUD,Australia,2014-07-02,active,889912
+ACC-0664,Bendigo Bank,business_transaction,AUD,Australia,2013-12-11,active,746345
+ACC-0665,Westpac,business_transaction,AUD,Australia,2017-03-04,active,525790
+ACC-0666,ME Bank,business_transaction,AUD,Australia,2014-04-17,active,311968
+ACC-0667,Bendigo Bank,business_transaction,AUD,Australia,2019-01-14,active,559034
+ACC-0668,Commonwealth Bank,business_transaction,AUD,Australia,2011-04-02,active,299008
+ACC-0669,ING Australia,business_transaction,AUD,Australia,2011-12-30,active,517303
+ACC-0670,Bankwest,business_transaction,AUD,Australia,2016-09-15,active,795405
+ACC-0671,ING Australia,business_transaction,AUD,Australia,2013-12-20,active,516029
+ACC-0672,St George Bank,business_transaction,AUD,Australia,2016-05-24,active,186205
+ACC-0673,ING Australia,business_transaction,AUD,Australia,2011-09-27,active,799946
+ACC-0674,AMP Bank,business_transaction,AUD,Australia,2017-10-18,active,329612
+ACC-0675,Commonwealth Bank,business_transaction,AUD,Australia,2013-04-30,active,355517
+ACC-0676,Bank of Queensland,business_transaction,AUD,Australia,2016-03-28,active,678002
+ACC-0677,St George Bank,business_transaction,AUD,Australia,2019-12-19,active,505907
+ACC-0678,Bank of Queensland,business_transaction,AUD,Australia,2014-02-25,active,482221
+ACC-0679,Westpac,business_transaction,AUD,Australia,2020-09-29,active,826871
+ACC-0680,ME Bank,business_transaction,AUD,Australia,2016-01-14,active,707081
+ACC-0681,Bendigo Bank,business_transaction,AUD,Australia,2011-03-06,active,946466
+ACC-0682,Suncorp,business_transaction,AUD,Australia,2013-01-07,active,702154
+ACC-0683,Suncorp,business_transaction,AUD,Australia,2016-08-17,active,557372
+ACC-0684,ING Australia,business_transaction,AUD,Australia,2017-04-17,active,160341
+ACC-0685,BankSA,business_transaction,AUD,Australia,2013-12-22,active,168590
+ACC-0686,Bankwest,business_transaction,AUD,Australia,2016-09-14,active,614651
+ACC-0687,BankSA,business_transaction,AUD,Australia,2015-01-26,active,424875
+ACC-0688,ANZ,business_transaction,AUD,Australia,2018-08-05,active,665824
+ACC-0689,ME Bank,business_transaction,AUD,Australia,2014-01-07,active,715983
+ACC-0690,ING Australia,business_transaction,AUD,Australia,2014-08-22,active,865859
+ACC-0691,AMP Bank,business_transaction,AUD,Australia,2012-01-13,active,130919
+ACC-0692,Westpac,business_transaction,AUD,Australia,2020-08-11,active,523158
+ACC-0693,AMP Bank,business_transaction,AUD,Australia,2013-11-07,active,291878
+ACC-0694,Bankwest,business_transaction,AUD,Australia,2014-10-29,active,364255
+ACC-0695,NAB,business_transaction,AUD,Australia,2012-07-17,active,468260
+ACC-0696,ING Australia,business_transaction,AUD,Australia,2012-11-21,active,121391
+ACC-0697,Westpac,business_transaction,AUD,Australia,2011-11-22,active,101812
+ACC-0698,Commonwealth Bank,business_transaction,AUD,Australia,2018-12-21,active,695673
+ACC-0699,BankSA,business_transaction,AUD,Australia,2016-12-18,active,622401
+ACC-0700,Westpac,business_transaction,AUD,Australia,2019-10-13,active,816367
+ACC-0701,Bankwest,business_transaction,AUD,Australia,2019-06-28,active,909483
+ACC-0702,Commonwealth Bank,business_transaction,AUD,Australia,2016-12-23,active,140657
+ACC-0703,Bendigo Bank,business_transaction,AUD,Australia,2017-08-29,active,289180
+ACC-0704,ANZ,business_transaction,AUD,Australia,2016-11-16,active,453786
+ACC-0705,ME Bank,business_transaction,AUD,Australia,2015-01-09,active,222034
+ACC-0706,ANZ,business_transaction,AUD,Australia,2012-09-07,active,957300
+ACC-0707,Bendigo Bank,business_transaction,AUD,Australia,2010-08-29,active,603760
+ACC-0708,St George Bank,business_transaction,AUD,Australia,2016-06-13,active,836316
+ACC-0709,Macquarie Bank,business_transaction,AUD,Australia,2013-08-05,active,242056
+ACC-0710,Bank of Queensland,business_transaction,AUD,Australia,2014-11-18,active,495383
+ACC-0711,Westpac,business_transaction,AUD,Australia,2013-08-09,active,688516
+ACC-0712,ME Bank,business_transaction,AUD,Australia,2018-08-23,active,401144
+ACC-0713,Westpac,business_transaction,AUD,Australia,2013-06-11,active,716006
+ACC-0714,ING Australia,business_transaction,AUD,Australia,2010-04-25,active,149500
+ACC-0715,Commonwealth Bank,business_transaction,AUD,Australia,2019-03-29,active,965488
+ACC-0716,ING Australia,business_transaction,AUD,Australia,2014-02-27,active,814220
+ACC-0717,ANZ,business_transaction,AUD,Australia,2020-01-04,active,332329
+ACC-0718,Suncorp,business_transaction,AUD,Australia,2012-04-26,active,698889
+ACC-0719,Westpac,business_transaction,AUD,Australia,2020-05-13,active,404550
+ACC-0720,ANZ,business_transaction,AUD,Australia,2014-05-17,active,966723
+ACC-0721,ANZ,business_transaction,AUD,Australia,2011-08-04,active,727836
+ACC-0722,Bank of Queensland,business_transaction,AUD,Australia,2017-08-18,active,698254
+ACC-0723,Bankwest,business_transaction,AUD,Australia,2010-02-11,active,536089
+ACC-0724,AMP Bank,business_transaction,AUD,Australia,2018-09-27,active,611932
+ACC-0725,Commonwealth Bank,business_transaction,AUD,Australia,2017-10-21,active,904390
+ACC-0726,BankSA,business_transaction,AUD,Australia,2011-04-14,active,220878
+ACC-0727,ING Australia,business_transaction,AUD,Australia,2013-09-02,active,275496
+ACC-0728,ING Australia,business_transaction,AUD,Australia,2013-03-19,active,398534
+ACC-0729,AMP Bank,business_transaction,AUD,Australia,2019-12-07,active,311944
+ACC-0730,ANZ,business_transaction,AUD,Australia,2015-10-24,active,137429
+ACC-0731,Commonwealth Bank,business_transaction,AUD,Australia,2019-05-06,active,506914
+ACC-0732,NAB,business_transaction,AUD,Australia,2014-11-21,active,745210
+ACC-0733,St George Bank,business_transaction,AUD,Australia,2018-08-17,active,143046
+ACC-0734,Commonwealth Bank,business_transaction,AUD,Australia,2016-05-18,active,114901
+ACC-0735,Bendigo Bank,business_transaction,AUD,Australia,2015-03-08,active,310396
+ACC-0736,ING Australia,business_transaction,AUD,Australia,2010-09-18,active,336176
+ACC-0737,BankSA,business_transaction,AUD,Australia,2018-02-01,active,560190
+ACC-0738,St George Bank,business_transaction,AUD,Australia,2015-12-05,active,401787
+ACC-0739,Westpac,business_transaction,AUD,Australia,2017-09-05,active,168295
+ACC-0740,St George Bank,business_transaction,AUD,Australia,2018-01-30,active,278169
+ACC-0741,BankSA,business_transaction,AUD,Australia,2012-08-15,active,106188
+ACC-0742,AMP Bank,business_transaction,AUD,Australia,2014-05-07,active,906035
+ACC-0743,ING Australia,business_transaction,AUD,Australia,2010-10-30,active,120754
+ACC-0744,Macquarie Bank,business_transaction,AUD,Australia,2017-09-09,active,745974
+ACC-0745,BankSA,business_transaction,AUD,Australia,2015-07-03,active,742366
+ACC-0746,Suncorp,business_transaction,AUD,Australia,2020-04-23,active,260576
+ACC-0747,Macquarie Bank,business_transaction,AUD,Australia,2017-02-22,active,866486
+ACC-0748,Bendigo Bank,business_transaction,AUD,Australia,2018-04-20,active,121954
+ACC-0749,Bank of Queensland,business_transaction,AUD,Australia,2017-12-20,active,667802
+ACC-0750,NAB,business_transaction,AUD,Australia,2020-07-24,active,525504
+ACC-0751,Suncorp,business_transaction,AUD,Australia,2020-09-05,active,507311
+ACC-0752,Bank of Queensland,business_transaction,AUD,Australia,2011-06-30,active,858443
+ACC-0753,St George Bank,business_transaction,AUD,Australia,2012-03-08,active,864733
+ACC-0754,Bendigo Bank,business_transaction,AUD,Australia,2017-03-22,active,421806
+ACC-0755,Westpac,business_transaction,AUD,Australia,2016-02-02,active,783920
+ACC-0756,NAB,business_transaction,AUD,Australia,2012-06-08,active,454086
+ACC-0757,ANZ,business_transaction,AUD,Australia,2020-07-30,active,564498
+ACC-0758,BankSA,business_transaction,AUD,Australia,2011-12-07,active,386596
+ACC-0759,ANZ,business_transaction,AUD,Australia,2014-08-12,active,431864
+ACC-0760,ME Bank,business_transaction,AUD,Australia,2020-06-11,active,610326
+ACC-0761,BankSA,business_transaction,AUD,Australia,2011-02-02,active,925189
+ACC-0762,Bendigo Bank,business_transaction,AUD,Australia,2019-07-25,active,194316
+ACC-0763,NAB,business_transaction,AUD,Australia,2013-06-13,active,981515
+ACC-0764,AMP Bank,business_transaction,AUD,Australia,2015-01-04,active,598165
+ACC-0765,Macquarie Bank,business_transaction,AUD,Australia,2011-02-20,active,941310
+ACC-0766,Westpac,business_transaction,AUD,Australia,2015-12-21,active,748322
+ACC-0767,Bankwest,business_transaction,AUD,Australia,2013-02-25,active,823479
+ACC-0768,Westpac,business_transaction,AUD,Australia,2018-06-23,active,141291
+ACC-0769,Suncorp,business_transaction,AUD,Australia,2011-11-30,active,904402
+ACC-0770,Suncorp,business_transaction,AUD,Australia,2016-07-23,active,699691
+ACC-0771,St George Bank,business_transaction,AUD,Australia,2013-11-09,active,456281
+ACC-0772,ANZ,business_transaction,AUD,Australia,2016-12-31,active,414682
+ACC-0773,BankSA,business_transaction,AUD,Australia,2013-08-06,active,406550
+ACC-0774,Commonwealth Bank,business_transaction,AUD,Australia,2016-12-22,active,718998
+ACC-0775,ING Australia,business_transaction,AUD,Australia,2013-02-21,active,645712
+ACC-0776,Commonwealth Bank,business_transaction,AUD,Australia,2017-04-13,active,350404
+ACC-0777,Commonwealth Bank,business_transaction,AUD,Australia,2013-01-22,active,886429
+ACC-0778,ING Australia,business_transaction,AUD,Australia,2010-05-09,active,236996
+ACC-0779,Bank of Queensland,business_transaction,AUD,Australia,2012-03-28,active,592957
+ACC-0780,Bank of Queensland,business_transaction,AUD,Australia,2013-10-06,active,484611
+ACC-0781,ANZ,business_transaction,AUD,Australia,2020-07-29,active,463058
+ACC-0782,Macquarie Bank,business_transaction,AUD,Australia,2012-12-28,active,187352
+ACC-0783,AMP Bank,business_transaction,AUD,Australia,2015-09-16,active,219039
+ACC-0784,ANZ,business_transaction,AUD,Australia,2014-03-10,active,168114
+ACC-0785,AMP Bank,business_transaction,AUD,Australia,2010-11-05,active,110113
+ACC-0786,St George Bank,business_transaction,AUD,Australia,2017-01-08,active,583145
+ACC-0787,Commonwealth Bank,business_transaction,AUD,Australia,2017-11-24,active,245453
+ACC-0788,Westpac,business_transaction,AUD,Australia,2010-01-16,active,554001
+ACC-0789,Bank of Queensland,business_transaction,AUD,Australia,2013-08-05,active,755833
+ACC-0790,St George Bank,business_transaction,AUD,Australia,2017-12-02,active,295103
+ACC-0791,Suncorp,business_transaction,AUD,Australia,2012-01-28,active,632240

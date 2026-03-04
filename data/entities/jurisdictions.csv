@@ -1,0 +1,13 @@
+jurisdiction_id,name,country,level,regulatory_body,aml_risk_rating
+JUR-AU-FED,Federal,Australia,federal,APRA/ASIC/AUSTRAC,low
+JUR-AU-NSW,New South Wales,Australia,state,NSW Fair Trading,low
+JUR-AU-VIC,Victoria,Australia,state,Consumer Affairs Victoria,low
+JUR-AU-QLD,Queensland,Australia,state,Office of Fair Trading QLD,low
+JUR-AU-WA,Western Australia,Australia,state,Consumer Protection WA,low
+JUR-AU-SA,South Australia,Australia,state,Consumer and Business Services SA,low
+JUR-SG,Singapore,Singapore,national,MAS,low
+JUR-HK,Hong Kong SAR,China,special_admin_region,HKMA/SFC,medium
+JUR-VU,Vanuatu,Vanuatu,national,Reserve Bank of Vanuatu,high
+JUR-MY,Malaysia,Malaysia,national,BNM,medium
+JUR-MM,Myanmar,Myanmar,national,CBM,high
+JUR-KH,Cambodia,Cambodia,national,NBC,high
