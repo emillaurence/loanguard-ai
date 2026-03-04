@@ -1,0 +1,102 @@
+{
+  "regulations": [
+    {
+      "standard_id": "CPS 220",
+      "title": "Risk Management",
+      "effective_date": "2015-01-01",
+      "applies_to": "ADI",
+      "obligations": [
+        {
+          "obligation_id": "CPS220-OB-01",
+          "description": "An ADI must maintain a risk management framework that is appropriate to the nature, scale and complexity of its operations.",
+          "applies_to": "ADI",
+          "severity": "HIGH"
+        },
+        {
+          "obligation_id": "CPS220-OB-02",
+          "description": "The Board must approve and oversee the risk management framework and ensure it remains adequate.",
+          "applies_to": "ADI",
+          "severity": "HIGH"
+        },
+        {
+          "obligation_id": "CPS220-OB-03",
+          "description": "An ADI must identify, measure, evaluate, monitor, report and control or mitigate all material risks.",
+          "applies_to": "ADI",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    {
+      "standard_id": "APS 110",
+      "title": "Capital Adequacy",
+      "effective_date": "2023-01-01",
+      "applies_to": "ADI",
+      "obligations": [
+        {
+          "obligation_id": "APS110-OB-01",
+          "description": "An ADI must maintain adequate capital to cover its credit, market and operational risk exposures.",
+          "applies_to": "ADI",
+          "severity": "HIGH"
+        },
+        {
+          "obligation_id": "APS110-OB-02",
+          "description": "An ADI must calculate its capital ratios in accordance with APRA's prescribed methodology.",
+          "applies_to": "ADI",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "standard_id": "AML-CTF",
+      "title": "Anti-Money Laundering and Counter-Terrorism Financing",
+      "effective_date": "2006-12-12",
+      "applies_to": "reporting_entity",
+      "obligations": [
+        {
+          "obligation_id": "AMLCTF-OB-01",
+          "description": "A reporting entity must identify and verify the identity of customers before providing designated services.",
+          "applies_to": "reporting_entity",
+          "severity": "HIGH"
+        },
+        {
+          "obligation_id": "AMLCTF-OB-02",
+          "description": "A reporting entity must report suspicious matters to AUSTRAC as soon as practicable.",
+          "applies_to": "reporting_entity",
+          "severity": "HIGH"
+        },
+        {
+          "obligation_id": "AMLCTF-OB-03",
+          "description": "A reporting entity must conduct ongoing customer due diligence including transaction monitoring.",
+          "applies_to": "reporting_entity",
+          "severity": "HIGH"
+        },
+        {
+          "obligation_id": "AMLCTF-OB-04",
+          "description": "Transaction monitoring programs must be designed to detect unusual or suspicious patterns of activity.",
+          "applies_to": "reporting_entity",
+          "severity": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "standard_id": "CPS 234",
+      "title": "Information Security",
+      "effective_date": "2019-07-01",
+      "applies_to": "ADI",
+      "obligations": [
+        {
+          "obligation_id": "CPS234-OB-01",
+          "description": "An ADI must maintain an information security capability commensurate with the size and extent of threats to its information assets.",
+          "applies_to": "ADI",
+          "severity": "HIGH"
+        },
+        {
+          "obligation_id": "CPS234-OB-02",
+          "description": "An ADI must classify its information assets by criticality and sensitivity.",
+          "applies_to": "ADI",
+          "severity": "MEDIUM"
+        }
+      ]
+    }
+  ]
+}

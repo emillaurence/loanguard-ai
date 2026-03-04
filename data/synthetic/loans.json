@@ -1,0 +1,138 @@
+{
+  "loan_accounts": [
+    {
+      "account_id": "LA-001",
+      "customer_id": "C-001",
+      "product_type": "home_loan",
+      "balance": 450000,
+      "currency": "AUD",
+      "status": "active",
+      "risk_rating": "medium",
+      "transactions": [
+        {
+          "transaction_id": "TX-001",
+          "amount": 15000,
+          "type": "credit",
+          "counterparty": "employer_payroll",
+          "timestamp": "2024-11-01T09:00:00Z",
+          "suspicious": false
+        },
+        {
+          "transaction_id": "TX-002",
+          "amount": 95000,
+          "type": "credit",
+          "counterparty": "unknown_offshore_entity",
+          "timestamp": "2024-11-03T14:32:00Z",
+          "suspicious": true
+        },
+        {
+          "transaction_id": "TX-003",
+          "amount": 90000,
+          "type": "debit",
+          "counterparty": "unknown_offshore_entity",
+          "timestamp": "2024-11-04T08:15:00Z",
+          "suspicious": true
+        }
+      ]
+    },
+    {
+      "account_id": "LA-002",
+      "customer_id": "C-002",
+      "product_type": "business_loan",
+      "balance": 1200000,
+      "currency": "AUD",
+      "status": "active",
+      "risk_rating": "high",
+      "transactions": [
+        {
+          "transaction_id": "TX-004",
+          "amount": 200000,
+          "type": "credit",
+          "counterparty": "shell_company_xyz",
+          "timestamp": "2024-10-28T11:00:00Z",
+          "suspicious": true
+        },
+        {
+          "transaction_id": "TX-005",
+          "amount": 195000,
+          "type": "debit",
+          "counterparty": "shell_company_xyz",
+          "timestamp": "2024-10-28T11:30:00Z",
+          "suspicious": true
+        },
+        {
+          "transaction_id": "TX-006",
+          "amount": 5000,
+          "type": "debit",
+          "counterparty": "utility_provider",
+          "timestamp": "2024-11-01T10:00:00Z",
+          "suspicious": false
+        }
+      ]
+    },
+    {
+      "account_id": "LA-003",
+      "customer_id": "C-003",
+      "product_type": "personal_loan",
+      "balance": 25000,
+      "currency": "AUD",
+      "status": "active",
+      "risk_rating": "low",
+      "transactions": [
+        {
+          "transaction_id": "TX-007",
+          "amount": 1000,
+          "type": "debit",
+          "counterparty": "retail_merchant",
+          "timestamp": "2024-11-05T15:00:00Z",
+          "suspicious": false
+        }
+      ]
+    },
+    {
+      "account_id": "LA-004",
+      "customer_id": "C-004",
+      "product_type": "home_loan",
+      "balance": 780000,
+      "currency": "AUD",
+      "status": "under_review",
+      "risk_rating": "high",
+      "transactions": [
+        {
+          "transaction_id": "TX-008",
+          "amount": 500000,
+          "type": "credit",
+          "counterparty": "unknown_domestic_entity",
+          "timestamp": "2024-10-15T09:00:00Z",
+          "suspicious": true
+        }
+      ]
+    }
+  ],
+  "customers": [
+    {
+      "customer_id": "C-001",
+      "name": "Alice Nguyen",
+      "kyc_status": "verified",
+      "risk_category": "medium"
+    },
+    {
+      "customer_id": "C-002",
+      "name": "Bright Future Pty Ltd",
+      "kyc_status": "pending_review",
+      "risk_category": "high"
+    },
+    {
+      "customer_id": "C-003",
+      "name": "Bob Smith",
+      "kyc_status": "verified",
+      "risk_category": "low"
+    },
+    {
+      "customer_id": "C-004",
+      "name": "Delta Holdings Pty Ltd",
+      "kyc_status": "failed",
+      "risk_category": "high"
+    }
+  ]
+}
