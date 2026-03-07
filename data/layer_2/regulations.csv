@@ -1,0 +1,4 @@
+regulation_id,name,issuing_body,document_type,effective_date,is_enforceable
+APS-112,Capital Adequacy: Standardised Approach to Credit Risk,APRA,prudential_standard,2025-07-01,True
+APG-223,Residential Mortgage Lending,APRA,practice_guide,2024-12-01,False
+APS-220,Credit Risk Management,APRA,prudential_standard,2022-01-01,True
