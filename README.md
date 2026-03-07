@@ -1,4 +1,4 @@
-# GraphRAG Finserv Compliance Agent
+# GraphRAG Financial Services Loan Compliance Agent
 
 An agentic GraphRAG application for Australian financial services compliance, powered by **Anthropic Claude**, **Neo4j AuraDB**, and **OpenAI embeddings**.
 
