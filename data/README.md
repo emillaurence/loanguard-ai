@@ -23,7 +23,6 @@ Regulatory graph data for Layer 2 — APRA prudential standards extracted from s
 |---|---|
 | `regulatory_documents/` | Source PDFs (APS-220, APS-112, APG-223) |
 | `document_config.yaml` | Pipeline config — one entry per regulatory document |
-| `document_config.yaml.example` | Template for adding new documents |
 | `regulations.csv` | One row per regulation |
 | `sections.csv` | Document sections with verbatim text and page ranges |
 | `requirements.csv` | Extracted obligations per section |
