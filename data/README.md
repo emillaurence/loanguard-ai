@@ -1,53 +1,51 @@
 # Data Directory
 
-This folder holds reference and synthetic data used to seed and test the Neo4j knowledge graph.
+This folder holds all data used to seed and operate the Neo4j knowledge graph, organised by layer.
 
 ## Subdirectories
 
+### `layer_1/`
+
+Entity graph data for Layer 1 — ADI borrowers, loan applications, accounts, and related entities.
+
+| Subfolder | Contents |
+|---|---|
+| `entities/` | Node CSVs: borrowers, loan applications, bank accounts, collateral, jurisdictions, etc. |
+| `links/` | Relationship CSVs: submitted_by, secured_by, resides_in, incorporated_in, etc. |
+
+Loaded into Neo4j by `notebooks/111_structured_data_loader.ipynb`.
+
+### `layer_2/`
+
+Regulatory graph data for Layer 2 — APRA prudential standards extracted from source PDFs.
+
+| File / Folder | Contents |
+|---|---|
+| `regulatory_documents/` | Source PDFs (APS-220, APS-112, APG-223) |
+| `document_config.yaml` | Pipeline config — one entry per regulatory document |
+| `document_config.yaml.example` | Template for adding new documents |
+| `regulations.csv` | One row per regulation |
+| `sections.csv` | Document sections with verbatim text and page ranges |
+| `requirements.csv` | Extracted obligations per section |
+| `thresholds.csv` | Quantitative thresholds per requirement |
+| `chunks.csv` | ~300-token text chunks for vector search |
+| `cross_references.csv` | Resolved cross-document section references |
+| `intermediate/` | Per-document extraction outputs from notebook 211 (before merging) |
+
+Loaded into Neo4j by the Layer 2 pipeline: notebooks 211 → 212 → 213 → 214 → 215 → 216.
+
+To add a new regulatory document, append an entry to `document_config.yaml` — no code changes needed.
+
 ### `synthetic/`
 
-Synthetic (generated) data safe to commit. Used for local development, unit tests,
-and seeding a fresh AuraDB instance.
+Legacy synthetic stubs used during initial development. Safe to commit.
 
 | File | Description |
 |---|---|
-| `loans.json` | Synthetic loan accounts and linked transactions |
-| `regulations.json` | Sample APRA prudential obligation stubs (CPS 220, APS 110, etc.) |
-
-**Synthetic data format (loans.json):**
-```json
-{
-  "loan_accounts": [
-    {
-      "account_id": "LA-001",
-      "customer_id": "C-001",
-      "product_type": "home_loan",
-      "balance": 450000,
-      "currency": "AUD",
-      "status": "active",
-      "risk_rating": "medium",
-      "transactions": [
-        {
-          "transaction_id": "TX-001",
-          "amount": 15000,
-          "type": "credit",
-          "counterparty": "employer",
-          "timestamp": "2024-11-01T09:00:00Z",
-          "suspicious": false
-        }
-      ]
-    }
-  ]
-}
-```
+| `loans.json` | Synthetic loan accounts and transactions |
+| `regulations.json` | Sample APRA obligation stubs |
 
 ### `raw/` (gitignored)
 
 Real or sensitive data. **Never commit files in this folder.**
 The `.gitignore` excludes `data/raw/` automatically.
-
-## TODO
-
-- [ ] Add a `seed_graph.py` script in `scripts/` to load `synthetic/` data into Neo4j
-- [ ] Add a `data_loader.ipynb` notebook for exploratory data ingestion
-- [ ] Define the full node/relationship schema once AuraDB instance is provisioned
