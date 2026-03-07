@@ -35,6 +35,9 @@ htmlcov/
 # Data — raw input data must never be committed
 data/raw/
 
+# Temporary config scratch files
+*.yaml.temp
+
 # macOS
 .DS_Store
 
