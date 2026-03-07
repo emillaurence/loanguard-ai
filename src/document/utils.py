@@ -23,6 +23,7 @@ def call_claude_stream(
     max_tokens: int,
     system: str,
     messages: list,
+    temperature: float = 0.0,
 ) -> str:
     """Call Claude via streaming and return the response text.
 
@@ -36,6 +37,7 @@ def call_claude_stream(
         max_tokens=max_tokens,
         system=system,
         messages=messages,
+        temperature=temperature,
     ) as stream:
         response = stream.get_final_message()
 
@@ -54,13 +56,14 @@ def call_claude_stream_json(
     max_tokens: int,
     system: str,
     messages: list,
+    temperature: float = 0.0,
 ) -> object:
     """Call Claude via streaming, strip fences, and parse JSON.
 
     Retries once with a JSON-fix prompt on a parse error.
     Raises RuntimeError on truncation; raises json.JSONDecodeError if both attempts fail.
     """
-    raw = call_claude_stream(client, model, max_tokens, system, messages)
+    raw = call_claude_stream(client, model, max_tokens, system, messages, temperature=temperature)
     raw = strip_fences(raw)
 
     try:
@@ -74,6 +77,7 @@ def call_claude_stream_json(
             max_tokens,
             system='Fix the following to be valid JSON. Return ONLY the fixed JSON, no markdown fences, no preamble.',
             messages=[{'role': 'user', 'content': f'Fix this JSON:\n{raw}'}],
+            temperature=temperature,
         )
         return json.loads(strip_fences(fix_text))
 

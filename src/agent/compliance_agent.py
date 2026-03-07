@@ -111,6 +111,7 @@ class ComplianceAgent:
                 system=SYSTEM_PROMPT,
                 tools=TOOLS,
                 messages=messages,
+                temperature=0,
             )
 
             logger.debug("stop_reason=%s", response.stop_reason)

@@ -108,6 +108,7 @@ class GraphRAGRetriever:
             max_tokens=512,
             system=NL_TO_CYPHER_SYSTEM,
             messages=[{"role": "user", "content": natural_language_query}],
+            temperature=0,
         )
         cypher = response.content[0].text.strip()
         logger.info("Generated Cypher:\n%s", cypher)
