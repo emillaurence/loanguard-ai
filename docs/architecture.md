@@ -1,113 +1,184 @@
-# Architecture: GraphRAG Finserv Compliance Agent
+# Architecture: GraphRAG Financial Services Loan Compliance Agent
 
-## Neo4j Graph Layer Diagram
+## Three-Layer Neo4j Graph Model
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                          LAYER 1 — ENTITY LAYER                             │
-│                                                                             │
-│   ┌──────────┐   HOLDS    ┌─────────────┐  HAS_TRANSACTION  ┌─────────────┐│
-│   │ Customer │──────────▶│ LoanAccount │──────────────────▶│ Transaction ││
-│   │          │            │             │                    │             ││
-│   │customer_id│           │ account_id  │                    │transaction_id│
-│   │name      │            │ product_type│                    │amount       ││
-│   │kyc_status│            │ balance     │                    │type         ││
-│   │risk_cat  │            │ status      │                    │counterparty ││
-│   └──────────┘            │ risk_rating │                    │suspicious   ││
-│                           └──────┬──────┘                    └─────────────┘│
-└──────────────────────────────────│──────────────────────────────────────────┘
-                                   │
-                                   │ HAS_ASSESSMENT
-                                   ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                      LAYER 3 — RUNTIME ASSESSMENT LAYER                     │
-│                                                                             │
-│            ┌────────────────────┐    ┌─────────────────┐                   │
-│            │ ComplianceAssessment│    │  ComplianceFlag │                   │
-│            │                    │    │                 │                   │
-│            │ assessment_id      │    │ flag_id         │                   │
-│            │ outcome            │    │ reason          │                   │
-│            │ score              │    │ severity        │                   │
-│            │ notes              │    │ status          │                   │
-│            └────────┬───────────┘    └────────┬────────┘                   │
-│                     │ REFERENCES              │ FLAGGED_ON                  │
-└─────────────────────│─────────────────────────│────────────────────────────┘
-                      ▼                         │ (back to LoanAccount)
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                        LAYER 2 — REGULATORY LAYER                           │
-│                                                                             │
-│   ┌────────────┐   CONTAINS   ┌────────────┐                               │
-│   │ Regulation │─────────────▶│ Obligation │                               │
-│   │            │              │            │                               │
-│   │ standard_id│              │obligation_id│                              │
-│   │ title      │              │description │                               │
-│   │ eff_date   │              │applies_to  │                               │
-│   └────────────┘              │severity    │                               │
-│                               └────────────┘                               │
-└─────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                            LAYER 1 — ENTITY LAYER                               │
+│                                                                                 │
+│  ┌───────────────────┐  SUBMITTED_BY  ┌──────────────────────┐                 │
+│  │ LoanApplication   │──────────────▶│ Borrower              │                 │
+│  │ :ResidentialSecured│               │ :Individual           │                 │
+│  │ :CommercialSecured │  GUARANTEED_BY│ :Corporate            │                 │
+│  │                   │──────────────▶│                       │                 │
+│  │ application_id    │               │ borrower_id           │                 │
+│  │ loan_amount       │               │ name                  │                 │
+│  │ loan_purpose      │               │ borrower_type         │────────────────▶│
+│  └─────────┬─────────┘               └───────────┬───────────┘  RESIDES_IN /  │
+│            │ SECURED_BY                           │              INCORPORATED_IN│
+│            ▼                                      ▼                             │
+│  ┌─────────────────┐               ┌──────────────────────┐                    │
+│  │ Collateral      │               │ Jurisdiction         │◀───────────────────┤
+│  │ property_type   │               │ jurisdiction_id      │  (bridge to L2)    │
+│  │ value           │               │ name, country        │                    │
+│  └─────────────────┘               └──────────────────────┘                    │
+│                                                                                 │
+│  Also: BankAccount, Transaction, Address, Officer, Industry                     │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                                        │
+                         APPLIES_TO_JURISDICTION
+                                        │
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                          LAYER 2 — REGULATORY LAYER                             │
+│                                                                                 │
+│  ┌────────────┐  CONTAINS_SECTION  ┌──────────┐  CONTAINS_REQUIREMENT          │
+│  │ Regulation │───────────────────▶│ Section  │──────────────────────▶         │
+│  │            │                    │          │                                 │
+│  │ regulation_id                   │ section_id  ┌─────────────────┐           │
+│  │ name       │                    │ title    │──▶│ Requirement     │           │
+│  │ issuing_body                    │ text     │   │ requirement_id  │           │
+│  └────────────┘                    └────┬─────┘   │ description     │           │
+│                                         │          │ severity        │           │
+│                              HAS_CHUNK  │          └────────┬────────┘           │
+│                                         ▼   NEXT_CHUNK      │ DEFINES_THRESHOLD  │
+│                                    ┌─────────┐ ──────────▶  ▼                   │
+│                                    │  Chunk  │         ┌───────────┐            │
+│                                    │         │         │ Threshold │            │
+│                                    │ chunk_id│         │ metric    │            │
+│                                    │ text    │         │ value     │            │
+│                                    │ embedding         │ operator  │            │
+│                                    └────┬────┘         └───────────┘            │
+│                                         │ SIMILAR_TO (cross-document)           │
+│                                         └──────────────────────────────▶ Chunk  │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                    LAYER 3 — RUNTIME ASSESSMENT LAYER (future)                  │
+│                                                                                 │
+│   ┌────────────────────┐  REFERENCES  ┌─────────────────┐                      │
+│   │ ComplianceAssessment│────────────▶│  Requirement    │  (from Layer 2)       │
+│   │ assessment_id      │              └─────────────────┘                      │
+│   │ outcome, score     │                                                        │
+│   └────────────────────┘                                                        │
+│                                                                                 │
+│   ┌─────────────────┐  FLAGGED_ON  ┌──────────────────┐                        │
+│   │ ComplianceFlag  │─────────────▶│ LoanApplication  │  (from Layer 1)        │
+│   │ flag_id, reason │              └──────────────────┘                        │
+│   │ severity, status│                                                           │
+│   └─────────────────┘                                                           │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Bridge node:** `(:Jurisdiction {jurisdiction_id: 'JUR-AU-FED'})` connects both layers. Borrowers link to it via `RESIDES_IN` or `INCORPORATED_IN`; regulations link to it via `APPLIES_TO_JURISDICTION`.
+
+---
+
+## Layer 2 Regulatory Pipeline
+
+Runs once per document set; re-run when adding new regulatory documents.
+
+```
+  PDF files + document_config.yaml
+           │
+           ▼
+  ┌─────────────────────────────────┐
+  │  211_extract_document_structure │  Claude extracts sections, requirements,
+  │                                 │  thresholds from PDF text (temperature=0)
+  │                                 │  close_page_gaps() absorbs unclaimed pages
+  └──────────────┬──────────────────┘  into adjacent sections post-extraction
+                 │  intermediate/{rid}_sections.csv
+                 │  intermediate/{rid}_requirements.csv
+                 │  intermediate/{rid}_thresholds.csv
+                 │  intermediate/{rid}_references.csv
+                 ▼
+  ┌─────────────────────────────────┐
+  │  212_merge_and_resolve_references│  Merges per-doc intermediates; Claude
+  │                                 │  resolves cross-doc references to known
+  │                                 │  section_ids (temperature=0)
+  └──────────────┬──────────────────┘
+                 │  sections.csv, requirements.csv,
+                 │  thresholds.csv, cross_references.csv
+                 ▼
+  ┌─────────────────────────────────┐
+  │  213_chunk_documents            │  Splits section text into ~300-token
+  │                                 │  chunks. Raises RuntimeError if any
+  │                                 │  page is uncovered (fix in 211 first)
+  └──────────────┬──────────────────┘
+                 │  chunks.csv
+                 ▼
+  ┌─────────────────────────────────┐
+  │  214_ingest_neo4j               │  Loads all Layer 2 nodes + relationships
+  │                                 │  into Neo4j. Re-runnable (clears first)
+  └──────────────┬──────────────────┘
+                 ▼
+  ┌─────────────────────────────────┐
+  │  215_generate_embeddings        │  OpenAI text-embedding-3-small (1536 dims)
+  │                                 │  written to Chunk.embedding; creates
+  │                                 │  SIMILAR_TO edges (cosine > 0.85,
+  │                                 │  cross-document only)
+  └──────────────┬──────────────────┘
+                 ▼
+  ┌─────────────────────────────────┐
+  │  216_validate_graph             │  Pass/fail validation of node counts,
+  │                                 │  relationships, and index health
+  └─────────────────────────────────┘
 ```
 
 ---
 
-## Agent Flow
+## Reasoning Patterns
+
+### 1. Tool-Use Agent (primary)
 
 ```
 User Query
     │
     ▼
-┌──────────────────────────────────────────────────────┐
-│                   ComplianceAgent.run()               │
-│                                                      │
-│  messages = [{"role": "user", "content": query}]     │
-│                                                      │
-│  ┌────────────────────────────────────────────────┐  │
-│  │              AGENTIC LOOP                      │  │
-│  │                                                │  │
-│  │  Claude API ◀──── messages + tools             │  │
-│  │       │                                        │  │
-│  │       ├── stop_reason == "end_turn"  ──────────┼──┼──▶ Return text
-│  │       │                                        │  │
-│  │       └── stop_reason == "tool_use"            │  │
-│  │               │                                │  │
-│  │               ▼                                │  │
-│  │         execute_tool()                         │  │
-│  │               │                                │  │
-│  │               ▼                                │  │
-│  │         Neo4j AuraDB                           │  │
-│  │         (run_query)                            │  │
-│  │               │                                │  │
-│  │               ▼                                │  │
-│  │    Inject tool_result into messages            │  │
-│  │    Loop ──────────────────────────────────▶    │  │
-│  └────────────────────────────────────────────────┘  │
-└──────────────────────────────────────────────────────┘
+ComplianceAgent.run()
+    │
+    │  messages = [{role: user, content: query}]
+    │
+    ▼
+┌─────────────────────────────────────────────────┐
+│                  AGENTIC LOOP                   │
+│              (max 10 iterations)                │
+│                                                 │
+│  Claude API (temperature=0) ◀── messages+tools  │
+│        │                                        │
+│        ├── end_turn ──────────────────────────────▶ Return text
+│        │                                        │
+│        └── tool_use                             │
+│                │                                │
+│                ▼                                │
+│          execute_tool()                         │
+│                │                                │
+│                ▼                                │
+│          Neo4j AuraDB (Cypher)                  │
+│                │                                │
+│                ▼                                │
+│    Inject tool_result → messages → loop ──────▶ │
+└─────────────────────────────────────────────────┘
 ```
 
----
-
-## GraphRAG Retriever Flow
+### 2. GraphRAG Retriever (supplementary)
 
 ```
 Natural Language Query
     │
     ▼
-Claude (NL-to-Cypher)
-    │  GRAPH_SCHEMA_HINT provided as system prompt
+Claude NL-to-Cypher (temperature=0, GRAPH_SCHEMA_HINT in system prompt)
     │
     ▼
-Cypher Query String
+Cypher Query
     │
     ▼
-Neo4j AuraDB (run_query)
-    │
-    ▼
-List[dict] results
+Neo4j AuraDB
     │
     ▼
 format_context_for_claude()
     │
     ▼
-Context String  ──▶  (inject into downstream Claude prompt)
+Context String ──▶ inject into downstream Claude prompt
 ```
 
 ---
@@ -116,21 +187,21 @@ Context String  ──▶  (inject into downstream Claude prompt)
 
 | Decision | Rationale |
 |---|---|
-| Tool-use agent (not pure RAG) | Allows Claude to decide which graph queries to run based on the question, rather than a fixed retrieval strategy |
-| Three-layer graph model | Separates concerns: entities (what exists), regulations (what the rules are), assessments (how entities measure up) |
-| Parameterised Cypher queries | Prevents Cypher injection; follows Neo4j best practices |
-| JSON-encoded tool results | Simple, schema-agnostic format that Claude can reason over natively |
-| `MAX_ITERATIONS` guard | Prevents runaway tool-use loops; surface tunable constant |
-| `.env` + `python-dotenv` | Keeps credentials out of code; consistent with 12-factor app principles |
+| Tool-use agent as primary pattern | Claude decides which graph queries to issue based on the question; avoids fixed retrieval strategies |
+| Three-layer graph + bridge node | Clean separation of entities / regulations / assessments; `Jurisdiction` joins both without duplicating data |
+| `close_page_gaps()` in notebook 211 | Claude extracts section content correctly but leaves cover/ToC pages unclaimed; post-process absorbs them deterministically to prevent data loss in chunking |
+| `RuntimeError` on page gaps in notebook 213 | Forces root-cause fix in notebook 211 rather than silently misattributing chunks to wrong sections |
+| `temperature=0` on all Claude calls | Deterministic outputs for structured extraction, NL-to-Cypher, and cross-reference resolution |
+| Streaming for large `max_tokens` | Anthropic SDK requires streaming for calls that could exceed 10 min; `call_claude_stream_json()` centralises this with fail-fast truncation detection |
+| ~300-token chunks | Fits one complete numbered requirement with sub-clauses — the atomic unit of regulatory compliance assessment |
+| `SIMILAR_TO` edges (cross-document only) | Surfaces thematically related requirements across different APRA standards without polluting within-document chunk chains |
+| Parameterised Cypher | Prevents Cypher injection; follows Neo4j best practices |
 
 ---
 
-## TODO — Design Decisions to Finalise
+## TODO
 
-- [ ] Define full node labels and relationship types in the AuraDB schema
-- [ ] Decide on graph indexing strategy (account_id, customer_id, obligation_id)
-- [ ] Add a data ingestion pipeline (`scripts/seed_graph.py`) to load `data/synthetic/`
-- [ ] Decide on token budget management for large graph results (chunking strategy)
-- [ ] Add structured output (Pydantic models) for agent final responses
-- [ ] Evaluate adding a vector similarity layer (Neo4j vector index) for document chunks
+- [ ] Build Layer 3 runtime assessment pipeline (flag generation, scoring)
+- [ ] Add structured Pydantic output models for agent final responses
 - [ ] Define escalation and alerting logic for HIGH severity compliance flags
+- [ ] Add `SHOW INDEXES` health check to notebook 216 validation
