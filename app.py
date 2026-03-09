@@ -186,7 +186,7 @@ FASTMCP_TOOL_DEFS = [
         "input_schema": {
             "type": "object",
             "properties": {
-                "assessment_id": {"type": "string", "description": "e.g. 'ASSESS-LOAN-0002-APG-223-2026-03-09'"},
+                "assessment_id": {"type": "string", "description": "e.g. 'ASSESS-LOAN-0002-APG-223-2026-03-10-143022'"},
             },
             "required": ["assessment_id"],
         },
@@ -432,6 +432,71 @@ def _inject_css() -> None:
   padding: 1px 6px;
   border-radius: 4px;
 }
+
+/* ── Entity profile ─────────────────────────────────── */
+.profile-metrics {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0.6rem 0.9rem;
+  background: #f8f9fa;
+  border-radius: var(--radius-md);
+  margin-bottom: 0.6rem;
+  flex-wrap: wrap;
+  border: 1px solid var(--border);
+}
+.profile-metric { display: flex; flex-direction: column; }
+.profile-metric-value { font-size: 1.05rem; font-weight: 700; color: var(--text-primary); }
+.profile-metric-label { font-size: 10px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .05em; margin-top: 1px; }
+.profile-grid {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 0.3rem 0.75rem;
+  align-items: start;
+}
+.profile-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--text-secondary);
+  padding-top: 3px;
+}
+.profile-value { font-size: 13px; color: var(--text-primary); line-height: 1.5; }
+.badge-danger {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  background: var(--sev-HIGH-bg);
+  color: var(--sev-HIGH-fg);
+  border: 1px solid var(--sev-HIGH-border);
+  margin-left: 4px;
+  vertical-align: middle;
+}
+.badge-warning {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  background: var(--sev-MEDIUM-bg);
+  color: var(--sev-MEDIUM-fg);
+  border: 1px solid var(--sev-MEDIUM-border);
+  margin-left: 4px;
+  vertical-align: middle;
+}
+.profile-suspicious {
+  background: var(--sev-MEDIUM-bg);
+  border: 1px solid var(--sev-MEDIUM-border);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 0.75rem;
+  margin-top: 0.6rem;
+}
 </style>
         """,
         unsafe_allow_html=True,
@@ -502,8 +567,20 @@ def _verdict_badge(verdict: str, confidence: float) -> None:
     icon   = VERDICT_ICONS.get(verdict, "ℹ")
     label  = VERDICT_LABELS.get(verdict, verdict)
     expl   = VERDICT_EXPLANATIONS.get(verdict, "")
-    pct    = f"{confidence:.0%}"
-    fill_w = int(confidence * 140)
+
+    if verdict == "INFORMATIONAL":
+        right_html = ""
+    else:
+        pct    = f"{confidence:.0%}"
+        fill_w = int(confidence * 140)
+        right_html = f"""
+  <div class="vb-right">
+    <div class="vb-pct">{pct}</div>
+    <div class="vb-pct-label">Confidence</div>
+    <div class="conf-bar-track" style="background:{colour}30;">
+      <div class="conf-bar-fill" style="width:{fill_w}px;background:{colour};"></div>
+    </div>
+  </div>"""
 
     st.markdown(
         f"""
@@ -514,21 +591,14 @@ def _verdict_badge(verdict: str, confidence: float) -> None:
       <div class="vb-text">{html.escape(label)}</div>
       <div class="vb-expl" style="color:{colour};">{html.escape(expl)}</div>
     </div>
-  </div>
-  <div class="vb-right">
-    <div class="vb-pct">{pct}</div>
-    <div class="vb-pct-label">Confidence</div>
-    <div class="conf-bar-track" style="background:{colour}30;">
-      <div class="conf-bar-fill" style="width:{fill_w}px;background:{colour};"></div>
-    </div>
-  </div>
+  </div>{right_html}
 </div>
         """,
         unsafe_allow_html=True,
     )
 
 
-def _render_routing(routing: dict) -> None:
+def _render_routing(routing: dict, chart_key: str = "routing_graph") -> None:
     intents  = routing.get("intents", [])
     entities = routing.get("entity_ids", []) or []
     regs     = routing.get("regulations", []) or []
@@ -578,7 +648,7 @@ def _render_routing(routing: dict) -> None:
             '<div class="section-label">Pipeline Graph — hover nodes for detail</div>',
             unsafe_allow_html=True,
         )
-        _render_routing_graph(routing)
+        _render_routing_graph(routing, chart_key=chart_key)
 
 
 def _render_findings(findings: list[dict]) -> None:
@@ -830,7 +900,512 @@ def _fetch_finding_subgraph(
     }
 
 
-def _render_finding_graph(finding: dict) -> None:
+@st.cache_data(ttl=300)
+def _fetch_entity_profile(entity_ids: tuple[str, ...]) -> dict:
+    """Fetch Layer 1 entity profile data from Neo4j for each entity ID."""
+    conn = _get_connection()
+    profile: dict = {}
+
+    for eid in entity_ids:
+        if eid.startswith("LOAN-"):
+            rows = conn.run_query(
+                """
+                MATCH (l:LoanApplication {loan_id: $id})
+                OPTIONAL MATCH (l)-[:SUBMITTED_BY]->(b:Borrower)
+                OPTIONAL MATCH (l)-[:BACKED_BY]->(c:Collateral)
+                OPTIONAL MATCH (l)-[:GUARANTEED_BY]->(g:Borrower)
+                OPTIONAL MATCH (b)-[:RESIDES_IN|REGISTERED_IN]->(j:Jurisdiction)
+                OPTIONAL MATCH (b)-[:BELONGS_TO_INDUSTRY]->(ind:Industry)
+                OPTIONAL MATCH (b)-[:HAS_ACCOUNT]->(acc:BankAccount)
+                OPTIONAL MATCH (b)<-[:DIRECTOR_OF]-(off:Officer)
+                RETURN
+                  properties(l)                     AS loan,
+                  properties(b)                     AS borrower,
+                  properties(c)                     AS collateral,
+                  collect(DISTINCT properties(g))   AS guarantors,
+                  properties(j)                     AS jurisdiction,
+                  properties(ind)                   AS industry,
+                  count(DISTINCT acc)               AS account_count,
+                  avg(acc.average_monthly_balance)  AS avg_balance,
+                  collect(DISTINCT properties(off)) AS officers
+                LIMIT 1
+                """,
+                {"id": eid},
+            )
+            if not rows:
+                continue
+            row = rows[0]
+            borrower_id = (row.get("borrower") or {}).get("borrower_id")
+            suspicious: list[dict] = []
+            if borrower_id:
+                suspicious = conn.run_query(
+                    """
+                    MATCH (b:Borrower {borrower_id: $bid})-[:HAS_ACCOUNT]->(acc:BankAccount)
+                    MATCH (t:Transaction)
+                    WHERE (t.from_account_id = acc.account_id OR t.to_account_id = acc.account_id)
+                      AND t.flagged_suspicious = true
+                    RETURN t.transaction_id AS transaction_id,
+                           t.amount         AS amount,
+                           t.currency       AS currency,
+                           t.date           AS date,
+                           t.type           AS type,
+                           t.description    AS description
+                    ORDER BY t.date DESC
+                    LIMIT 5
+                    """,
+                    {"bid": borrower_id},
+                )
+            guarantors_basic = [g for g in (row.get("guarantors") or []) if g]
+
+            # Fetch full BRW-* profile for each guarantor
+            guarantor_profiles: list[dict] = []
+            for g in guarantors_basic:
+                g_id = g.get("borrower_id")
+                if not g_id:
+                    continue
+                g_rows = conn.run_query(
+                    """
+                    MATCH (b:Borrower {borrower_id: $id})
+                    OPTIONAL MATCH (b)<-[:SUBMITTED_BY]-(l:LoanApplication)
+                    OPTIONAL MATCH (b)-[:RESIDES_IN|REGISTERED_IN]->(j:Jurisdiction)
+                    OPTIONAL MATCH (b)-[:BELONGS_TO_INDUSTRY]->(ind:Industry)
+                    OPTIONAL MATCH (b)-[:HAS_ACCOUNT]->(acc:BankAccount)
+                    OPTIONAL MATCH (b)<-[:DIRECTOR_OF]-(off:Officer)
+                    RETURN
+                      properties(b)                     AS borrower,
+                      collect(DISTINCT properties(l))   AS loans,
+                      properties(j)                     AS jurisdiction,
+                      properties(ind)                   AS industry,
+                      count(DISTINCT acc)               AS account_count,
+                      avg(acc.average_monthly_balance)  AS avg_balance,
+                      collect(DISTINCT properties(off)) AS officers
+                    LIMIT 1
+                    """,
+                    {"id": g_id},
+                )
+                if not g_rows:
+                    continue
+                g_row = g_rows[0]
+                g_suspicious = conn.run_query(
+                    """
+                    MATCH (b:Borrower {borrower_id: $bid})-[:HAS_ACCOUNT]->(acc:BankAccount)
+                    MATCH (t:Transaction)
+                    WHERE (t.from_account_id = acc.account_id OR t.to_account_id = acc.account_id)
+                      AND t.flagged_suspicious = true
+                    RETURN t.transaction_id AS transaction_id,
+                           t.amount         AS amount,
+                           t.currency       AS currency,
+                           t.date           AS date,
+                           t.type           AS type,
+                           t.description    AS description
+                    ORDER BY t.date DESC
+                    LIMIT 5
+                    """,
+                    {"bid": g_id},
+                )
+                guarantor_profiles.append({
+                    "entity_type":            "Borrower",
+                    "borrower":               g_row.get("borrower") or {},
+                    "loans":                  [l for l in (g_row.get("loans") or []) if l],
+                    "jurisdiction":           g_row.get("jurisdiction") or {},
+                    "industry":               g_row.get("industry") or {},
+                    "account_count":          g_row.get("account_count") or 0,
+                    "avg_balance":            g_row.get("avg_balance"),
+                    "officers":               [o for o in (g_row.get("officers") or []) if o],
+                    "suspicious_transactions": g_suspicious,
+                })
+
+            profile[eid] = {
+                "entity_type":            "LoanApplication",
+                "loan":                   row.get("loan") or {},
+                "borrower":               row.get("borrower") or {},
+                "collateral":             row.get("collateral") or {},
+                "guarantors":             guarantors_basic,
+                "guarantor_profiles":     guarantor_profiles,
+                "jurisdiction":           row.get("jurisdiction") or {},
+                "industry":               row.get("industry") or {},
+                "account_count":          row.get("account_count") or 0,
+                "avg_balance":            row.get("avg_balance"),
+                "officers":               [o for o in (row.get("officers") or []) if o],
+                "suspicious_transactions": suspicious,
+            }
+
+        elif eid.startswith("BRW-"):
+            rows = conn.run_query(
+                """
+                MATCH (b:Borrower {borrower_id: $id})
+                OPTIONAL MATCH (b)<-[:SUBMITTED_BY]-(l:LoanApplication)
+                OPTIONAL MATCH (b)-[:RESIDES_IN|REGISTERED_IN]->(j:Jurisdiction)
+                OPTIONAL MATCH (b)-[:BELONGS_TO_INDUSTRY]->(ind:Industry)
+                OPTIONAL MATCH (b)-[:HAS_ACCOUNT]->(acc:BankAccount)
+                OPTIONAL MATCH (b)<-[:DIRECTOR_OF]-(off:Officer)
+                RETURN
+                  properties(b)                     AS borrower,
+                  collect(DISTINCT properties(l))   AS loans,
+                  properties(j)                     AS jurisdiction,
+                  properties(ind)                   AS industry,
+                  count(DISTINCT acc)               AS account_count,
+                  avg(acc.average_monthly_balance)  AS avg_balance,
+                  collect(DISTINCT properties(off)) AS officers
+                LIMIT 1
+                """,
+                {"id": eid},
+            )
+            if not rows:
+                continue
+            row = rows[0]
+            suspicious = conn.run_query(
+                """
+                MATCH (b:Borrower {borrower_id: $bid})-[:HAS_ACCOUNT]->(acc:BankAccount)
+                MATCH (t:Transaction)
+                WHERE (t.from_account_id = acc.account_id OR t.to_account_id = acc.account_id)
+                  AND t.flagged_suspicious = true
+                RETURN t.transaction_id AS transaction_id,
+                       t.amount         AS amount,
+                       t.currency       AS currency,
+                       t.date           AS date,
+                       t.type           AS type,
+                       t.description    AS description
+                ORDER BY t.date DESC
+                LIMIT 5
+                """,
+                {"bid": eid},
+            )
+            profile[eid] = {
+                "entity_type":            "Borrower",
+                "borrower":               row.get("borrower") or {},
+                "loans":                  [l for l in (row.get("loans") or []) if l],
+                "jurisdiction":           row.get("jurisdiction") or {},
+                "industry":               row.get("industry") or {},
+                "account_count":          row.get("account_count") or 0,
+                "avg_balance":            row.get("avg_balance"),
+                "officers":               [o for o in (row.get("officers") or []) if o],
+                "suspicious_transactions": suspicious,
+            }
+
+    return profile
+
+
+def _render_entity_profile(profile: dict) -> None:
+    """Render Layer 1 entity profile cards for all entities in the profile dict."""
+
+    def _badge_danger(text: str) -> str:
+        return f'<span class="badge-danger">{html.escape(text)}</span>'
+
+    def _badge_warning(text: str) -> str:
+        return f'<span class="badge-warning">{html.escape(text)}</span>'
+
+    def _risk_pill(risk: str) -> str:
+        risk_upper = (risk or "").upper()
+        css = {"HIGH": "sev-HIGH", "MEDIUM": "sev-MEDIUM", "LOW": "sev-LOW"}.get(risk_upper, "sev-INFO")
+        return f'<span class="sev-pill {css}">{html.escape(risk_upper)}</span>'
+
+    def _fmt_aud(val) -> str:
+        if val is None:
+            return "—"
+        try:
+            return f"${float(val):,.0f}"
+        except (TypeError, ValueError):
+            return str(val)
+
+    def _fmt_pct(val) -> str:
+        if val is None:
+            return "—"
+        try:
+            return f"{float(val):.0f}%"
+        except (TypeError, ValueError):
+            return str(val)
+
+    def _bool_true(val) -> bool:
+        return str(val).lower() not in ("false", "0", "none", "")
+
+    def _render_borrower_section(data: dict, label_prefix: str = "") -> None:
+        """Shared renderer for a Borrower profile dict (used for main borrower and guarantors)."""
+        borrower    = data.get("borrower") or {}
+        loans       = data.get("loans") or []
+        jurisdiction = data.get("jurisdiction") or {}
+        industry    = data.get("industry") or {}
+        account_count = data.get("account_count") or 0
+        avg_balance = data.get("avg_balance")
+        officers    = data.get("officers") or []
+        suspicious  = data.get("suspicious_transactions") or []
+
+        b_id      = borrower.get("borrower_id") or ""
+        b_credit  = borrower.get("credit_score")
+        b_risk    = borrower.get("risk_rating") or ""
+        b_revenue = borrower.get("annual_revenue")
+        b_type_val = (borrower.get("entity_subtype") or borrower.get("type") or "").replace("_", " ").title()
+
+        header = label_prefix or html.escape(borrower.get("name") or b_id)
+        if label_prefix and b_id:
+            header += f' <span style="color:var(--text-secondary);font-size:12px;">({html.escape(b_id)})</span>'
+
+        metrics_html = f"""<div class="profile-metrics">
+  <div class="profile-metric">
+    <div class="profile-metric-value" style="font-size:0.9rem;">{header}</div>
+    <div class="profile-metric-label">Name</div>
+  </div>
+  <div class="profile-metric">
+    <div class="profile-metric-value" style="font-size:0.9rem;">{html.escape(b_type_val) if b_type_val else "—"}</div>
+    <div class="profile-metric-label">Type</div>
+  </div>
+  <div class="profile-metric">
+    <div class="profile-metric-value">{b_credit or "—"}</div>
+    <div class="profile-metric-label">Credit Score</div>
+  </div>
+  <div class="profile-metric">
+    <div class="profile-metric-value">{_fmt_aud(b_revenue) if b_revenue and float(b_revenue or 0) > 0 else "—"}</div>
+    <div class="profile-metric-label">Annual Revenue</div>
+  </div>
+  <div class="profile-metric">
+    <div class="profile-metric-value">{_risk_pill(b_risk) if b_risk else "—"}</div>
+    <div class="profile-metric-label">Risk Rating</div>
+  </div>
+</div>"""
+
+        rows_html = ""
+
+        if loans:
+            loan_parts = []
+            for l in loans[:5]:
+                l_id     = html.escape(l.get("loan_id") or "?")
+                l_amt    = _fmt_aud(l.get("amount"))
+                l_status = html.escape((l.get("status") or "").replace("_", " ").title())
+                l_lvr    = _fmt_pct(l.get("lvr"))
+                loan_parts.append(
+                    f'<code style="font-size:11px;">{l_id}</code> {l_amt}'
+                    f' LVR {l_lvr}'
+                    f' <span style="color:var(--text-secondary);">{l_status}</span>'
+                )
+            if len(loans) > 5:
+                loan_parts.append(f'<span style="color:var(--text-secondary);">+ {len(loans)-5} more</span>')
+            rows_html += f'<div class="profile-label">Loans</div><div class="profile-value">{"<br>".join(loan_parts)}</div>'
+
+        if jurisdiction:
+            j_name = html.escape(jurisdiction.get("name") or jurisdiction.get("jurisdiction_id") or "—")
+            j_aml  = (jurisdiction.get("aml_risk_rating") or "").upper()
+            j_val  = j_name + (f' &nbsp; AML: {_risk_pill(j_aml)}' if j_aml else "")
+            rows_html += f'<div class="profile-label">Jurisdiction</div><div class="profile-value">{j_val}</div>'
+
+        if industry:
+            i_name = html.escape(industry.get("name") or industry.get("industry_id") or "—")
+            i_risk = (industry.get("risk_level") or "").upper()
+            i_val  = i_name + (f' &nbsp; Risk: {_risk_pill(i_risk)}' if i_risk else "")
+            rows_html += f'<div class="profile-label">Industry</div><div class="profile-value">{i_val}</div>'
+
+        acc_val = f"{account_count} account{'s' if account_count != 1 else ''}"
+        if avg_balance is not None:
+            acc_val += f" &nbsp; Avg balance: {_fmt_aud(avg_balance)}/mo"
+        rows_html += f'<div class="profile-label">Accounts</div><div class="profile-value">{acc_val}</div>'
+
+        if officers:
+            off_parts = []
+            for o in officers:
+                o_name = html.escape(o.get("name") or o.get("officer_id") or "?")
+                o_str  = o_name
+                if _bool_true(o.get("is_pep")):
+                    o_str += _badge_danger("PEP")
+                if _bool_true(o.get("sanctions_match")):
+                    o_str += _badge_danger("SANCTIONS")
+                off_parts.append(o_str)
+            rows_html += f'<div class="profile-label">Officers</div><div class="profile-value">{" &nbsp;·&nbsp; ".join(off_parts)}</div>'
+
+        st.markdown(
+            metrics_html + f'<div class="profile-grid">{rows_html}</div>',
+            unsafe_allow_html=True,
+        )
+
+        if suspicious:
+            n = len(suspicious)
+            txn_html = (
+                f'<div class="profile-suspicious">'
+                f'<div style="font-size:12px;font-weight:700;color:var(--sev-MEDIUM-fg);margin-bottom:0.35rem;">'
+                f'⚠ {n} Suspicious Transaction{"s" if n > 1 else ""}</div>'
+            )
+            for t in suspicious:
+                t_id   = html.escape(t.get("transaction_id") or "")
+                t_amt  = _fmt_aud(t.get("amount"))
+                t_ccy  = html.escape(t.get("currency") or "AUD")
+                t_date = html.escape(str(t.get("date") or ""))
+                t_type = html.escape((t.get("type") or "").replace("_", " "))
+                t_desc = html.escape((t.get("description") or "")[:60])
+                txn_html += (
+                    f'<div style="font-size:12px;color:var(--text-primary);padding:2px 0;">'
+                    f'<code style="font-size:11px;">{t_id}</code> &nbsp; {t_amt} {t_ccy}'
+                    f' &nbsp; <span style="color:var(--text-secondary);">{t_date} · {t_type}</span>'
+                    f' &nbsp; {t_desc}</div>'
+                )
+            txn_html += "</div>"
+            st.markdown(txn_html, unsafe_allow_html=True)
+
+    for eid, data in profile.items():
+        etype = data.get("entity_type", "")
+
+        if etype == "LoanApplication":
+            loan        = data.get("loan") or {}
+            borrower    = data.get("borrower") or {}
+            collateral  = data.get("collateral") or {}
+            guarantors  = data.get("guarantors") or []
+            jurisdiction = data.get("jurisdiction") or {}
+            industry    = data.get("industry") or {}
+            account_count = data.get("account_count") or 0
+            avg_balance = data.get("avg_balance")
+            officers    = data.get("officers") or []
+            suspicious  = data.get("suspicious_transactions") or []
+
+            loan_type   = html.escape((loan.get("loan_type") or "").replace("_", " ").title())
+            loan_purpose = html.escape((loan.get("purpose") or "").replace("_", " ").title())
+            status      = html.escape((loan.get("status") or "—").replace("_", " ").title())
+            rate        = loan.get("interest_rate_indicative")
+            term        = loan.get("term_months")
+
+            metrics_html = f"""<div class="profile-metrics">
+  <div class="profile-metric">
+    <div class="profile-metric-value">{_fmt_aud(loan.get("amount"))}</div>
+    <div class="profile-metric-label">Loan Amount</div>
+  </div>
+  <div class="profile-metric">
+    <div class="profile-metric-value">{_fmt_pct(loan.get("lvr"))}</div>
+    <div class="profile-metric-label">LVR</div>
+  </div>
+  <div class="profile-metric">
+    <div class="profile-metric-value">{f"{float(rate):.2f}%" if rate is not None else "—"}</div>
+    <div class="profile-metric-label">Indicative Rate</div>
+  </div>
+  <div class="profile-metric">
+    <div class="profile-metric-value">{f"{term} mo" if term else "—"}</div>
+    <div class="profile-metric-label">Term</div>
+  </div>
+  <div class="profile-metric">
+    <div class="profile-metric-value" style="font-size:0.9rem;">{status}</div>
+    <div class="profile-metric-label">Status</div>
+  </div>
+</div>"""
+
+            rows_html = ""
+
+            if loan_type or loan_purpose:
+                type_val = " &nbsp;·&nbsp; ".join(filter(None, [loan_type, loan_purpose]))
+                rows_html += f'<div class="profile-label">Type</div><div class="profile-value">{type_val}</div>'
+
+            if borrower:
+                b_name   = html.escape(borrower.get("name") or "—")
+                b_type   = html.escape((borrower.get("entity_subtype") or borrower.get("type") or "").replace("_", " "))
+                b_credit = borrower.get("credit_score")
+                b_risk   = borrower.get("risk_rating") or ""
+                b_rev    = borrower.get("annual_revenue")
+                b_val    = b_name
+                if b_type:
+                    b_val += f' <span style="color:var(--text-secondary);font-size:12px;">({b_type})</span>'
+                if b_credit:
+                    b_val += f' &nbsp; Credit: <strong>{b_credit}</strong>'
+                if b_risk:
+                    b_val += f' &nbsp; Risk: {_risk_pill(b_risk)}'
+                if b_rev and float(b_rev or 0) > 0:
+                    b_val += f' &nbsp; Revenue: {_fmt_aud(b_rev)}'
+                rows_html += f'<div class="profile-label">Borrower</div><div class="profile-value">{b_val}</div>'
+
+            if collateral:
+                c_desc  = html.escape((collateral.get("description") or collateral.get("type") or "—")[:80])
+                c_val   = f"{c_desc}"
+                c_amt   = collateral.get("estimated_value")
+                if c_amt:
+                    c_val += f' &nbsp; {_fmt_aud(c_amt)}'
+                c_date  = collateral.get("valuation_date")
+                if c_date:
+                    c_val += f' <span style="color:var(--text-secondary);font-size:12px;">valued {html.escape(str(c_date))}</span>'
+                if _bool_true(collateral.get("encumbered")):
+                    c_val += _badge_warning("ENCUMBERED")
+                rows_html += f'<div class="profile-label">Collateral</div><div class="profile-value">{c_val}</div>'
+
+            if guarantors:
+                g_parts = []
+                for g in guarantors:
+                    g_name = html.escape(g.get("name") or g.get("borrower_id") or "?")
+                    g_credit = g.get("credit_score")
+                    g_parts.append(g_name + (f" (credit: {g_credit})" if g_credit else ""))
+                rows_html += f'<div class="profile-label">Guarantors</div><div class="profile-value">{" &nbsp;·&nbsp; ".join(g_parts)}</div>'
+
+            if jurisdiction:
+                j_name = html.escape(jurisdiction.get("name") or jurisdiction.get("jurisdiction_id") or "—")
+                j_aml  = (jurisdiction.get("aml_risk_rating") or "").upper()
+                j_val  = j_name + (f' &nbsp; AML: {_risk_pill(j_aml)}' if j_aml else "")
+                rows_html += f'<div class="profile-label">Jurisdiction</div><div class="profile-value">{j_val}</div>'
+
+            if industry:
+                i_name = html.escape(industry.get("name") or industry.get("industry_id") or "—")
+                i_risk = (industry.get("risk_level") or "").upper()
+                i_val  = i_name + (f' &nbsp; Risk: {_risk_pill(i_risk)}' if i_risk else "")
+                rows_html += f'<div class="profile-label">Industry</div><div class="profile-value">{i_val}</div>'
+
+            acc_val = f"{account_count} account{'s' if account_count != 1 else ''}"
+            if avg_balance is not None:
+                acc_val += f" &nbsp; Avg balance: {_fmt_aud(avg_balance)}/mo"
+            rows_html += f'<div class="profile-label">Accounts</div><div class="profile-value">{acc_val}</div>'
+
+            if officers:
+                off_parts = []
+                for o in officers:
+                    o_name = html.escape(o.get("name") or o.get("officer_id") or "?")
+                    o_str  = o_name
+                    if _bool_true(o.get("is_pep")):
+                        o_str += _badge_danger("PEP")
+                    if _bool_true(o.get("sanctions_match")):
+                        o_str += _badge_danger("SANCTIONS")
+                    off_parts.append(o_str)
+                rows_html += f'<div class="profile-label">Officers</div><div class="profile-value">{" &nbsp;·&nbsp; ".join(off_parts)}</div>'
+
+            st.markdown(
+                metrics_html + f'<div class="profile-grid">{rows_html}</div>',
+                unsafe_allow_html=True,
+            )
+
+            # Borrower suspicious transactions (label distinguishes from guarantor)
+            if suspicious:
+                n = len(suspicious)
+                txn_html = (
+                    f'<div class="profile-suspicious">'
+                    f'<div style="font-size:12px;font-weight:700;color:var(--sev-MEDIUM-fg);margin-bottom:0.35rem;">'
+                    f'⚠ {n} Suspicious Transaction{"s" if n > 1 else ""} on Borrower Accounts</div>'
+                )
+                for t in suspicious:
+                    t_id   = html.escape(t.get("transaction_id") or "")
+                    t_amt  = _fmt_aud(t.get("amount"))
+                    t_ccy  = html.escape(t.get("currency") or "AUD")
+                    t_date = html.escape(str(t.get("date") or ""))
+                    t_type = html.escape((t.get("type") or "").replace("_", " "))
+                    t_desc = html.escape((t.get("description") or "")[:60])
+                    txn_html += (
+                        f'<div style="font-size:12px;color:var(--text-primary);padding:2px 0;">'
+                        f'<code style="font-size:11px;">{t_id}</code> &nbsp; {t_amt} {t_ccy}'
+                        f' &nbsp; <span style="color:var(--text-secondary);">{t_date} · {t_type}</span>'
+                        f' &nbsp; {t_desc}</div>'
+                    )
+                txn_html += "</div>"
+                st.markdown(txn_html, unsafe_allow_html=True)
+
+            # Guarantor profiles
+            for g_data in (data.get("guarantor_profiles") or []):
+                g_name    = (g_data.get("borrower") or {}).get("name") or "Guarantor"
+                g_id      = (g_data.get("borrower") or {}).get("borrower_id") or ""
+                g_id_html = (
+                    f'&nbsp;<span style="font-weight:400">({html.escape(g_id)})</span>'
+                    if g_id else ""
+                )
+                st.markdown(
+                    f'<div style="border-top:1px solid var(--border);margin:0.75rem 0 0.5rem 0;'
+                    f'padding-top:0.5rem;font-size:11px;font-weight:600;text-transform:uppercase;'
+                    f'letter-spacing:.06em;color:var(--text-secondary);">'
+                    f'Guarantor: {html.escape(g_name)}{g_id_html}</div>',
+                    unsafe_allow_html=True,
+                )
+                _render_borrower_section(g_data)
+
+        elif etype == "Borrower":
+            _render_borrower_section(data)
+
+
+def _render_finding_graph(finding: dict, chart_key: str = "finding_graph") -> None:
     """Cross-layer Plotly network: L1 entity subgraph ↔ Finding ↔ L2 regulatory chain."""
     import plotly.graph_objects as go
 
@@ -992,10 +1567,10 @@ def _render_finding_graph(finding: dict) -> None:
         showlegend=False,
         annotations=annotations,
     )
-    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False}, key=chart_key)
 
 
-def _render_findings_chart(findings: list[dict]) -> None:
+def _render_findings_chart(findings: list[dict], chart_key: str = "findings_sev_chart") -> None:
     import plotly.graph_objects as go
 
     _sev_ord = {"HIGH": 4, "MEDIUM": 3, "LOW": 2, "INFO": 1}
@@ -1055,7 +1630,7 @@ def _render_findings_chart(findings: list[dict]) -> None:
         use_container_width=True,
         config={"displayModeBar": False},
         on_select="rerun",
-        key="findings_sev_chart",
+        key=chart_key,
     )
 
     # Render cross-layer evidence graph for the selected bar
@@ -1070,10 +1645,10 @@ def _render_findings_chart(findings: list[dict]) -> None:
                 f'Finding Evidence — Layer 1 + Layer 2</div>',
                 unsafe_allow_html=True,
             )
-            _render_finding_graph(selected)
+            _render_finding_graph(selected, chart_key=f"{chart_key}_evidence")
 
 
-def _render_evidence_graph(cited_sections: list[dict], cited_chunks: list[dict]) -> None:
+def _render_evidence_graph(cited_sections: list[dict], cited_chunks: list[dict], chart_key: str = "evidence_graph") -> None:
     """Plotly network graph: Regulation → Section → Chunk."""
     import plotly.graph_objects as go
 
@@ -1189,10 +1764,10 @@ def _render_evidence_graph(cited_sections: list[dict], cited_chunks: list[dict])
                  font=dict(size=10, color="#fd7e14"), xref="x", yref="y"),
         ],
     )
-    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False}, key=chart_key)
 
 
-def _render_routing_graph(routing: dict) -> None:
+def _render_routing_graph(routing: dict, chart_key: str = "routing_graph") -> None:
     """Plotly mini-graph: entities → regulations → agents → orchestrator."""
     import plotly.graph_objects as go
 
@@ -1323,10 +1898,10 @@ def _render_routing_graph(routing: dict) -> None:
             for lbl in col_labels
         ],
     )
-    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False}, key=chart_key)
 
 
-def _render_evidence(cited_sections: list[dict], cited_chunks: list[dict]) -> None:
+def _render_evidence(cited_sections: list[dict], cited_chunks: list[dict], chart_key: str = "evidence_graph") -> None:
     col_sec, col_chk = st.columns(2)
 
     with col_sec:
@@ -1378,7 +1953,23 @@ def _render_evidence(cited_sections: list[dict], cited_chunks: list[dict]) -> No
             '<div class="section-label">Regulatory Path — hover nodes for detail</div>',
             unsafe_allow_html=True,
         )
-        _render_evidence_graph(cited_sections, cited_chunks)
+        _render_evidence_graph(cited_sections, cited_chunks, chart_key=chart_key)
+
+
+def _render_error(error_str: str) -> None:
+    """Render a user-friendly error message, translating known exception types."""
+    s = (error_str or "").lower()
+    if "ratelimit" in s or "rate_limit" in s or "rate limit" in s or "429" in s:
+        msg = "The AI service is rate-limited. Please wait a moment and try again."
+    elif "authentication" in s or "401" in s or "invalid x-api-key" in s:
+        msg = "API key is invalid or missing. Check your `.env` file."
+    elif ("serviceunavaila" in s or "neo4j" in s) and ("connect" in s or "unavailable" in s):
+        msg = "Cannot reach the Neo4j database. Check your connection settings."
+    elif "timeout" in s:
+        msg = "The request timed out. Try a more specific question."
+    else:
+        msg = error_str[:300]
+    st.error(msg)
 
 
 def render_response(resp) -> None:
@@ -1386,7 +1977,7 @@ def render_response(resp) -> None:
     _verdict_badge(resp.verdict, resp.confidence)
 
     with st.expander("Routing", expanded=False):
-        _render_routing(resp.routing)
+        _render_routing(resp.routing, chart_key=f"routing_graph_{resp.session_id}")
 
     if resp.cypher_used:
         with st.expander(f"Cypher used ({len(resp.cypher_used)} queries)", expanded=False):
@@ -1397,9 +1988,16 @@ def render_response(resp) -> None:
     st.markdown('<div class="section-label">Analysis</div>', unsafe_allow_html=True)
     st.markdown(resp.answer)
 
+    _entity_ids = tuple(resp.routing.get("entity_ids") or [])
+    if _entity_ids:
+        _profile = _fetch_entity_profile(_entity_ids)
+        if _profile:
+            with st.expander("Entity Profile", expanded=False):
+                _render_entity_profile(_profile)
+
     if resp.cited_sections or resp.cited_chunks:
         with st.expander("Evidence", expanded=False):
-            _render_evidence(resp.cited_sections or [], resp.cited_chunks or [])
+            _render_evidence(resp.cited_sections or [], resp.cited_chunks or [], chart_key=f"evidence_graph_{resp.session_id}")
 
     if resp.findings:
         _sev_order = {"HIGH": 0, "MEDIUM": 1, "LOW": 2, "INFO": 3}
@@ -1421,23 +2019,31 @@ def render_response(resp) -> None:
                     '<div class="section-label">Severity Map — hover for detail</div>',
                     unsafe_allow_html=True,
                 )
-                _render_findings_chart(resp.findings)
+                _render_findings_chart(resp.findings, chart_key=f"findings_sev_chart_{resp.session_id}")
 
     if resp.recommended_next_steps:
         with st.expander("Recommended next steps", expanded=True):
             steps_html = ""
             for i, step in enumerate(resp.recommended_next_steps, 1):
+                step_escaped = html.escape(step)
+                step_html = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', step_escaped)
                 steps_html += f"""
 <div class="step-card">
   <div class="step-num">{i}</div>
-  <div style="font-size:14px;color:var(--text-primary);line-height:1.5;">{html.escape(step)}</div>
+  <div style="font-size:14px;color:var(--text-primary);line-height:1.5;">{step_html}</div>
 </div>
 """
             st.markdown(steps_html, unsafe_allow_html=True)
 
-    if resp.assessment_id:
+    _aid_list = getattr(resp, "assessment_ids", None) or (
+        [resp.assessment_id] if resp.assessment_id else []
+    )
+    if _aid_list:
+        ids_html = " &nbsp;·&nbsp; ".join(
+            f"<code>{html.escape(aid)}</code>" for aid in _aid_list
+        )
         st.markdown(
-            f'<div class="assess-footer">Assessment stored: <code>{html.escape(resp.assessment_id)}</code></div>',
+            f'<div class="assess-footer">Assessment{"s" if len(_aid_list) > 1 else ""} stored: {ids_html}</div>',
             unsafe_allow_html=True,
         )
 
@@ -1456,14 +2062,16 @@ st.title("LoanGuard AI")
 st.markdown("**Intelligent loan compliance monitoring and risk investigation AI Agents powered by Neo4j and Claude**")
 st.caption("Multi-agent pipeline: Orchestrator → ComplianceAgent + InvestigationAgent")
 
-# Initialise on first load (shows spinner)
-with st.spinner("Connecting to Neo4j and loading agents…"):
-    try:
-        orchestrator = _get_orchestrator()
-        st.success("Connected.", icon="✅")
-    except Exception as e:
-        st.error(f"Initialisation failed: {e}")
-        st.stop()
+# Initialise on first load only — skip spinner/banner on subsequent reruns
+if "agent_ready" not in st.session_state:
+    with st.spinner("Connecting to Neo4j and loading agents…"):
+        try:
+            _get_orchestrator()
+            st.session_state["agent_ready"] = True
+        except Exception as e:
+            st.error(f"Initialisation failed: {e}")
+            st.stop()
+orchestrator = _get_orchestrator()  # returns cached resource instantly
 
 # ── Sidebar — example questions + log path ───────────────────────────────────
 with st.sidebar:
@@ -1484,16 +2092,20 @@ with st.sidebar:
 if "history" not in st.session_state:
     st.session_state.history = []
 
-col_input, col_btn = st.columns([8, 1])
-with col_input:
-    question = st.text_input(
-        "Ask a compliance or investigation question",
-        placeholder="e.g. Is LOAN-0002 compliant with APG-223?",
-        label_visibility="collapsed",
-        key="question_input",
-    )
-with col_btn:
-    ask = st.button("Ask", type="primary", use_container_width=True)
+if st.session_state.pop("_clear_input", False):
+    st.session_state.pop("question_input", None)
+
+with st.form("question_form", clear_on_submit=False):
+    col_input, col_btn = st.columns([8, 1])
+    with col_input:
+        question = st.text_input(
+            "Ask a compliance or investigation question",
+            placeholder="e.g. Is LOAN-0002 compliant with APG-223?",
+            label_visibility="collapsed",
+            key="question_input",
+        )
+    with col_btn:
+        ask = st.form_submit_button("Ask", type="primary", use_container_width=True)
 
 if st.button("Clear chat", type="secondary"):
     st.session_state.history = []
@@ -1501,23 +2113,32 @@ if st.button("Clear chat", type="secondary"):
 
 # ── Run question ──────────────────────────────────────────────────────────────
 auto_submit = st.session_state.pop("auto_submit", False)
-if (ask or auto_submit) and question.strip():
-    st.session_state.history.append({"role": "user", "content": question.strip()})
+submit_question = question if ask else (st.session_state.get("question_input", "") if auto_submit else "")
+if submit_question.strip():
+    st.session_state.history.append({"role": "user", "content": submit_question.strip()})
     with st.spinner("Thinking…"):
         try:
-            resp = orchestrator.run(question.strip())
+            resp = orchestrator.run(submit_question.strip())
             st.session_state.history.append({"role": "assistant", "content": resp})
         except Exception as e:
             st.session_state.history.append({"role": "assistant", "content": None, "error": str(e)})
+    st.session_state["_clear_input"] = True
+    st.rerun()
 
-# ── Render chat history ───────────────────────────────────────────────────────
-for msg in st.session_state.history:
-    if msg["role"] == "user":
-        with st.chat_message("user"):
-            st.markdown(msg["content"])
-    else:
+# ── Render chat history (newest on top) ──────────────────────────────────────
+_history = st.session_state.history
+_pairs: list[tuple] = []
+for _i in range(0, len(_history), 2):
+    _user_msg = _history[_i]
+    _asst_msg = _history[_i + 1] if _i + 1 < len(_history) else None
+    _pairs.append((_user_msg, _asst_msg))
+
+for _user_msg, _asst_msg in reversed(_pairs):
+    with st.chat_message("user"):
+        st.markdown(_user_msg["content"])
+    if _asst_msg is not None:
         with st.chat_message("assistant"):
-            if msg.get("error"):
-                st.error(msg["error"])
+            if _asst_msg.get("error"):
+                _render_error(_asst_msg["error"])
             else:
-                render_response(msg["content"])
+                render_response(_asst_msg["content"])

@@ -135,7 +135,7 @@ def persist_assessment(
     """
     Persist a compliance Assessment with Findings and ReasoningSteps to Layer 3.
 
-    Idempotent MERGE on assessment_id derived from entity+regulation+date.
+    Creates a new Assessment node per run, identified by entity+regulation+local datetime.
 
     Args:
         entity_id:      'LOAN-0002' or 'BRW-0001'.
@@ -163,7 +163,7 @@ def trace_evidence(assessment_id: str) -> dict:
     cited sections (with text), and cited chunks (with text excerpt).
 
     Args:
-        assessment_id: e.g. 'ASSESS-LOAN-0002-APG-223-2026-03-09'.
+        assessment_id: e.g. 'ASSESS-LOAN-0002-APG-223-2026-03-10-143022'.
     """
     return _trace_evidence(assessment_id)
 

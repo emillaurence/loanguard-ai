@@ -99,10 +99,18 @@ for a compliance officer or investigator.
 
 Your response must include:
 1. A direct answer to the original question (2–4 sentences).
-2. 3–5 concrete recommended next steps as a numbered list.
+2. A clearly delimited section of 3–5 concrete recommended next steps.
 
 Do NOT reproduce or summarise the findings list — findings are displayed
-separately in the UI. Focus only on the answer and next steps.
+separately in the UI.
+
+Structure your response exactly like this:
+<answer text here>
+
+RECOMMENDED NEXT STEPS:
+1. <step>
+2. <step>
+3. <step>
 
 CITATION RULE: Only cite regulation IDs that appear in the AVAILABLE REGULATIONS
 list provided in the context (e.g. APG-223, APS-112, APS-220). Use the bare ID
@@ -206,6 +214,102 @@ class Orchestrator:
             logger.warning("Could not fetch regulation IDs from graph: %s", e)
             return []
 
+    def _fetch_assessment_findings(
+        self, assessment_ids: list[str]
+    ) -> tuple[list[dict], str, float]:
+        """
+        Fetch all Finding nodes for the given assessment IDs from Neo4j.
+
+        Returns (findings, aggregated_verdict, aggregated_confidence).
+        Verdict is the worst-case across all assessments:
+          NON_COMPLIANT > REQUIRES_REVIEW > ANOMALY_DETECTED > COMPLIANT > INFORMATIONAL
+        """
+        _VERDICT_PRIORITY = {
+            "NON_COMPLIANT": 4,
+            "REQUIRES_REVIEW": 3,
+            "ANOMALY_DETECTED": 2,
+            "COMPLIANT": 1,
+            "INFORMATIONAL": 0,
+        }
+
+        try:
+            # Fetch findings across all assessments
+            findings_result = self.execute_tool(
+                "read-neo4j-cypher",
+                {
+                    "query": (
+                        "MATCH (a:Assessment)-[:HAS_FINDING]->(f:Finding) "
+                        "WHERE a.assessment_id IN $ids "
+                        "RETURN a.assessment_id AS assessment_id, "
+                        "       a.regulation_id AS regulation_id, "
+                        "       a.verdict AS verdict, "
+                        "       a.confidence AS confidence, "
+                        "       f.finding_id AS finding_id, "
+                        "       f.finding_type AS finding_type, "
+                        "       f.severity AS severity, "
+                        "       f.description AS description, "
+                        "       f.pattern_name AS pattern_name "
+                        "ORDER BY "
+                        "  CASE f.severity WHEN 'HIGH' THEN 0 WHEN 'MEDIUM' THEN 1 "
+                        "  WHEN 'LOW' THEN 2 ELSE 3 END "
+                        "LIMIT 200"
+                    ),
+                    "params": {"ids": assessment_ids},
+                },
+            )
+
+            # Fetch per-assessment verdicts/confidence for aggregation
+            meta_result = self.execute_tool(
+                "read-neo4j-cypher",
+                {
+                    "query": (
+                        "MATCH (a:Assessment) "
+                        "WHERE a.assessment_id IN $ids "
+                        "RETURN a.assessment_id AS assessment_id, "
+                        "       a.regulation_id AS regulation_id, "
+                        "       a.verdict AS verdict, "
+                        "       a.confidence AS confidence "
+                        "LIMIT 50"
+                    ),
+                    "params": {"ids": assessment_ids},
+                },
+            )
+
+            rows = findings_result.get("rows", [])
+            meta_rows = meta_result.get("rows", [])
+
+            findings: list[dict] = []
+            for row in rows:
+                findings.append({
+                    "finding_type":  row.get("finding_type", "information"),
+                    "severity":      row.get("severity", "INFO"),
+                    "description":   row.get("description", ""),
+                    "pattern_name":  row.get("pattern_name"),
+                    "regulation_id": row.get("regulation_id", ""),
+                    "assessment_id": row.get("assessment_id", ""),
+                })
+
+            # Aggregate verdict (worst-case) and confidence (average)
+            best_verdict = "INFORMATIONAL"
+            confidences: list[float] = []
+            for m in meta_rows:
+                v = (m.get("verdict") or "INFORMATIONAL").upper()
+                if _VERDICT_PRIORITY.get(v, 0) > _VERDICT_PRIORITY.get(best_verdict, 0):
+                    best_verdict = v
+                if m.get("confidence") is not None:
+                    confidences.append(float(m["confidence"]))
+
+            avg_confidence = sum(confidences) / len(confidences) if confidences else 0.5
+            logger.info(
+                "Fetched %d findings from %d assessments; aggregated verdict=%s confidence=%.2f",
+                len(findings), len(assessment_ids), best_verdict, avg_confidence,
+            )
+            return findings, best_verdict, avg_confidence
+
+        except Exception as e:
+            logger.warning("Could not fetch assessment findings from graph: %s", e)
+            return [], "INFORMATIONAL", 0.5
+
     def _route(self, question: str) -> dict:
         """Classify question intent using a single Claude call."""
         resp = self.client.messages.create(
@@ -258,32 +362,47 @@ class Orchestrator:
         confidence = 0.5
         cited_sections: list[dict] = []
 
+        # Resolve entity/regulation context for graph enrichment (needed by both agents)
+        _ent_id   = (routing.get("entity_ids")   or [""])[0]
+        _ent_type = (routing.get("entity_types")  or [""])[0]
+        _reg_id   = (routing.get("regulations")   or [""])[0]
+
         if compliance_result:
-            verdict = compliance_result.verdict
-            confidence = compliance_result.confidence
             for cypher in compliance_result.cypher_used:
                 all_cypher.append({"tool": "read-neo4j-cypher", "cypher": cypher})
 
-            # Resolve entity/regulation context for graph enrichment
-            _ent_id   = (routing.get("entity_ids")   or [""])[0]
-            _ent_type = (routing.get("entity_types")  or [""])[0]
-            _reg_id   = (routing.get("regulations")   or [""])[0]
-
-            # Primary source: findings Claude persisted to Layer 3 (rich descriptions,
-            # agent-assessed severities). Fall back to threshold_breaches conversion
-            # only if persist_assessment was never called or returned no findings.
-            if compliance_result.persisted_findings:
+            # Preferred: fetch all findings from Neo4j using the persisted assessment IDs.
+            # This captures findings from every persist_assessment call (one per regulation).
+            # Falls back to in-memory persisted_findings, then threshold_breaches.
+            if compliance_result.assessment_ids:
+                neo4j_findings, verdict, confidence = self._fetch_assessment_findings(
+                    compliance_result.assessment_ids
+                )
+                if neo4j_findings:
+                    for f in neo4j_findings:
+                        f.setdefault("entity_id",   _ent_id)
+                        f.setdefault("entity_type", _ent_type)
+                    all_findings.extend(neo4j_findings)
+                else:
+                    # Neo4j fetch returned nothing (e.g. graph unavailable) — fall back
+                    verdict = compliance_result.verdict
+                    confidence = compliance_result.confidence
+                    all_findings.extend(compliance_result.persisted_findings)
+            elif compliance_result.persisted_findings:
+                verdict = compliance_result.verdict
+                confidence = compliance_result.confidence
                 breaches = compliance_result.threshold_breaches or []
                 for i, f in enumerate(compliance_result.persisted_findings):
                     enriched = dict(f)
                     enriched.setdefault("entity_id",   _ent_id)
                     enriched.setdefault("entity_type", _ent_type)
                     enriched.setdefault("regulation_id", _reg_id)
-                    # Pair threshold breach by position (best-effort)
                     if i < len(breaches):
                         enriched.setdefault("threshold_id", breaches[i].get("threshold_id", ""))
                     all_findings.append(enriched)
             else:
+                verdict = compliance_result.verdict
+                confidence = compliance_result.confidence
                 for breach in compliance_result.threshold_breaches:
                     tid = breach.get("threshold_id", "unknown")
                     description, severity = _THRESHOLD_META.get(
@@ -311,8 +430,9 @@ class Orchestrator:
             )
             context_parts.append(
                 f"Compliance agent result:\n"
-                f"  Verdict: {compliance_result.verdict}\n"
-                f"  Confidence: {compliance_result.confidence}\n"
+                f"  Verdict: {verdict}\n"
+                f"  Confidence: {confidence}\n"
+                f"  Assessments: {compliance_result.assessment_ids or [compliance_result.assessment_id]}\n"
                 f"  Requirements checked: {compliance_result.requirement_ids}\n"
                 f"  Threshold breaches: {compliance_result.threshold_breaches}\n"
                 f"  Reasoning steps: {compliance_result.reasoning_steps}\n"
@@ -373,9 +493,15 @@ class Orchestrator:
         )
         answer = synthesis_response.content[0].text.strip()
 
-        # Extract recommended next steps from answer
+        # Split answer from recommended next steps at the delimiter
         import re
-        steps = re.findall(r"^\d+\.\s+(.+)$", answer, re.MULTILINE)
+        _STEPS_DELIMITER = "RECOMMENDED NEXT STEPS:"
+        if _STEPS_DELIMITER in answer:
+            _answer_part, _steps_part = answer.split(_STEPS_DELIMITER, 1)
+            answer = _answer_part.strip()
+            steps = re.findall(r"^\d+\.\s+(.+)$", _steps_part, re.MULTILINE)
+        else:
+            steps = re.findall(r"^\d+\.\s+(.+)$", answer, re.MULTILINE)
 
         return InvestigationResponse(
             session_id=session_id,
@@ -391,4 +517,5 @@ class Orchestrator:
             cited_chunks=[],
             recommended_next_steps=steps[:5],
             assessment_id=compliance_result.assessment_id if compliance_result else None,
+            assessment_ids=compliance_result.assessment_ids if compliance_result else [],
         )

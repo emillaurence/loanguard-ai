@@ -174,6 +174,13 @@ Node: ReasoningStep
 
 (Borrower)-[:RESIDES_IN|REGISTERED_IN]->(Jurisdiction)<-[:APPLIES_TO_JURISDICTION]-(Regulation)
 All APRA regulations link to JUR-AU-FED.
+
+### Cypher Best Practices
+
+- For variable-length paths like `(a)-[r:OWNS*1..3]->(b)`, use `size(r)` to count
+  relationships, NOT `length(r)` (which expects a Path, not a List<Relationship>).
+- Collect relationship types with `[rel IN r | type(rel)]` instead of `type(r)`.
+- Always use parameterised queries (`$param`) — never string interpolation.
 """
 
 
@@ -392,6 +399,7 @@ class ComplianceResult:
     reasoning_steps: list[str] = field(default_factory=list)
     cypher_used: list[str] = field(default_factory=list)
     assessment_id: str | None = None
+    assessment_ids: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict:
         return self.__dict__.copy()
@@ -426,6 +434,7 @@ class InvestigationResponse:
     cited_chunks: list[dict] = field(default_factory=list)
     recommended_next_steps: list[str] = field(default_factory=list)
     assessment_id: str | None = None
+    assessment_ids: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict:
         return self.__dict__.copy()

@@ -176,9 +176,15 @@ class InvestigationAgent:
 
                 # Trim history to MAX_HISTORY_PAIRS to prevent input token growth.
                 # Always keep messages[0] (initial user question) + the last N pairs.
+                # Must preserve tool_use/tool_result pairs to avoid API errors.
                 max_msgs = 1 + MAX_HISTORY_PAIRS * 2
                 if len(messages) > max_msgs:
-                    messages = [messages[0]] + messages[-MAX_HISTORY_PAIRS * 2:]
+                    tail = messages[-(MAX_HISTORY_PAIRS * 2):]
+                    # If tail starts with a user/tool_result, its assistant/tool_use was
+                    # trimmed off — drop it to avoid orphaned tool_result blocks.
+                    if tail[0].get("role") == "user":
+                        tail = tail[1:]
+                    messages = [messages[0]] + tail
 
                 continue
 

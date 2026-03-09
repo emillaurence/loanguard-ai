@@ -120,6 +120,7 @@ class ComplianceAgent:
         cypher_used: list[str] = []
         final_text = ""
         assessment_id: str | None = None
+        assessment_ids: list[str] = []
         persisted_findings: list[dict] = []
         seen_section_ids: set[str] = set()
         seen_chunk_ids: set[str] = set()
@@ -172,10 +173,16 @@ class ComplianceAgent:
                         if block.name == "read-neo4j-cypher" and block.input.get("query"):
                             cypher_used.append(block.input["query"])
                         result = self.execute_tool(block.name, block.input)
-                        # Capture assessment_id and persisted findings from Layer 3
+                        # Accumulate assessment_ids and persisted findings from Layer 3.
+                        # persist_assessment may be called once per regulation, so we
+                        # extend rather than overwrite to capture findings from all regulations.
                         if block.name == "persist_assessment" and isinstance(result, dict):
-                            assessment_id = result.get("assessment_id")
-                            persisted_findings = result.get("findings", [])
+                            aid = result.get("assessment_id")
+                            if aid:
+                                assessment_id = aid  # keep last for backward compat
+                                if aid not in assessment_ids:
+                                    assessment_ids.append(aid)
+                            persisted_findings.extend(result.get("findings", []))
                         # Accumulate section/chunk IDs for the evidence tracker
                         self._extract_evidence_ids(block.name, result, seen_section_ids, seen_chunk_ids)
                         content = json.dumps(result, default=str)
@@ -202,9 +209,17 @@ class ComplianceAgent:
                     )
                 messages.append({"role": "user", "content": tool_results})
 
+                # Truncate history but preserve tool_use/tool_result pairs.
+                # Messages alternate: user, assistant, user (tool_result), assistant, ...
+                # We must keep pairs together to avoid API errors about missing tool_results.
                 max_msgs = 1 + MAX_HISTORY_PAIRS * 2
                 if len(messages) > max_msgs:
-                    messages = [messages[0]] + messages[-MAX_HISTORY_PAIRS * 2:]
+                    tail = messages[-(MAX_HISTORY_PAIRS * 2):]
+                    # If tail starts with a user/tool_result, its assistant/tool_use was
+                    # trimmed off — drop it to avoid orphaned tool_result blocks.
+                    if tail[0].get("role") == "user":
+                        tail = tail[1:]
+                    messages = [messages[0]] + tail
 
                 continue
 
@@ -213,6 +228,7 @@ class ComplianceAgent:
 
         result = self._parse_result(final_text, cypher_used)
         result.assessment_id = assessment_id
+        result.assessment_ids = assessment_ids
         result.persisted_findings = persisted_findings
         return result
 

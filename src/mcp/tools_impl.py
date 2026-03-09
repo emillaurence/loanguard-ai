@@ -193,8 +193,8 @@ def persist_assessment(
         return {"error": f"Invalid verdict '{verdict}'. Must be one of {valid_verdicts}."}
 
     confidence = max(0.0, min(1.0, float(confidence)))
-    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    assessment_id = f"ASSESS-{entity_id}-{regulation_id}-{today}"
+    now_local = datetime.now()
+    assessment_id = f"ASSESS-{entity_id}-{regulation_id}-{now_local.strftime('%Y-%m-%d-%H%M%S')}"
     created_at = datetime.now(timezone.utc).isoformat()
 
     conn = _get_conn()
