@@ -586,14 +586,14 @@ def _render_findings(findings: list[dict]) -> None:
         return
 
     _sev_order = {"HIGH": 0, "MEDIUM": 1, "LOW": 2, "INFO": 3}
-    sorted_findings = sorted(findings, key=lambda f: _sev_order.get(f.get("severity", "INFO"), 3))
+    sorted_findings = sorted(findings, key=lambda f: _sev_order.get(f.get("severity") or "INFO", 3))
 
     cards_html = ""
     for f in sorted_findings:
-        sev   = html.escape(f.get("severity", "INFO"))
-        desc  = html.escape(f.get("description", ""))
-        ftype = html.escape(f.get("finding_type", ""))
-        pname = html.escape(f.get("pattern_name", ""))
+        sev   = html.escape(f.get("severity") or "INFO")
+        desc  = html.escape(f.get("description") or "")
+        ftype = html.escape(f.get("finding_type") or "")
+        pname = html.escape(f.get("pattern_name") or "")
 
         type_chip  = f'<span class="chip chip-blue" style="font-size:11px;">{ftype}</span>' if ftype else ""
         pname_html = (
@@ -629,7 +629,7 @@ def _render_findings_chart(findings: list[dict]) -> None:
         key=lambda f: _sev_ord.get(f.get("severity", "INFO"), 1),
     )
 
-    labels   = [f.get("severity", "INFO") for f in sorted_findings]
+    labels   = [f.get("severity") or "INFO" for f in sorted_findings]
     x_values = [_sev_ord.get(s, 1) for s in labels]
     colours  = [SEV_BAR_COLOURS.get(s, "#6c757d") for s in labels]
 
@@ -745,7 +745,7 @@ def render_response(resp) -> None:
         _sev_emoji = {"HIGH": "🔴", "MEDIUM": "🟡", "LOW": "🟢", "INFO": "🔵"}
         _sev_css   = {"HIGH": "var(--sev-HIGH-fg)", "MEDIUM": "var(--sev-MEDIUM-fg)",
                       "LOW": "var(--sev-LOW-fg)", "INFO": "var(--sev-INFO-fg)"}
-        top_sev = min(resp.findings, key=lambda f: _sev_order.get(f.get("severity", "INFO"), 3)).get("severity", "INFO")
+        top_sev = min(resp.findings, key=lambda f: _sev_order.get(f.get("severity") or "INFO", 3)).get("severity") or "INFO"
         emoji   = _sev_emoji.get(top_sev, "")
         colour  = _sev_css.get(top_sev, "var(--text-secondary)")
         st.markdown(
