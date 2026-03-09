@@ -15,6 +15,12 @@ openai>=1.30.0
 jupyter>=1.1.0
 jupyterlab>=4.0.0
 ipykernel>=6.29.0
+ipywidgets>=8.0.0
+
+# 31x Investigation system — MCP
+fastmcp>=0.1.0          # FastMCP server framework (jlowin/fastmcp)
+mcp-neo4j-cypher        # Neo4j Labs MCP server (neo4j-contrib/mcp-neo4j)
+mcp                     # MCP Python client
 
 # Testing
 pytest>=8.0.0

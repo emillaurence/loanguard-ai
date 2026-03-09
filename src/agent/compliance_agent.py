@@ -1,158 +1,157 @@
 """
-ComplianceAgent: Agentic loop wrapping Claude with Neo4j graph tools.
+ComplianceAgent — assesses LoanApplications and Borrowers against APRA regulations.
 
-The agent receives a natural-language compliance question, iteratively calls
-graph tools via Claude's tool-use API, and returns a structured final answer.
+Uses two MCP tools:
+  traverse_compliance_path  (FastMCP) — cross-layer L1→L2 subgraph
+  read-neo4j-cypher         (Neo4j MCP) — ad-hoc Cypher for specific checks
 
-Model: claude-sonnet-4-6
-# TODO: Update the model constant below if a newer Claude version is preferred.
+Claude generates all Cypher itself (text-to-Cypher is native, not a separate tool).
+Persists findings to Layer 3 via persist_assessment (FastMCP).
+
+Model: claude-sonnet-4-6  temperature=0
 """
 
 from __future__ import annotations
+
+import json
 import logging
 import os
-from typing import TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
 
 import anthropic
 
-from src.agent.tools import TOOLS, execute_tool
+from src.mcp.schema import GRAPH_SCHEMA_HINT, ComplianceResult
 
 if TYPE_CHECKING:
     from src.graph.connection import Neo4jConnection
 
 logger = logging.getLogger(__name__)
 
-# ---------------------------------------------------------------------------
-# Constants
-# ---------------------------------------------------------------------------
-
 MODEL = "claude-sonnet-4-6"
-MAX_TOKENS = 4096
-MAX_ITERATIONS = 10  # Guard against infinite tool-use loops
+MAX_TOKENS = 8096
+MAX_ITERATIONS = 12
 
-SYSTEM_PROMPT = """You are a financial services compliance reasoning agent with \
-access to a Neo4j knowledge graph. The graph contains three layers:
+SYSTEM_PROMPT = f"""You are a financial services compliance officer with expert knowledge
+of APRA prudential standards (APS-112, APG-223, APS-220).
 
-1. Entity Layer — loan accounts, customers, and their transactions.
-2. Regulatory Layer — APRA prudential standards (e.g. CPS 220, APS 110) and \
-their specific obligations.
-3. Runtime Assessment Layer — compliance assessments and flags raised against \
-individual accounts.
+You have access to a Neo4j knowledge graph and two categories of tools:
 
-Your role:
-- Answer compliance questions by querying the knowledge graph using the provided tools.
-- Identify accounts, transactions, or customers that may breach APRA obligations.
-- Reason over graph data to produce clear, evidence-based compliance findings.
-- Cite specific account IDs, obligation IDs, and flag reasons in your answers.
-- Be concise, precise, and professionally appropriate for a financial services context.
+1. FastMCP tools (domain-specific):
+   - traverse_compliance_path: Your PRIMARY tool. Call this first for any entity.
+     Returns the full regulatory subgraph (Regulation→Section→Requirement→Threshold)
+     applicable to the entity's jurisdiction and loan type.
+   - retrieve_regulatory_chunks: Semantic search for regulatory text.
+   - persist_assessment: Write your assessment to Layer 3 when complete.
 
-When you have gathered sufficient evidence from the graph, provide a final answer \
-that includes: a summary of findings, accounts at risk, relevant APRA obligations \
-referenced, and recommended next steps.
+2. Neo4j MCP tools (raw Cypher):
+   - read-neo4j-cypher: Execute any Cypher query to check specific values
+     or traverse relationships not covered by the above tools.
 
-# TODO: Extend this system prompt with organisation-specific compliance context,
-#       risk appetite statements, or escalation procedures."""
+## Your workflow
 
+For any compliance question:
+1. Call traverse_compliance_path to get the applicable regulatory framework.
+2. Use read-neo4j-cypher to check specific entity properties against thresholds
+   (e.g. verify LVR, loan amount, interest rate from the LoanApplication node).
+3. Optionally call retrieve_regulatory_chunks for supporting regulatory text.
+4. Form a verdict: COMPLIANT | NON_COMPLIANT | REQUIRES_REVIEW.
+5. Call persist_assessment to save your reasoning to Layer 3.
+6. Return a structured final answer citing requirement_ids and threshold_ids.
 
-# ---------------------------------------------------------------------------
-# ComplianceAgent
-# ---------------------------------------------------------------------------
+## Key thresholds (for quick reference)
+- APG-223-THR-003: serviceability buffer >= 3.0% over loan rate
+- APG-223-THR-006: non-salary income haircut >= 20%
+- APG-223-THR-008: LVR >= 90% requires senior management review
+- APS-112-THR-032: LMI must cover >= 40% of loan for capital relief
+
+## Output format
+Always conclude with:
+VERDICT: <verdict>
+CONFIDENCE: <0.0-1.0>
+REQUIREMENTS CHECKED: <comma-separated requirement_ids>
+THRESHOLDS BREACHED: <comma-separated threshold_ids or 'none'>
+RECOMMENDED NEXT STEPS: <numbered list>
+
+{GRAPH_SCHEMA_HINT}
+"""
 
 
 class ComplianceAgent:
     """
-    Agentic compliance assistant backed by Claude and a Neo4j knowledge graph.
+    Compliance assessment agent for LoanApplications and Borrowers.
 
     Usage:
-        with Neo4jConnection() as conn:
-            agent = ComplianceAgent(neo4j_conn=conn)
-            answer = agent.run("Are there any high-risk loan accounts?")
-            print(answer)
+        agent = ComplianceAgent(tools=mcp_tools, execute_tool_fn=dispatcher)
+        result = agent.run("Is LOAN-0002 compliant with APG-223?")
     """
 
     def __init__(
         self,
-        neo4j_conn: "Neo4jConnection",
+        tools: list[dict],
+        execute_tool_fn: Any,
         model: str = MODEL,
         max_tokens: int = MAX_TOKENS,
     ) -> None:
-        self.conn = neo4j_conn
+        self.tools = tools
+        self.execute_tool = execute_tool_fn
         self.model = model
         self.max_tokens = max_tokens
         self.client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
-    def run(self, user_query: str) -> str:
+    def run(self, question: str) -> ComplianceResult:
         """
-        Execute the agentic loop for a compliance question.
-
-        Steps:
-            1. Send query + tools to Claude.
-            2. If stop_reason == "tool_use", execute tool calls and inject results.
-            3. Repeat until stop_reason == "end_turn" or MAX_ITERATIONS reached.
+        Run the compliance assessment agentic loop.
 
         Args:
-            user_query: Natural-language compliance question.
+            question: Natural-language compliance question.
 
         Returns:
-            Claude's final text response.
+            ComplianceResult with verdict, cited IDs, and assessment_id.
         """
-        messages: list[dict] = [{"role": "user", "content": user_query}]
+        messages: list[dict] = [{"role": "user", "content": question}]
         iterations = 0
+        cypher_used: list[str] = []
+        final_text = ""
 
-        logger.info("ComplianceAgent starting. Query: %s", user_query)
+        logger.info("ComplianceAgent: %s", question)
 
         while iterations < MAX_ITERATIONS:
             iterations += 1
-            logger.debug("Iteration %d / %d", iterations, MAX_ITERATIONS)
-
             response = self.client.messages.create(
                 model=self.model,
                 max_tokens=self.max_tokens,
                 system=SYSTEM_PROMPT,
-                tools=TOOLS,
+                tools=self.tools,
                 messages=messages,
                 temperature=0,
             )
 
-            logger.debug("stop_reason=%s", response.stop_reason)
-
-            # ----------------------------------------------------------------
-            # Terminal: Claude has finished reasoning
-            # ----------------------------------------------------------------
             if response.stop_reason == "end_turn":
-                return self._extract_text(response)
+                final_text = self._extract_text(response)
+                break
 
-            # ----------------------------------------------------------------
-            # Tool use: Claude wants to query the graph
-            # ----------------------------------------------------------------
             if response.stop_reason == "tool_use":
-                # Append the assistant turn (contains tool_use blocks)
                 messages.append({"role": "assistant", "content": response.content})
-
-                # Execute every tool call and collect results
                 tool_results = []
                 for block in response.content:
                     if block.type == "tool_use":
-                        logger.info("Tool call: %s(%s)", block.name, block.input)
-                        result_content = execute_tool(block.name, block.input, self.conn)
-                        tool_results.append(
-                            {
-                                "type": "tool_result",
-                                "tool_use_id": block.id,
-                                "content": result_content,
-                            }
-                        )
-
-                # Inject tool results as the next user turn
+                        logger.info("Tool: %s(%s)", block.name, list(block.input.keys()))
+                        # Track Cypher for transparency panel
+                        if block.name == "read-neo4j-cypher" and block.input.get("query"):
+                            cypher_used.append(block.input["query"])
+                        result = self.execute_tool(block.name, block.input)
+                        tool_results.append({
+                            "type": "tool_result",
+                            "tool_use_id": block.id,
+                            "content": json.dumps(result, default=str),
+                        })
                 messages.append({"role": "user", "content": tool_results})
                 continue
 
-            # Unexpected stop reason — surface as error
             logger.warning("Unexpected stop_reason: %s", response.stop_reason)
             break
 
-        logger.warning("Max iterations (%d) reached without end_turn.", MAX_ITERATIONS)
-        return self._extract_text(response)  # Return whatever Claude last said
+        return self._parse_result(final_text, cypher_used)
 
     # ------------------------------------------------------------------
     # Helpers
@@ -160,8 +159,38 @@ class ComplianceAgent:
 
     @staticmethod
     def _extract_text(response: anthropic.types.Message) -> str:
-        """Pull the first text block from a Claude response."""
         for block in response.content:
             if hasattr(block, "text"):
                 return block.text
-        return "(No text response returned by Claude.)"
+        return ""
+
+    @staticmethod
+    def _parse_result(text: str, cypher_used: list[str]) -> ComplianceResult:
+        """Extract structured fields from Claude's final text response."""
+        import re
+
+        def _find(pattern: str, default: str = "") -> str:
+            m = re.search(pattern, text, re.IGNORECASE)
+            return m.group(1).strip() if m else default
+
+        verdict = _find(r"VERDICT:\s*(\w+)", "INFORMATIONAL")
+        confidence_str = _find(r"CONFIDENCE:\s*([\d.]+)", "0.5")
+        reqs_str = _find(r"REQUIREMENTS CHECKED:\s*(.+)", "")
+        thresh_str = _find(r"THRESHOLDS BREACHED:\s*(.+)", "")
+        steps_raw = re.findall(r"^\d+\.\s+(.+)$", text, re.MULTILINE)
+
+        confidence = float(confidence_str) if confidence_str else 0.5
+        requirement_ids = [r.strip() for r in reqs_str.split(",") if r.strip() and r.strip().lower() != "none"]
+        threshold_ids = [t.strip() for t in thresh_str.split(",") if t.strip() and t.strip().lower() != "none"]
+
+        return ComplianceResult(
+            entity_id="",
+            entity_type="",
+            regulation_id="",
+            verdict=verdict.upper(),
+            confidence=confidence,
+            requirement_ids=requirement_ids,
+            threshold_breaches=[{"threshold_id": t} for t in threshold_ids],
+            reasoning_steps=steps_raw[:10],
+            cypher_used=cypher_used,
+        )

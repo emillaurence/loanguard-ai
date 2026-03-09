@@ -14,11 +14,11 @@ import logging
 from typing import Any, TYPE_CHECKING
 
 from src.graph import (
-    get_loan_accounts,
+    get_loans_by_risk as get_loan_accounts,
     get_transactions_for_account,
-    get_apra_obligations,
-    get_compliance_assessments,
-    get_compliance_flags,
+    get_requirements_for_loan_type as get_apra_obligations,
+    get_assessments_for_entity as get_compliance_assessments,
+    get_assessments_for_entity as get_compliance_flags,
 )
 
 if TYPE_CHECKING:

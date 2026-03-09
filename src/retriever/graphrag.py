@@ -29,26 +29,7 @@ logger = logging.getLogger(__name__)
 # TODO: Update this schema hint as your graph evolves.
 # ---------------------------------------------------------------------------
 
-GRAPH_SCHEMA_HINT = """
-Node labels and key properties:
-  - Customer         : customer_id, name, kyc_status, risk_category
-  - LoanAccount      : account_id, customer_id, product_type, balance, currency, status, risk_rating
-  - Transaction      : transaction_id, amount, currency, type, timestamp, counterparty, suspicious
-  - Regulation       : standard_id, title, effective_date
-  - Obligation       : obligation_id, description, applies_to, severity
-  - ComplianceAssessment : assessment_id, assessed_at, outcome, score, notes
-  - ComplianceFlag   : flag_id, reason, severity, raised_at, status
-
-Relationships:
-  - (Customer)-[:HOLDS]->(LoanAccount)
-  - (LoanAccount)-[:HAS_TRANSACTION]->(Transaction)
-  - (LoanAccount)-[:HAS_ASSESSMENT]->(ComplianceAssessment)
-  - (ComplianceAssessment)-[:REFERENCES]->(Obligation)
-  - (ComplianceFlag)-[:FLAGGED_ON]->(LoanAccount)
-  - (Regulation)-[:CONTAINS]->(Obligation)
-
-# TODO: Add any additional relationships as the graph schema grows.
-"""
+from src.mcp.schema import GRAPH_SCHEMA_HINT  # single source of truth
 
 NL_TO_CYPHER_SYSTEM = f"""You are a Neo4j Cypher query expert for a financial services \
 compliance knowledge graph.
@@ -66,7 +47,7 @@ Rules:
 - Always include a LIMIT clause (max 200 rows).
 - Use parameterised queries where possible (e.g. $account_id).
 - If the question cannot be answered from the schema, return: MATCH (n) RETURN null LIMIT 0
-"""
+"""  # noqa: E501
 
 
 class GraphRAGRetriever:
