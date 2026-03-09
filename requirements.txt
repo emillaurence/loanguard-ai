@@ -13,6 +13,7 @@ openai>=1.30.0
 
 # App
 streamlit>=1.35.0
+plotly>=5.22.0
 
 # Notebook
 jupyter>=1.1.0

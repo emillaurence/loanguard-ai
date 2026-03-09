@@ -58,7 +58,11 @@ For any compliance question:
    (e.g. verify LVR, loan amount, interest rate from the LoanApplication node).
 3. Optionally call retrieve_regulatory_chunks for supporting regulatory text.
 4. Form a verdict: COMPLIANT | NON_COMPLIANT | REQUIRES_REVIEW.
-5. Call persist_assessment to save your reasoning to Layer 3.
+5. Call persist_assessment to save your reasoning to Layer 3. For each reasoning
+   step, populate section_ids with any section_id values returned by
+   traverse_compliance_path or read-neo4j-cypher that informed that step, and
+   populate chunk_ids with any chunk_id values returned by
+   retrieve_regulatory_chunks that informed that step.
 6. Return a structured final answer citing requirement_ids and threshold_ids.
 
 ## Key thresholds (for quick reference)
@@ -116,6 +120,9 @@ class ComplianceAgent:
         cypher_used: list[str] = []
         final_text = ""
         assessment_id: str | None = None
+        persisted_findings: list[dict] = []
+        seen_section_ids: set[str] = set()
+        seen_chunk_ids: set[str] = set()
 
         logger.info("ComplianceAgent: %s", question)
 
@@ -156,7 +163,7 @@ class ComplianceAgent:
                 break
 
             if response.stop_reason == "tool_use":
-                messages.append({"role": "assistant", "content": response.content})
+                messages.append({"role": "assistant", "content": self._blocks_to_dicts(response.content)})
                 tool_results = []
                 for block in response.content:
                     if block.type == "tool_use":
@@ -165,9 +172,12 @@ class ComplianceAgent:
                         if block.name == "read-neo4j-cypher" and block.input.get("query"):
                             cypher_used.append(block.input["query"])
                         result = self.execute_tool(block.name, block.input)
-                        # Capture assessment_id written to Layer 3
+                        # Capture assessment_id and persisted findings from Layer 3
                         if block.name == "persist_assessment" and isinstance(result, dict):
                             assessment_id = result.get("assessment_id")
+                            persisted_findings = result.get("findings", [])
+                        # Accumulate section/chunk IDs for the evidence tracker
+                        self._extract_evidence_ids(block.name, result, seen_section_ids, seen_chunk_ids)
                         content = json.dumps(result, default=str)
                         if len(content) > _TOOL_RESULT_CHAR_LIMIT:
                             content = content[:_TOOL_RESULT_CHAR_LIMIT] + "… [truncated — use a more specific query]"
@@ -176,6 +186,20 @@ class ComplianceAgent:
                             "tool_use_id": block.id,
                             "content": content,
                         })
+                # Append evidence tracker to the last tool_result content so IDs survive
+                # history truncation. Must not add a separate text block — the API requires
+                # the user message following tool_use to contain only tool_result blocks.
+                if (seen_section_ids or seen_chunk_ids) and tool_results:
+                    parts = []
+                    if seen_section_ids:
+                        parts.append(f"section_ids seen: {', '.join(sorted(seen_section_ids))}")
+                    if seen_chunk_ids:
+                        parts.append(f"chunk_ids seen: {', '.join(sorted(seen_chunk_ids))}")
+                    tool_results[-1]["content"] += (
+                        "\n\n[Evidence tracker] " + " | ".join(parts) +
+                        " — populate the relevant IDs into section_ids / chunk_ids"
+                        " of each reasoning_step when calling persist_assessment."
+                    )
                 messages.append({"role": "user", "content": tool_results})
 
                 max_msgs = 1 + MAX_HISTORY_PAIRS * 2
@@ -189,11 +213,57 @@ class ComplianceAgent:
 
         result = self._parse_result(final_text, cypher_used)
         result.assessment_id = assessment_id
+        result.persisted_findings = persisted_findings
         return result
 
     # ------------------------------------------------------------------
     # Helpers
     # ------------------------------------------------------------------
+
+    @staticmethod
+    def _extract_evidence_ids(
+        tool_name: str,
+        result: dict,
+        seen_section_ids: set[str],
+        seen_chunk_ids: set[str],
+    ) -> None:
+        """Accumulate section_ids and chunk_ids from tool results into the running sets."""
+        if not isinstance(result, dict):
+            return
+        if tool_name == "traverse_compliance_path":
+            for reg in result.get("regulations", {}).values():
+                for sec_id in reg.get("sections", {}).keys():
+                    if sec_id:
+                        seen_section_ids.add(sec_id)
+        elif tool_name == "retrieve_regulatory_chunks":
+            for chunk in result.get("chunks", []):
+                if chunk.get("chunk_id"):
+                    seen_chunk_ids.add(chunk["chunk_id"])
+        elif tool_name == "read-neo4j-cypher":
+            for row in result.get("rows", []):
+                if row.get("section_id"):
+                    seen_section_ids.add(row["section_id"])
+                if row.get("chunk_id"):
+                    seen_chunk_ids.add(row["chunk_id"])
+
+    @staticmethod
+    def _blocks_to_dicts(content) -> list[dict]:
+        """Convert Anthropic SDK content blocks to plain dicts for stable serialisation."""
+        result = []
+        for block in content:
+            if isinstance(block, dict):
+                result.append(block)
+            elif block.type == "text":
+                result.append({"type": "text", "text": block.text})
+            elif block.type == "tool_use":
+                result.append({
+                    "type": "tool_use",
+                    "id": block.id,
+                    "name": block.name,
+                    "input": block.input,
+                })
+            # skip any other block types (e.g. thinking) silently
+        return result
 
     @staticmethod
     def _extract_text(response: anthropic.types.Message) -> str:
