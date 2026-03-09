@@ -15,7 +15,7 @@
 │  │ loan_amount       │               │ name                  │                 │
 │  │ loan_purpose      │               │ borrower_type         │────────────────▶│
 │  └─────────┬─────────┘               └───────────┬───────────┘  RESIDES_IN /  │
-│            │ SECURED_BY                           │              INCORPORATED_IN│
+│            │ BACKED_BY                            │              REGISTERED_IN  │
 │            ▼                                      ▼                             │
 │  ┌─────────────────┐               ┌──────────────────────┐                    │
 │  │ Collateral      │               │ Jurisdiction         │◀───────────────────┤
@@ -31,7 +31,7 @@
 ┌─────────────────────────────────────────────────────────────────────────────────┐
 │                          LAYER 2 — REGULATORY LAYER                             │
 │                                                                                 │
-│  ┌────────────┐  CONTAINS_SECTION  ┌──────────┐  CONTAINS_REQUIREMENT          │
+│  ┌────────────┐  HAS_SECTION       ┌──────────┐  HAS_REQUIREMENT               │
 │  │ Regulation │───────────────────▶│ Section  │──────────────────────▶         │
 │  │            │                    │          │                                 │
 │  │ regulation_id                   │ section_id  ┌─────────────────┐           │
@@ -40,7 +40,7 @@
 │  └────────────┘                    └────┬─────┘   │ description     │           │
 │                                         │          │ severity        │           │
 │                              HAS_CHUNK  │          └────────┬────────┘           │
-│                                         ▼   NEXT_CHUNK      │ DEFINES_THRESHOLD  │
+│                                         ▼   NEXT_CHUNK      │ DEFINES_LIMIT      │
 │                                    ┌─────────┐ ──────────▶  ▼                   │
 │                                    │  Chunk  │         ┌───────────┐            │
 │                                    │         │         │ Threshold │            │
@@ -48,7 +48,7 @@
 │                                    │ text    │         │ value     │            │
 │                                    │ embedding         │ operator  │            │
 │                                    └────┬────┘         └───────────┘            │
-│                                         │ SIMILAR_TO (cross-document)           │
+│                                         │ SEMANTICALLY_SIMILAR (cross-document) │
 │                                         └──────────────────────────────▶ Chunk  │
 └─────────────────────────────────────────────────────────────────────────────────┘
 
@@ -69,7 +69,7 @@
 └─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Bridge node:** `(:Jurisdiction {jurisdiction_id: 'JUR-AU-FED'})` connects both layers. Borrowers link to it via `RESIDES_IN` or `INCORPORATED_IN`; regulations link to it via `APPLIES_TO_JURISDICTION`.
+**Bridge node:** `(:Jurisdiction {jurisdiction_id: 'JUR-AU-FED'})` connects both layers. Borrowers link to it via `RESIDES_IN` or `REGISTERED_IN`; regulations link to it via `APPLIES_TO_JURISDICTION`.
 
 ---
 
@@ -114,7 +114,7 @@ Runs once per document set; re-run when adding new regulatory documents.
   ┌─────────────────────────────────┐
   │  215_generate_embeddings        │  OpenAI text-embedding-3-small (1536 dims)
   │                                 │  written to Chunk.embedding; creates
-  │                                 │  SIMILAR_TO edges (cosine > 0.85,
+  │                                 │  SEMANTICALLY_SIMILAR edges (cosine > 0.85,
   │                                 │  cross-document only)
   └──────────────┬──────────────────┘
                  ▼
@@ -194,7 +194,7 @@ Context String ──▶ inject into downstream Claude prompt
 | `temperature=0` on all Claude calls | Deterministic outputs for structured extraction, NL-to-Cypher, and cross-reference resolution |
 | Streaming for large `max_tokens` | Anthropic SDK requires streaming for calls that could exceed 10 min; `call_claude_stream_json()` centralises this with fail-fast truncation detection |
 | ~300-token chunks | Fits one complete numbered requirement with sub-clauses — the atomic unit of regulatory compliance assessment |
-| `SIMILAR_TO` edges (cross-document only) | Surfaces thematically related requirements across different APRA standards without polluting within-document chunk chains |
+| `SEMANTICALLY_SIMILAR` edges (cross-document only) | Surfaces thematically related requirements across different APRA standards without polluting within-document chunk chains |
 | Parameterised Cypher | Prevents Cypher injection; follows Neo4j best practices |
 
 ---

@@ -59,7 +59,7 @@ jupyter lab
 | `212_merge_and_resolve_references` | Merges per-document outputs and resolves cross-references via Claude |
 | `213_chunk_documents` | Chunks section text into ~300-token segments |
 | `214_ingest_neo4j` | Loads all Layer 2 nodes and relationships into Neo4j |
-| `215_generate_embeddings` | Generates OpenAI embeddings for `Chunk` nodes and creates `SIMILAR_TO` edges |
+| `215_generate_embeddings` | Generates OpenAI embeddings for `Chunk` nodes and creates `SEMANTICALLY_SIMILAR` edges |
 | `216_validate_graph` | Validates node counts, relationships, and index health |
 
 ### 6. Run the compliance agent

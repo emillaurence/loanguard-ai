@@ -11,7 +11,7 @@ Entity graph data for Layer 1 — ADI borrowers, loan applications, accounts, an
 | Subfolder | Contents |
 |---|---|
 | `entities/` | Node CSVs: borrowers, loan applications, bank accounts, collateral, jurisdictions, etc. |
-| `links/` | Relationship CSVs: submitted_by, secured_by, resides_in, incorporated_in, etc. |
+| `links/` | Relationship CSVs: submitted_by, backed_by, resides_in, registered_in, etc. |
 
 Loaded into Neo4j by `notebooks/111_structured_data_loader.ipynb`.
 
