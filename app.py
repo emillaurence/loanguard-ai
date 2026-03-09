@@ -1,5 +1,6 @@
 """
-Streamlit — Graph Investigation Assistant
+LoanGuard AI - Streamlit Application
+Intelligent loan compliance monitoring and risk investigation AI Agents powered by Neo4j and Claude.
 Mirrors the ipywidgets UI in notebooks/316_orchestrator_and_chat.ipynb.
 """
 from __future__ import annotations
@@ -203,12 +204,6 @@ EXAMPLES = [
     "Which APRA thresholds apply to residential secured loans?",
 ]
 
-SEV_COLOURS = {
-    "HIGH":   ("#f8d7da", "#842029"),
-    "MEDIUM": ("#fff3cd", "#664d03"),
-    "LOW":    ("#d4edda", "#155724"),
-    "INFO":   ("#d1ecf1", "#0c5460"),
-}
 
 VERDICT_COLOURS = {
     "COMPLIANT":        "#28a745",
@@ -708,7 +703,6 @@ def _fetch_finding_subgraph(
         if row.get("collateral_props"):
             cp = row["collateral_props"]
             cid = cp.get("collateral_id", "Collateral")
-            val = cp.get("estimated_value")
             l1_nodes.append({
                 "id": cid, "label": "Collateral", "display": cid,
                 "hover": f"<b>Collateral</b><br>"
@@ -1177,7 +1171,6 @@ def _render_evidence_graph(cited_sections: list[dict], cited_chunks: list[dict])
         color="#fd7e14", size=16,
     )
 
-    n_nodes = len(reg_ids) + len(sec_list) + len(chk_list)
     fig = go.Figure(data=[edge_trace, reg_trace, sec_trace, chk_trace])
     fig.update_layout(
         height=max(200, 60 * max(len(reg_ids), len(sec_list), len(chk_list))),
@@ -1452,14 +1445,15 @@ def render_response(resp) -> None:
 # ── Page layout ───────────────────────────────────────────────────────────────
 
 st.set_page_config(
-    page_title="Graph Investigation Assistant",
+    page_title="LoanGuard AI",
     page_icon="🔍",
     layout="wide",
 )
 
 _inject_css()
 
-st.title("Graph Investigation Assistant")
+st.title("LoanGuard AI")
+st.markdown("**Intelligent loan compliance monitoring and risk investigation AI Agents powered by Neo4j and Claude**")
 st.caption("Multi-agent pipeline: Orchestrator → ComplianceAgent + InvestigationAgent")
 
 # Initialise on first load (shows spinner)

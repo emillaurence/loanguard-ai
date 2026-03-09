@@ -24,90 +24,10 @@ if TYPE_CHECKING:
 # ===========================================================================
 
 
-def get_borrower(conn: "Neo4jConnection", borrower_id: str) -> list[dict]:
-    """Return a Borrower node and its linked loans, accounts, and jurisdiction."""
-    return conn.run_query(
-        """
-        MATCH (b:Borrower {borrower_id: $id})
-        OPTIONAL MATCH (b)-[:RESIDES_IN|REGISTERED_IN]->(j:Jurisdiction)
-        OPTIONAL MATCH (b)<-[:SUBMITTED_BY]-(l:LoanApplication)
-        OPTIONAL MATCH (b)-[:HAS_ACCOUNT]->(a:BankAccount)
-        RETURN b.borrower_id        AS borrower_id,
-               b.name               AS name,
-               b.type               AS type,
-               b.entity_subtype     AS entity_subtype,
-               b.credit_score       AS credit_score,
-               b.risk_rating        AS risk_rating,
-               b.status             AS status,
-               b.annual_revenue     AS annual_revenue,
-               b.employee_count     AS employee_count,
-               j.jurisdiction_id    AS jurisdiction_id,
-               j.aml_risk_rating    AS jurisdiction_aml_risk,
-               collect(DISTINCT l.loan_id)    AS loan_ids,
-               collect(DISTINCT a.account_id) AS account_ids
-        """,
-        {"id": borrower_id},
-    )
 
 
-def get_loan_application(conn: "Neo4jConnection", loan_id: str) -> list[dict]:
-    """Return a LoanApplication with borrower, collateral, guarantors."""
-    return conn.run_query(
-        """
-        MATCH (l:LoanApplication {loan_id: $id})
-        OPTIONAL MATCH (l)-[:SUBMITTED_BY]->(b:Borrower)
-        OPTIONAL MATCH (l)-[:BACKED_BY]->(c:Collateral)
-        OPTIONAL MATCH (l)-[:GUARANTEED_BY]->(g:Borrower)
-        RETURN l.loan_id                    AS loan_id,
-               l.loan_type                  AS loan_type,
-               l.amount                     AS amount,
-               l.currency                   AS currency,
-               l.term_months                AS term_months,
-               l.lvr                        AS lvr,
-               l.interest_rate_indicative   AS interest_rate_pct,
-               l.purpose                    AS purpose,
-               l.status                     AS status,
-               l.description                AS description,
-               b.borrower_id                AS borrower_id,
-               b.name                       AS borrower_name,
-               b.risk_rating                AS borrower_risk,
-               c.collateral_id              AS collateral_id,
-               c.estimated_value            AS collateral_value,
-               c.type                       AS collateral_type,
-               collect(DISTINCT g.borrower_id) AS guarantor_ids
-        """,
-        {"id": loan_id},
-    )
 
 
-def get_borrower_neighborhood(
-    conn: "Neo4jConnection",
-    borrower_id: str,
-    depth: int = 2,
-    limit: int = 50,
-) -> list[dict]:
-    """
-    Variable-depth BFS from a Borrower node.
-    Excludes Layer 3 Assessment/Finding/ReasoningStep nodes.
-    Returns paths as (start_id, rel_type, end_id, end_label) rows.
-    """
-    return conn.run_query(
-        """
-        MATCH path = (b:Borrower {borrower_id: $id})-[r*1..$depth]-(n)
-        WHERE NOT n:Assessment AND NOT n:Finding AND NOT n:ReasoningStep
-        WITH DISTINCT r, n,
-             [rel IN r | type(rel)]           AS rel_types,
-             [rel IN r | startNode(rel)]      AS starts
-        RETURN rel_types,
-               coalesce(n.borrower_id, n.loan_id, n.account_id,
-                        n.officer_id, n.address_id, n.collateral_id,
-                        n.jurisdiction_id)    AS end_node_id,
-               labels(n)[0]                  AS end_node_label,
-               n.name                        AS end_node_name
-        LIMIT $limit
-        """,
-        {"id": borrower_id, "depth": depth, "limit": limit},
-    )
 
 
 def get_transactions_for_account(
@@ -136,47 +56,8 @@ def get_transactions_for_account(
     )
 
 
-def get_suspicious_transactions(
-    conn: "Neo4jConnection",
-    limit: int = 100,
-) -> list[dict]:
-    """Return all transactions flagged as suspicious."""
-    return conn.run_query(
-        """
-        MATCH (t:Transaction)
-        WHERE t.flagged_suspicious = true
-        OPTIONAL MATCH (t)-[:FROM_ACCOUNT]->(src:BankAccount)
-        OPTIONAL MATCH (t)-[:TO_ACCOUNT]->(dst:BankAccount)
-        RETURN t.transaction_id     AS transaction_id,
-               t.amount             AS amount,
-               t.date               AS date,
-               t.type               AS type,
-               t.description        AS description,
-               t.from_account_id    AS from_account_id,
-               t.to_account_id      AS to_account_id
-        ORDER BY t.date DESC
-        LIMIT $limit
-        """,
-        {"limit": limit},
-    )
 
 
-def get_officers_for_borrower(
-    conn: "Neo4jConnection",
-    borrower_id: str,
-) -> list[dict]:
-    """Return officers who are directors of a corporate borrower."""
-    return conn.run_query(
-        """
-        MATCH (o:Officer)-[:DIRECTOR_OF]->(b:Borrower {borrower_id: $id})
-        RETURN o.officer_id     AS officer_id,
-               o.name           AS name,
-               o.is_pep         AS is_pep,
-               o.sanctions_match AS sanctions_match,
-               o.nationality    AS nationality
-        """,
-        {"id": borrower_id},
-    )
 
 
 def get_loans_by_risk(
@@ -207,26 +88,6 @@ def get_loans_by_risk(
 # ===========================================================================
 
 
-def get_regulation(conn: "Neo4jConnection", regulation_id: str) -> list[dict]:
-    """Return a regulation and its sections."""
-    return conn.run_query(
-        """
-        MATCH (r:Regulation {regulation_id: $id})
-        OPTIONAL MATCH (r)-[:HAS_SECTION]->(s:Section)
-        RETURN r.regulation_id   AS regulation_id,
-               r.name            AS name,
-               r.issuing_body    AS issuing_body,
-               r.document_type  AS document_type,
-               r.effective_date AS effective_date,
-               r.is_enforceable AS is_enforceable,
-               collect(DISTINCT {
-                 section_id: s.section_id,
-                 title: s.title,
-                 section_number: s.section_number
-               }) AS sections
-        """,
-        {"id": regulation_id},
-    )
 
 
 def get_requirements_for_loan_type(
@@ -289,43 +150,6 @@ def get_requirements_for_loan_type(
     )
 
 
-def get_thresholds(
-    conn: "Neo4jConnection",
-    regulation_id: str | None = None,
-) -> list[dict]:
-    """Return all thresholds, optionally scoped to one regulation."""
-    if regulation_id:
-        return conn.run_query(
-            """
-            MATCH (t:Threshold {regulation_id: $reg_id})
-            RETURN t.threshold_id    AS threshold_id,
-                   t.regulation_id  AS regulation_id,
-                   t.requirement_id AS requirement_id,
-                   t.metric         AS metric,
-                   t.operator       AS operator,
-                   t.value          AS value,
-                   t.value_upper    AS value_upper,
-                   t.unit           AS unit,
-                   t.consequence    AS consequence
-            ORDER BY t.threshold_id
-            """,
-            {"reg_id": regulation_id},
-        )
-    return conn.run_query(
-        """
-        MATCH (t:Threshold)
-        RETURN t.threshold_id    AS threshold_id,
-               t.regulation_id  AS regulation_id,
-               t.requirement_id AS requirement_id,
-               t.metric         AS metric,
-               t.operator       AS operator,
-               t.value          AS value,
-               t.value_upper    AS value_upper,
-               t.unit           AS unit,
-               t.consequence    AS consequence
-        ORDER BY t.regulation_id, t.threshold_id
-        """
-    )
 
 
 def get_compliance_path(
@@ -466,22 +290,6 @@ def get_compliance_path(
     return result
 
 
-def get_chunks_for_section(
-    conn: "Neo4jConnection",
-    section_id: str,
-) -> list[dict]:
-    """Return all chunks for a section in order."""
-    return conn.run_query(
-        """
-        MATCH (s:Section {section_id: $id})-[:HAS_CHUNK]->(c:Chunk)
-        RETURN c.chunk_id    AS chunk_id,
-               c.text        AS text,
-               c.chunk_index AS chunk_index,
-               c.token_count AS token_count
-        ORDER BY c.chunk_index
-        """,
-        {"id": section_id},
-    )
 
 
 def vector_search_chunks(
