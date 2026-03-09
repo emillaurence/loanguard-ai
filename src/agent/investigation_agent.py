@@ -28,11 +28,12 @@ logger = logging.getLogger(__name__)
 
 MODEL = "claude-sonnet-4-6"
 MAX_TOKENS = 8096
-MAX_ITERATIONS = 15
+MAX_ITERATIONS = 10
 # Keep at most this many tool-result round-trips in the message history.
 # Each pair = one {"role":"assistant","content":[tool_use]} + one {"role":"user","content":[tool_result]}.
 # Older pairs are dropped to prevent input token growth across iterations.
-MAX_HISTORY_PAIRS = 6
+MAX_HISTORY_PAIRS = 4
+_TOOL_RESULT_CHAR_LIMIT = 3000
 
 SYSTEM_PROMPT = f"""You are a financial crimes investigator with expertise in
 graph-based entity network analysis and AML/CTF investigations.
@@ -122,7 +123,8 @@ class InvestigationAgent:
                     response = self.client.messages.create(
                         model=self.model,
                         max_tokens=self.max_tokens,
-                        system=SYSTEM_PROMPT,
+                        system=[{"type": "text", "text": SYSTEM_PROMPT,
+                                 "cache_control": {"type": "ephemeral"}}],
                         tools=self.tools,
                         messages=messages,
                         temperature=0,
@@ -159,10 +161,13 @@ class InvestigationAgent:
                         if block.name == "read-neo4j-cypher" and block.input.get("query"):
                             cypher_used.append(block.input["query"])
                         result = self.execute_tool(block.name, block.input)
+                        content = json.dumps(result, default=str)
+                        if len(content) > _TOOL_RESULT_CHAR_LIMIT:
+                            content = content[:_TOOL_RESULT_CHAR_LIMIT] + "… [truncated — use a more specific query]"
                         tool_results.append({
                             "type": "tool_result",
                             "tool_use_id": block.id,
-                            "content": json.dumps(result, default=str),
+                            "content": content,
                         })
                 messages.append({"role": "user", "content": tool_results})
 

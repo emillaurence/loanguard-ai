@@ -18,7 +18,6 @@ import json
 import logging
 import os
 import uuid
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any
 
 import anthropic
@@ -136,38 +135,19 @@ class Orchestrator:
         needs_compliance   = routing.get("needs_compliance_agent", False)
         needs_investigation = routing.get("needs_investigation_agent", False)
 
-        if needs_compliance and needs_investigation:
-            with ThreadPoolExecutor(max_workers=2) as pool:
-                futures = {
-                    pool.submit(self._compliance_agent.run, question):   "compliance",
-                    pool.submit(self._investigation_agent.run, question): "investigation",
-                }
-                for future in as_completed(futures):
-                    label = futures[future]
-                    try:
-                        result = future.result()
-                        if label == "compliance":
-                            compliance_result = result
-                            logger.info("[%s] Compliance verdict: %s", session_id, result.verdict)
-                        else:
-                            investigation_result = result
-                            logger.info("[%s] Investigation complete", session_id)
-                    except Exception as e:
-                        logger.error("[%s] %sAgent failed: %s", session_id, label.capitalize(), e)
-        else:
-            if needs_compliance:
-                try:
-                    compliance_result = self._compliance_agent.run(question)
-                    logger.info("[%s] Compliance verdict: %s", session_id, compliance_result.verdict)
-                except Exception as e:
-                    logger.error("[%s] ComplianceAgent failed: %s", session_id, e)
+        if needs_compliance:
+            try:
+                compliance_result = self._compliance_agent.run(question)
+                logger.info("[%s] Compliance verdict: %s", session_id, compliance_result.verdict)
+            except Exception as e:
+                logger.error("[%s] ComplianceAgent failed: %s", session_id, e)
 
-            if needs_investigation:
-                try:
-                    investigation_result = self._investigation_agent.run(question)
-                    logger.info("[%s] Investigation complete", session_id)
-                except Exception as e:
-                    logger.error("[%s] InvestigationAgent failed: %s", session_id, e)
+        if needs_investigation:
+            try:
+                investigation_result = self._investigation_agent.run(question)
+                logger.info("[%s] Investigation complete", session_id)
+            except Exception as e:
+                logger.error("[%s] InvestigationAgent failed: %s", session_id, e)
 
         # Step 3: Synthesise
         response = self._synthesise(

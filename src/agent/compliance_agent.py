@@ -30,7 +30,9 @@ logger = logging.getLogger(__name__)
 
 MODEL = "claude-sonnet-4-6"
 MAX_TOKENS = 8096
-MAX_ITERATIONS = 12
+MAX_ITERATIONS = 8
+MAX_HISTORY_PAIRS = 4
+_TOOL_RESULT_CHAR_LIMIT = 3000
 
 SYSTEM_PROMPT = f"""You are a financial services compliance officer with expert knowledge
 of APRA prudential standards (APS-112, APG-223, APS-220).
@@ -124,7 +126,8 @@ class ComplianceAgent:
                     response = self.client.messages.create(
                         model=self.model,
                         max_tokens=self.max_tokens,
-                        system=SYSTEM_PROMPT,
+                        system=[{"type": "text", "text": SYSTEM_PROMPT,
+                                 "cache_control": {"type": "ephemeral"}}],
                         tools=self.tools,
                         messages=messages,
                         temperature=0,
@@ -165,12 +168,20 @@ class ComplianceAgent:
                         # Capture assessment_id written to Layer 3
                         if block.name == "persist_assessment" and isinstance(result, dict):
                             assessment_id = result.get("assessment_id")
+                        content = json.dumps(result, default=str)
+                        if len(content) > _TOOL_RESULT_CHAR_LIMIT:
+                            content = content[:_TOOL_RESULT_CHAR_LIMIT] + "… [truncated — use a more specific query]"
                         tool_results.append({
                             "type": "tool_result",
                             "tool_use_id": block.id,
-                            "content": json.dumps(result, default=str),
+                            "content": content,
                         })
                 messages.append({"role": "user", "content": tool_results})
+
+                max_msgs = 1 + MAX_HISTORY_PAIRS * 2
+                if len(messages) > max_msgs:
+                    messages = [messages[0]] + messages[-MAX_HISTORY_PAIRS * 2:]
+
                 continue
 
             logger.warning("Unexpected stop_reason: %s", response.stop_reason)
