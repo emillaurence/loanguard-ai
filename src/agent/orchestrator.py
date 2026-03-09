@@ -264,11 +264,25 @@ class Orchestrator:
             for cypher in compliance_result.cypher_used:
                 all_cypher.append({"tool": "read-neo4j-cypher", "cypher": cypher})
 
+            # Resolve entity/regulation context for graph enrichment
+            _ent_id   = (routing.get("entity_ids")   or [""])[0]
+            _ent_type = (routing.get("entity_types")  or [""])[0]
+            _reg_id   = (routing.get("regulations")   or [""])[0]
+
             # Primary source: findings Claude persisted to Layer 3 (rich descriptions,
             # agent-assessed severities). Fall back to threshold_breaches conversion
             # only if persist_assessment was never called or returned no findings.
             if compliance_result.persisted_findings:
-                all_findings.extend(compliance_result.persisted_findings)
+                breaches = compliance_result.threshold_breaches or []
+                for i, f in enumerate(compliance_result.persisted_findings):
+                    enriched = dict(f)
+                    enriched.setdefault("entity_id",   _ent_id)
+                    enriched.setdefault("entity_type", _ent_type)
+                    enriched.setdefault("regulation_id", _reg_id)
+                    # Pair threshold breach by position (best-effort)
+                    if i < len(breaches):
+                        enriched.setdefault("threshold_id", breaches[i].get("threshold_id", ""))
+                    all_findings.append(enriched)
             else:
                 for breach in compliance_result.threshold_breaches:
                     tid = breach.get("threshold_id", "unknown")
@@ -277,10 +291,14 @@ class Orchestrator:
                         (f"Threshold breached: {tid}", "HIGH"),
                     )
                     all_findings.append({
-                        "finding_type": "compliance_breach",
-                        "severity": severity,
-                        "description": description,
-                        "pattern_name": None,
+                        "finding_type":  "compliance_breach",
+                        "severity":      severity,
+                        "description":   description,
+                        "pattern_name":  None,
+                        "entity_id":     _ent_id,
+                        "entity_type":   _ent_type,
+                        "regulation_id": _reg_id,
+                        "threshold_id":  tid,
                     })
 
             # Sort findings HIGH → MEDIUM → LOW → INFO for synthesis context
@@ -310,13 +328,18 @@ class Orchestrator:
             )
             for i, cypher in enumerate(investigation_result.cypher_used):
                 all_cypher.append({"tool": "read-neo4j-cypher", "cypher": cypher})
+            _inv_ent_id   = investigation_result.entity_id or _ent_id
+            _inv_ent_type = investigation_result.entity_type or _ent_type
             for signal in investigation_result.risk_signals:
                 severity = "HIGH" if "[HIGH]" in signal else "MEDIUM" if "[MEDIUM]" in signal else "LOW"
                 all_findings.append({
-                    "finding_type": "risk_signal",
-                    "severity": severity,
-                    "description": signal,
-                    "pattern_name": None,
+                    "finding_type":  "risk_signal",
+                    "severity":      severity,
+                    "description":   signal,
+                    "pattern_name":  None,
+                    "entity_id":     _inv_ent_id,
+                    "entity_type":   _inv_ent_type,
+                    "regulation_id": _reg_id,
                 })
             # Re-sort after adding investigation findings
             _sev_order = {"HIGH": 0, "MEDIUM": 1, "LOW": 2, "INFO": 3}

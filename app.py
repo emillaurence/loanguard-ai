@@ -625,6 +625,382 @@ def _render_findings(findings: list[dict]) -> None:
     st.markdown(cards_html, unsafe_allow_html=True)
 
 
+def _wrap_text(text: str, width: int = 60) -> str:
+    """Word-wrap plain text into Plotly <br>-separated lines."""
+    words = (text or "").split()
+    lines: list[str] = []
+    current: list[str] = []
+    for w in words:
+        if sum(len(x) + 1 for x in current) + len(w) > width:
+            lines.append(" ".join(current))
+            current = [w]
+        else:
+            current.append(w)
+    if current:
+        lines.append(" ".join(current))
+    return "<br>".join(lines)
+
+
+@st.cache_data(ttl=300)
+def _fetch_finding_subgraph(
+    entity_id: str,
+    entity_type: str,
+    regulation_id: str,
+    threshold_id: str,
+) -> dict:
+    """Fetch Layer 1 entity neighbourhood + Layer 2 regulatory chain from Neo4j."""
+    if not entity_id:
+        return {"l1_nodes": [], "l1_edges": [], "l2_nodes": [], "l2_edges": []}
+
+    conn = _get_connection()
+
+    # ── Layer 1: entity + direct neighbours ──────────────────────────────────
+    id_prop = "loan_id" if entity_type == "LoanApplication" else "borrower_id"
+    l1_rows = conn.run_query(
+        f"""
+        MATCH (e:{entity_type} {{{id_prop}: $eid}})
+        OPTIONAL MATCH (e)-[r1:SUBMITTED_BY]->(b:Borrower)
+        OPTIONAL MATCH (e)-[r2:BACKED_BY]->(c:Collateral)
+        OPTIONAL MATCH (e)-[r3:GUARANTEED_BY]->(g:Borrower)
+        OPTIONAL MATCH (b)-[r4:RESIDES_IN|REGISTERED_IN]->(j:Jurisdiction)
+        OPTIONAL MATCH (b)-[r5:BELONGS_TO_INDUSTRY]->(ind:Industry)
+        RETURN
+          properties(e)   AS entity_props,
+          labels(e)[0]    AS entity_label,
+          properties(b)   AS borrower_props,
+          properties(c)   AS collateral_props,
+          properties(g)   AS guarantor_props,
+          type(r1)        AS rel_submitted,
+          type(r2)        AS rel_backed,
+          type(r3)        AS rel_guaranteed,
+          properties(j)   AS jurisdiction_props,
+          type(r4)        AS rel_jur,
+          properties(ind) AS industry_props
+        LIMIT 1
+        """,
+        {"eid": entity_id},
+    )
+
+    l1_nodes: list[dict] = []
+    l1_edges: list[dict] = []
+
+    if l1_rows:
+        row = l1_rows[0]
+        ep = row.get("entity_props") or {}
+        l1_nodes.append({
+            "id": entity_id, "label": entity_type,
+            "display": entity_id,
+            "hover": f"<b>{entity_type}</b><br>"
+                     + "<br>".join(f"{k}: {v}" for k, v in ep.items()
+                                   if k not in ("description",) and v is not None),
+            "layer": "primary",
+        })
+        if row.get("borrower_props"):
+            bp = row["borrower_props"]
+            bid = bp.get("borrower_id", "Borrower")
+            l1_nodes.append({
+                "id": bid, "label": "Borrower", "display": bid,
+                "hover": f"<b>Borrower</b><br>"
+                         + "<br>".join(f"{k}: {v}" for k, v in bp.items() if v is not None),
+                "layer": "neighbour",
+            })
+            l1_edges.append({"src": entity_id, "dst": bid, "label": row.get("rel_submitted", "SUBMITTED_BY")})
+        if row.get("collateral_props"):
+            cp = row["collateral_props"]
+            cid = cp.get("collateral_id", "Collateral")
+            val = cp.get("estimated_value")
+            l1_nodes.append({
+                "id": cid, "label": "Collateral", "display": cid,
+                "hover": f"<b>Collateral</b><br>"
+                         + "<br>".join(f"{k}: {v}" for k, v in cp.items() if v is not None),
+                "layer": "neighbour",
+            })
+            l1_edges.append({"src": entity_id, "dst": cid, "label": row.get("rel_backed", "BACKED_BY")})
+        if row.get("jurisdiction_props"):
+            jp = row["jurisdiction_props"]
+            jid = jp.get("jurisdiction_id", "Jurisdiction")
+            l1_nodes.append({
+                "id": jid, "label": "Jurisdiction", "display": jid,
+                "hover": f"<b>Jurisdiction</b><br>"
+                         + "<br>".join(f"{k}: {v}" for k, v in jp.items() if v is not None),
+                "layer": "neighbour",
+            })
+            bp_id = (row.get("borrower_props") or {}).get("borrower_id", entity_id)
+            l1_edges.append({"src": bp_id, "dst": jid, "label": row.get("rel_jur", "RESIDES_IN")})
+        if row.get("industry_props"):
+            ip = row["industry_props"]
+            iid = ip.get("industry_id", "Industry")
+            l1_nodes.append({
+                "id": iid, "label": "Industry", "display": f"{ip.get('name', iid)}",
+                "hover": f"<b>Industry</b><br>"
+                         + "<br>".join(f"{k}: {v}" for k, v in ip.items() if v is not None),
+                "layer": "neighbour",
+            })
+            bp_id = (row.get("borrower_props") or {}).get("borrower_id", entity_id)
+            l1_edges.append({"src": bp_id, "dst": iid, "label": "BELONGS_TO_INDUSTRY"})
+
+    # ── Layer 2: threshold → requirement → section → regulation ──────────────
+    l2_nodes: list[dict] = []
+    l2_edges: list[dict] = []
+
+    if threshold_id:
+        l2_rows = conn.run_query(
+            """
+            MATCH (thr:Threshold {threshold_id: $tid})
+            OPTIONAL MATCH (req:Requirement)-[:DEFINES_LIMIT]->(thr)
+            OPTIONAL MATCH (sec:Section)-[:HAS_REQUIREMENT]->(req)
+            OPTIONAL MATCH (reg:Regulation)-[:HAS_SECTION]->(sec)
+            RETURN
+              properties(thr) AS thr_props,
+              properties(req) AS req_props,
+              properties(sec) AS sec_props,
+              properties(reg) AS reg_props
+            LIMIT 1
+            """,
+            {"tid": threshold_id},
+        )
+        if l2_rows:
+            r2 = l2_rows[0]
+            if r2.get("thr_props"):
+                tp = r2["thr_props"]
+                tid_node = tp.get("threshold_id", threshold_id)
+                l2_nodes.append({
+                    "id": tid_node, "label": "Threshold", "display": tid_node,
+                    "hover": f"<b>Threshold</b><br>"
+                             + f"{tp.get('metric','')} {tp.get('operator','')} {tp.get('value','')} {tp.get('unit','')}<br>"
+                             + f"<i>{tp.get('consequence','')}</i>",
+                    "layer": "threshold",
+                })
+            if r2.get("req_props"):
+                rp = r2["req_props"]
+                rid_node = rp.get("requirement_id", "REQ")
+                l2_nodes.append({
+                    "id": rid_node, "label": "Requirement", "display": rid_node,
+                    "hover": f"<b>Requirement</b><br>{_wrap_text(rp.get('description',''))}",
+                    "layer": "requirement",
+                })
+                l2_edges.append({"src": rid_node, "dst": tid_node, "label": "DEFINES_LIMIT"})
+            if r2.get("sec_props"):
+                sp = r2["sec_props"]
+                sid_node = sp.get("section_id", "SEC")
+                l2_nodes.append({
+                    "id": sid_node, "label": "Section", "display": sid_node,
+                    "hover": f"<b>Section</b><br><i>{sp.get('title','')}</i><br>{_wrap_text(sp.get('content_summary','')[:200])}",
+                    "layer": "section",
+                })
+                req_id = (r2.get("req_props") or {}).get("requirement_id", "REQ")
+                l2_edges.append({"src": sid_node, "dst": req_id, "label": "HAS_REQUIREMENT"})
+            if r2.get("reg_props"):
+                rp2 = r2["reg_props"]
+                reg_id_node = rp2.get("regulation_id", regulation_id)
+                l2_nodes.append({
+                    "id": reg_id_node, "label": "Regulation", "display": reg_id_node,
+                    "hover": f"<b>Regulation</b><br>{rp2.get('name','')}<br>Issued by: {rp2.get('issuing_body','')}",
+                    "layer": "regulation",
+                })
+                sec_id = (r2.get("sec_props") or {}).get("section_id", "SEC")
+                l2_edges.append({"src": reg_id_node, "dst": sec_id, "label": "HAS_SECTION"})
+    elif regulation_id:
+        reg_rows = conn.run_query(
+            """
+            MATCH (reg:Regulation {regulation_id: $rid})-[:HAS_SECTION]->(sec:Section)
+            RETURN properties(reg) AS reg_props, properties(sec) AS sec_props
+            LIMIT 4
+            """,
+            {"rid": regulation_id},
+        )
+        reg_added = False
+        for r2 in reg_rows:
+            if r2.get("reg_props") and not reg_added:
+                rp2 = r2["reg_props"]
+                reg_id_node = rp2.get("regulation_id", regulation_id)
+                l2_nodes.append({
+                    "id": reg_id_node, "label": "Regulation", "display": reg_id_node,
+                    "hover": f"<b>Regulation</b><br>{rp2.get('name','')}<br>Issued by: {rp2.get('issuing_body','')}",
+                    "layer": "regulation",
+                })
+                reg_added = True
+            if r2.get("sec_props"):
+                sp = r2["sec_props"]
+                sid_node = sp.get("section_id", "SEC")
+                l2_nodes.append({
+                    "id": sid_node, "label": "Section", "display": sid_node,
+                    "hover": f"<b>Section</b><br><i>{sp.get('title','')}</i>",
+                    "layer": "section",
+                })
+                l2_edges.append({"src": regulation_id, "dst": sid_node, "label": "HAS_SECTION"})
+
+    return {
+        "l1_nodes": l1_nodes, "l1_edges": l1_edges,
+        "l2_nodes": l2_nodes, "l2_edges": l2_edges,
+    }
+
+
+def _render_finding_graph(finding: dict) -> None:
+    """Cross-layer Plotly network: L1 entity subgraph ↔ Finding ↔ L2 regulatory chain."""
+    import plotly.graph_objects as go
+
+    entity_id    = finding.get("entity_id") or ""
+    entity_type  = finding.get("entity_type") or "LoanApplication"
+    regulation_id = finding.get("regulation_id") or ""
+    threshold_id = finding.get("threshold_id") or ""
+    severity     = finding.get("severity") or "INFO"
+    description  = finding.get("description") or ""
+    finding_type = finding.get("finding_type") or ""
+
+    if not entity_id and not regulation_id:
+        st.markdown("*No graph context available for this finding.*")
+        return
+
+    with st.spinner("Loading graph evidence…"):
+        data = _fetch_finding_subgraph(entity_id, entity_type, regulation_id, threshold_id)
+
+    l1_nodes = data["l1_nodes"]
+    l1_edges = data["l1_edges"]
+    l2_nodes = data["l2_nodes"]
+    l2_edges = data["l2_edges"]
+
+    if not l1_nodes and not l2_nodes:
+        st.markdown("*No graph data found for this finding.*")
+        return
+
+    # ── X positions per layer ─────────────────────────────────────────────────
+    # neighbours(0) → primary entity(1.5) → finding(3) → threshold/req(4.5) → section(5.5) → regulation(6.5)
+    _layer_x = {
+        "neighbour":   0.0,
+        "primary":     1.5,
+        "finding":     3.0,
+        "threshold":   4.5,
+        "requirement": 5.0,
+        "section":     5.5,
+        "regulation":  6.5,
+    }
+
+    _node_colours = {
+        "LoanApplication": "#0d6efd",
+        "Borrower":        "#fd7e14",
+        "Collateral":      "#28a745",
+        "Jurisdiction":    "#6f42c1",
+        "BankAccount":     "#17a2b8",
+        "Transaction":     "#dc3545",
+        "Industry":        "#e9a00b",
+        "Threshold":       "#dc3545",
+        "Requirement":     "#6f42c1",
+        "Section":         "#0d6efd",
+        "Regulation":      "#28a745",
+    }
+    _sev_colours = {"HIGH": "#dc3545", "MEDIUM": "#fd7e14", "LOW": "#28a745", "INFO": "#17a2b8"}
+
+    # Finding node
+    finding_node = {
+        "id": "__finding__", "label": "Finding", "display": finding_type or "Finding",
+        "hover": f"<b>Finding [{severity}]</b><br>{_wrap_text(description)}",
+        "layer": "finding",
+    }
+
+    all_nodes = l1_nodes + [finding_node] + l2_nodes
+
+    # Y positions: spread nodes within each x column
+    from collections import defaultdict
+    col_buckets: dict[float, list] = defaultdict(list)
+    for n in all_nodes:
+        col_buckets[_layer_x.get(n["layer"], 3.0)].append(n)
+
+    node_pos: dict[str, tuple[float, float]] = {}
+    for x, bucket in col_buckets.items():
+        ys = [i / max(len(bucket) - 1, 1) for i in range(len(bucket))]
+        for n, y in zip(bucket, ys):
+            node_pos[n["id"]] = (x, y)
+
+    # ── Edges ─────────────────────────────────────────────────────────────────
+    # L1 internal edges
+    all_edges = list(l1_edges)
+    # Primary entity → Finding
+    if entity_id:
+        all_edges.append({"src": entity_id, "dst": "__finding__", "label": "TRIGGERED"})
+    # Finding → first L2 node (threshold or section)
+    if l2_nodes:
+        all_edges.append({"src": "__finding__", "dst": l2_nodes[0]["id"], "label": "BREACHES" if threshold_id else "UNDER"})
+    # L2 internal edges
+    all_edges.extend(l2_edges)
+
+    edge_x, edge_y, edge_hover_x, edge_hover_y, edge_labels = [], [], [], [], []
+    for e in all_edges:
+        p0 = node_pos.get(e["src"])
+        p1 = node_pos.get(e["dst"])
+        if p0 and p1:
+            edge_x += [p0[0], p1[0], None]
+            edge_y += [p0[1], p1[1], None]
+            edge_hover_x.append((p0[0] + p1[0]) / 2)
+            edge_hover_y.append((p0[1] + p1[1]) / 2)
+            edge_labels.append(e.get("label", ""))
+
+    edge_trace = go.Scatter(
+        x=edge_x, y=edge_y, mode="lines",
+        line=dict(width=1.5, color="#c8d3e0"),
+        hoverinfo="none",
+    )
+    edge_label_trace = go.Scatter(
+        x=edge_hover_x, y=edge_hover_y, mode="markers",
+        marker=dict(size=1, color="rgba(0,0,0,0)"),
+        text=edge_labels,
+        hovertemplate="%{text}<extra></extra>",
+    )
+
+    # ── Node trace ────────────────────────────────────────────────────────────
+    node_x, node_y, node_text, node_hover, node_colors, node_sizes = [], [], [], [], [], []
+    for n in all_nodes:
+        pos = node_pos.get(n["id"])
+        if not pos:
+            continue
+        node_x.append(pos[0])
+        node_y.append(pos[1])
+        node_text.append(n["display"])
+        node_hover.append(n["hover"])
+        if n["layer"] == "finding":
+            node_colors.append(_sev_colours.get(severity, "#6c757d"))
+            node_sizes.append(28)
+        else:
+            node_colors.append(_node_colours.get(n["label"], "#6c757d"))
+            node_sizes.append(22)
+
+    node_trace = go.Scatter(
+        x=node_x, y=node_y, mode="markers+text",
+        marker=dict(size=node_sizes, color=node_colors, line=dict(width=2, color="white")),
+        text=node_text,
+        textposition="top center",
+        textfont=dict(size=10),
+        customdata=node_hover,
+        hovertemplate="%{customdata}<extra></extra>",
+    )
+
+    # ── Layer labels ──────────────────────────────────────────────────────────
+    annotations = [
+        dict(x=0.0,  y=1.18, text="L1 Neighbours", showarrow=False,
+             font=dict(size=9, color="#6c757d"), xref="x", yref="y"),
+        dict(x=1.5,  y=1.18, text="L1 Entity",     showarrow=False,
+             font=dict(size=9, color="#0d6efd"),   xref="x", yref="y"),
+        dict(x=3.0,  y=1.18, text="Finding",       showarrow=False,
+             font=dict(size=9, color=_sev_colours.get(severity, "#6c757d")), xref="x", yref="y"),
+    ]
+    if l2_nodes:
+        annotations.append(dict(x=5.5, y=1.18, text="L2 Regulatory", showarrow=False,
+                                font=dict(size=9, color="#28a745"), xref="x", yref="y"))
+
+    fig = go.Figure(data=[edge_trace, edge_label_trace, node_trace])
+    fig.update_layout(
+        height=280,
+        margin=dict(l=10, r=10, t=30, b=10),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        xaxis=dict(visible=False, range=[-0.5, 7.2]),
+        yaxis=dict(visible=False, range=[-0.2, 1.3]),
+        showlegend=False,
+        annotations=annotations,
+    )
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+
+
 def _render_findings_chart(findings: list[dict]) -> None:
     import plotly.graph_objects as go
 
@@ -632,50 +1008,75 @@ def _render_findings_chart(findings: list[dict]) -> None:
 
     sorted_findings = sorted(
         findings,
-        key=lambda f: _sev_ord.get(f.get("severity", "INFO"), 1),
+        key=lambda f: _sev_ord.get(f.get("severity") or "INFO", 1),
     )
 
     labels   = [f.get("severity") or "INFO" for f in sorted_findings]
     x_values = [_sev_ord.get(s, 1) for s in labels]
     colours  = [SEV_BAR_COLOURS.get(s, "#6c757d") for s in labels]
 
-    custom = [
-        (
-            f.get("description", ""),
-            f.get("finding_type", ""),
-            f.get("pattern_name", ""),
-        )
-        for f in sorted_findings
-    ]
+    # Pre-build hover strings (avoids None literals and handles word-wrap)
+    hover_texts = []
+    for f in sorted_findings:
+        sev   = f.get("severity") or "INFO"
+        desc  = f.get("description") or ""
+        ftype = f.get("finding_type") or ""
+        pname = f.get("pattern_name") or ""
+        lines = [f"<b>[{sev}]</b>", _wrap_text(desc)]
+        if ftype:
+            lines.append(f"<span style='color:#888'>Type: {ftype}</span>")
+        if pname:
+            lines.append(f"<span style='color:#888'>Pattern: {pname}</span>")
+        lines.append("<i>Click bar to see graph evidence</i>")
+        hover_texts.append("<br>".join(lines))
+
+    # Y-axis labels: short severity+index so the bar label is clean
+    y_labels = [f"[{labels[i]}] #{i+1}" for i in range(len(sorted_findings))]
 
     fig = go.Figure(
         go.Bar(
             x=x_values,
-            y=[f.get("description", f"Finding {i+1}")[:40] for i, f in enumerate(sorted_findings)],
+            y=y_labels,
             orientation="h",
             marker_color=colours,
-            customdata=custom,
-            hovertemplate=(
-                "<b>%{y}</b><br>"
-                "%{customdata[0]}<br>"
-                "Type: %{customdata[1]}<br>"
-                "Pattern: %{customdata[2]}"
-                "<extra></extra>"
-            ),
+            customdata=hover_texts,
+            hovertemplate="%{customdata}<extra></extra>",
         )
     )
 
     fig.update_layout(
-        height=max(120, 48 * len(findings)),
+        height=max(120, 52 * len(findings)),
         margin=dict(l=0, r=0, t=0, b=0),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         xaxis=dict(visible=False),
         yaxis=dict(showgrid=False, zeroline=False, tickfont=dict(size=12)),
         showlegend=False,
+        hoverlabel=dict(bgcolor="white", bordercolor="#dee2e6",
+                        font=dict(size=13, color="#212529")),
     )
 
-    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+    sel = st.plotly_chart(
+        fig,
+        use_container_width=True,
+        config={"displayModeBar": False},
+        on_select="rerun",
+        key="findings_sev_chart",
+    )
+
+    # Render cross-layer evidence graph for the selected bar
+    if sel and sel.selection and sel.selection.points:
+        idx = sel.selection.points[0].get("point_index", 0)
+        if 0 <= idx < len(sorted_findings):
+            selected = sorted_findings[idx]
+            sev = selected.get("severity") or "INFO"
+            sev_colour = SEV_BAR_COLOURS.get(sev, "#6c757d")
+            st.markdown(
+                f'<div class="section-label" style="color:{sev_colour};">'
+                f'Finding Evidence — Layer 1 + Layer 2</div>',
+                unsafe_allow_html=True,
+            )
+            _render_finding_graph(selected)
 
 
 def _render_evidence_graph(cited_sections: list[dict], cited_chunks: list[dict]) -> None:
