@@ -242,7 +242,7 @@ def get_requirements_for_loan_type(
                   -[:HAS_REQUIREMENT]->(req:Requirement)
             WHERE req.applies_to_loan_type = $loan_type
                OR req.applies_to_loan_type IS NULL
-            OPTIONAL MATCH (req)-[:DEFINES_THRESHOLD]->(t:Threshold)
+            OPTIONAL MATCH (req)-[:DEFINES_LIMIT]->(t:Threshold)
             RETURN reg.regulation_id    AS regulation_id,
                    s.section_id         AS section_id,
                    s.title              AS section_title,
@@ -267,8 +267,9 @@ def get_requirements_for_loan_type(
         MATCH (reg:Regulation)-[:HAS_SECTION]->(s:Section)
               -[:HAS_REQUIREMENT]->(req:Requirement)
         WHERE req.applies_to_loan_type = $loan_type
+           OR req.applies_to_loan_type = 'all'
            OR req.applies_to_loan_type IS NULL
-        OPTIONAL MATCH (req)-[:DEFINES_THRESHOLD]->(t:Threshold)
+        OPTIONAL MATCH (req)-[:DEFINES_LIMIT]->(t:Threshold)
         RETURN reg.regulation_id    AS regulation_id,
                s.section_id         AS section_id,
                req.requirement_id   AS requirement_id,
@@ -363,8 +364,8 @@ def get_compliance_path(
             """,
             {"id": entity_id},
         )
-        jurisdiction_id = entity_rows[0]["jurisdiction_id"] if entity_rows else "JUR-AU-FED"
-        loan_type = entity_rows[0].get("loan_type", "residential_secured") if entity_rows else "residential_secured"
+        jurisdiction_id = (entity_rows[0].get("jurisdiction_id") or "JUR-AU-FED") if entity_rows else "JUR-AU-FED"
+        loan_type = (entity_rows[0].get("loan_type") or "residential_secured") if entity_rows else "residential_secured"
     else:
         entity_rows = conn.run_query(
             """
@@ -378,11 +379,11 @@ def get_compliance_path(
             """,
             {"id": entity_id},
         )
-        jurisdiction_id = entity_rows[0]["jurisdiction_id"] if entity_rows else "JUR-AU-FED"
+        jurisdiction_id = (entity_rows[0].get("jurisdiction_id") or "JUR-AU-FED") if entity_rows else "JUR-AU-FED"
         loan_type = "residential_secured"
 
     # Step 2: Regulations → Sections → Requirements → Thresholds via jurisdiction
-    reg_filter = "AND reg.regulation_id = $reg_id" if regulation_id else ""
+    reg_filter = "WHERE reg.regulation_id = $reg_id" if regulation_id else ""
     reg_params: dict = {"jur_id": jurisdiction_id, "loan_type": loan_type}
     if regulation_id:
         reg_params["reg_id"] = regulation_id
@@ -391,10 +392,12 @@ def get_compliance_path(
         f"""
         MATCH (reg:Regulation)-[:APPLIES_TO_JURISDICTION]->(j:Jurisdiction {{jurisdiction_id: $jur_id}})
         {reg_filter}
+        WITH reg
         MATCH (reg)-[:HAS_SECTION]->(s:Section)-[:HAS_REQUIREMENT]->(req:Requirement)
         WHERE req.applies_to_loan_type = $loan_type
+           OR req.applies_to_loan_type = 'all'
            OR req.applies_to_loan_type IS NULL
-        OPTIONAL MATCH (req)-[:DEFINES_THRESHOLD]->(t:Threshold)
+        OPTIONAL MATCH (req)-[:DEFINES_LIMIT]->(t:Threshold)
         RETURN reg.regulation_id    AS regulation_id,
                reg.name             AS regulation_name,
                reg.is_enforceable   AS is_enforceable,

@@ -139,7 +139,7 @@ Node: Chunk
 (Section)-[:HAS_CHUNK]->(Chunk)
 (Section)-[:NEXT_SECTION]->(Section)
 (Section)-[:CROSS_REFERENCES]->(Section)
-(Requirement)-[:DEFINES_THRESHOLD]->(Threshold)
+(Requirement)-[:DEFINES_LIMIT]->(Threshold)
 (Chunk)-[:NEXT_CHUNK]->(Chunk)
 (Chunk)-[:SEMANTICALLY_SIMILAR {score}]->(Chunk)
 
