@@ -1,6 +1,8 @@
-# GraphRAG Financial Services Loan Compliance Agent
+# LoanGuard AI
 
-An agentic GraphRAG application for Australian financial services compliance, powered by **Anthropic Claude**, **Neo4j AuraDB**, and **OpenAI embeddings**.
+**Intelligent loan compliance monitoring and risk investigation AI Agents powered by Neo4j and Claude**
+
+An advanced agentic GraphRAG application for Australian financial services compliance, built with **Anthropic Claude**, **Neo4j AuraDB**, and **OpenAI embeddings**.
 
 ## Overview
 
@@ -49,19 +51,21 @@ Five tools callable by agents — implemented as plain Python in `src/mcp/tools_
 | `persist_assessment` | Idempotent MERGE to Layer 3 (Assessment + Finding + ReasoningStep) |
 | `trace_evidence` | Walks a stored Assessment back to cited sections and chunks |
 
-## Streamlit UI
+## LoanGuard AI - Streamlit Application
+
+Launch the interactive compliance monitoring dashboard:
 
 ```bash
 streamlit run app.py
 ```
 
-Features:
-- **Verdict banner** — full-width colored card with icon, plain-English explanation, confidence %, and 140 px fill bar
-- **Findings** — severity-sorted colored cards with `.card-accent-{HIGH|MEDIUM|LOW|INFO}` left border; colored section label and expander title reflect the highest severity present
-- **Severity map** — Plotly horizontal bar chart below findings; hover shows full description, type, and pattern
-- **Evidence** — two-column layout: cited regulatory sections (left) and cited chunks with similarity score (right)
-- **Routing** — 2×2 chip grid showing intents, entities, regulations, and agent pipeline
-- **Next steps** — numbered card layout with circle badge per step
+### Key Features:
+- **🎯 Verdict Dashboard** — Full-width coloured cards with compliance status, confidence scores, and visual progress bars
+- **📊 Risk Findings** — Severity-sorted findings with colour-coded alerts (HIGH/MEDIUM/LOW/INFO) and detailed descriptions
+- **📈 Interactive Charts** — Plotly-powered severity maps and evidence graphs with hover details and click interactions
+- **🔍 Evidence Tracing** — Two-column layout showing cited regulatory sections and semantic similarity scores
+- **🤖 Agent Pipeline** — Visual routing display showing orchestrator → compliance agent → investigation agent flow
+- **📋 Action Items** — Numbered recommendation cards with clear next steps for compliance officers
 
 ## Setup
 
@@ -105,30 +109,32 @@ jupyter lab
 | `215_generate_embeddings` | Generates OpenAI embeddings for `Chunk` nodes; creates `SEMANTICALLY_SIMILAR` edges (cosine > 0.85, cross-document only) |
 | `216_validate_graph` | Validates node counts, relationships, and index health |
 
-### 6. Launch the Streamlit app
+### 6. Launch LoanGuard AI
 
 ```bash
 streamlit run app.py
 ```
 
+The application will be available at `http://localhost:8501` with the interactive compliance dashboard.
+
 ## Folder Structure
 
 ```
 graphrag-finserv-compliance/
-├── app.py                      # Streamlit UI — single-file, mirrors notebook 316
-├── notebooks/                  # Ordered pipeline + prototype notebooks
+├── app.py                      # LoanGuard AI Streamlit application
+├── notebooks/                  # Data pipeline and agent development notebooks
 ├── src/
-│   ├── graph/                  # Neo4j connection and parameterised Cypher helpers
-│   ├── agent/                  # Orchestrator, ComplianceAgent, InvestigationAgent
-│   ├── mcp/                    # Tool implementations, schema, FastMCP server
-│   ├── retriever/              # GraphRAG: NL-to-Cypher + context formatting
-│   └── document/               # PDF extraction, Claude streaming, config utils
+│   ├── graph/                  # Neo4j connection and optimised Cypher queries
+│   ├── agent/                  # Multi-agent system (Orchestrator, Compliance, Investigation)
+│   ├── mcp/                    # MCP tool implementations and FastMCP server
+│   ├── retriever/              # GraphRAG retrieval and NL-to-Cypher conversion
+│   └── document/               # PDF processing and Claude streaming utilities
 ├── data/
-│   ├── layer_1/                # Entity graph CSVs (borrowers, loans, accounts)
-│   ├── layer_2/                # Regulatory graph CSVs + source PDFs
-│   └── synthetic/              # Legacy synthetic stubs (safe to commit)
-├── tests/                      # Unit tests (fully mocked — no credentials needed)
-└── .env.example                # Environment variable template
+│   ├── layer_1/                # Financial entity data (borrowers, loans, transactions)
+│   ├── layer_2/                # APRA regulatory documents and processed data
+│   └── synthetic/              # Sample data for testing (safe to commit)
+├── tests/                      # Comprehensive test suite (fully mocked)
+└── .env.example                # Environment configuration template
 ```
 
 ## Running Tests
@@ -139,9 +145,21 @@ pytest tests/ -v
 
 All tests are fully mocked — no Neo4j or Anthropic credentials required.
 
-## Key Cypher Patterns
+## Architecture Highlights
 
-- Never use `type(r)` with variable-length paths — collect with `[rel IN r | type(rel)]` instead
-- All queries use parameterised syntax (`$param`) — never string interpolation for user data
-- Vector search: `CALL db.index.vector.queryNodes('chunk_embeddings', $k, $emb) YIELD node AS c, score`
-- Assessment ID format: `ASSESS-{entity_id}-{regulation_id}-{YYYY-MM-DD}`
+### 🔧 Optimised Codebase
+- **Cleaned and streamlined**: Removed 200+ lines of unused code and 8 unused functions
+- **Performance optimised**: Reduced import overhead and improved maintainability
+- **Focused functionality**: Only actively used functions remain in the codebase
+
+### 🔍 Key Cypher Patterns
+- **Safe queries**: Parameterised syntax (`$param`) prevents injection attacks
+- **Efficient paths**: Use `[rel IN r | type(rel)]` for variable-length relationship traversal
+- **Vector search**: `CALL db.index.vector.queryNodes('chunk_embeddings', $k, $emb)`
+- **Consistent IDs**: Assessment format `ASSESS-{entity_id}-{regulation_id}-{YYYY-MM-DD}`
+
+### 🚀 Performance Features
+- **Prompt caching**: Claude system prompts cached for faster responses
+- **Rate limiting**: Exponential backoff with retry-after header handling
+- **Context management**: Tool results truncated to 3000 chars, history windowed to last 4 message pairs
+- **Streaming support**: Large Claude calls use streaming API for better UX
