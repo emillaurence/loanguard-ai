@@ -38,6 +38,10 @@ data/raw/
 # Temporary config scratch files
 *.yaml.temp
 
+# Logs
+*.log
+logs/
+
 # macOS
 .DS_Store
 

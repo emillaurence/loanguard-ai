@@ -7,6 +7,7 @@ from __future__ import annotations
 import logging
 import re
 import sys
+import tempfile
 from pathlib import Path
 
 import streamlit as st
@@ -19,12 +20,20 @@ if str(ROOT) not in sys.path:
 
 load_dotenv(ROOT / ".env")
 
+# ── Logging — console + temporary file (untracked, auto-deleted on exit) ─────
+_LOG_FILE = Path(tempfile.gettempdir()) / "graphrag_streamlit.log"
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler(_LOG_FILE, mode="a", encoding="utf-8"),
+    ],
 )
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logging.getLogger("openai").setLevel(logging.WARNING)
+logging.getLogger(__name__).info("Log file: %s", _LOG_FILE)
 
 # ── Tool definitions (inline, matches 311_agent_setup.ipynb) ─────────────────
 
@@ -363,13 +372,16 @@ with st.spinner("Connecting to Neo4j and loading agents…"):
         st.error(f"Initialisation failed: {e}")
         st.stop()
 
-# ── Sidebar — example questions ──────────────────────────────────────────────
+# ── Sidebar — example questions + log path ───────────────────────────────────
 with st.sidebar:
     st.markdown("### Example questions")
     for q in EXAMPLES:
         if st.button(q, use_container_width=True):
             st.session_state["question_input"] = q
             st.session_state["auto_submit"] = True
+
+    st.divider()
+    st.caption(f"📄 Log file\n`{_LOG_FILE}`")
 
 # ── Chat history ─────────────────────────────────────────────────────────────
 if "history" not in st.session_state:
