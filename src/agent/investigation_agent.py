@@ -47,6 +47,9 @@ Neo4j MCP (raw Cypher execution):
   read-neo4j-cypher: Execute any read Cypher query. YOU generate the Cypher.
     Use variable-length relationships for traversal: (a)-[:REL*1..3]->(b)
     Always LIMIT results (max 100 rows).
+    IMPORTANT: When using variable-length paths [r*1..3], `r` is a
+    List<Relationship> — do NOT call type(r) on it. Either use a single-hop
+    [r] if you need type(r), or omit the relationship type from the RETURN.
 
 FastMCP (domain tools):
   detect_graph_anomalies: Run named anomaly patterns (transaction_structuring,
