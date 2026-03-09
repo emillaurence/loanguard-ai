@@ -17,6 +17,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import time
 from typing import Any
 
 import anthropic
@@ -27,7 +28,11 @@ logger = logging.getLogger(__name__)
 
 MODEL = "claude-sonnet-4-6"
 MAX_TOKENS = 8096
-MAX_ITERATIONS = 12
+MAX_ITERATIONS = 15
+# Keep at most this many tool-result round-trips in the message history.
+# Each pair = one {"role":"assistant","content":[tool_use]} + one {"role":"user","content":[tool_result]}.
+# Older pairs are dropped to prevent input token growth across iterations.
+MAX_HISTORY_PAIRS = 6
 
 SYSTEM_PROMPT = f"""You are a financial crimes investigator with expertise in
 graph-based entity network analysis and AML/CTF investigations.
@@ -112,14 +117,34 @@ class InvestigationAgent:
 
         while iterations < MAX_ITERATIONS:
             iterations += 1
-            response = self.client.messages.create(
-                model=self.model,
-                max_tokens=self.max_tokens,
-                system=SYSTEM_PROMPT,
-                tools=self.tools,
-                messages=messages,
-                temperature=0,
-            )
+            for attempt in range(3):
+                try:
+                    response = self.client.messages.create(
+                        model=self.model,
+                        max_tokens=self.max_tokens,
+                        system=SYSTEM_PROMPT,
+                        tools=self.tools,
+                        messages=messages,
+                        temperature=0,
+                    )
+                    break
+                except anthropic.RateLimitError as e:
+                    if attempt < 2:
+                        # Prefer API retry-after; fallback to capped exponential backoff (30s, 60s)
+                        retry_after = None
+                        try:
+                            h = getattr(e, "response", None) and getattr(e.response, "headers", None)
+                            if h:
+                                retry_after = h.get("retry-after")
+                                if retry_after is not None:
+                                    retry_after = min(int(float(retry_after)), 120)
+                        except (TypeError, ValueError):
+                            pass
+                        wait = retry_after if retry_after is not None else min(30 * (2**attempt), 120)
+                        logger.warning("Rate limited — waiting %ds (attempt %d/3)", wait, attempt + 1)
+                        time.sleep(wait)
+                    else:
+                        raise
 
             if response.stop_reason == "end_turn":
                 final_text = self._extract_text(response)
@@ -140,6 +165,13 @@ class InvestigationAgent:
                             "content": json.dumps(result, default=str),
                         })
                 messages.append({"role": "user", "content": tool_results})
+
+                # Trim history to MAX_HISTORY_PAIRS to prevent input token growth.
+                # Always keep messages[0] (initial user question) + the last N pairs.
+                max_msgs = 1 + MAX_HISTORY_PAIRS * 2
+                if len(messages) > max_msgs:
+                    messages = [messages[0]] + messages[-MAX_HISTORY_PAIRS * 2:]
+
                 continue
 
             logger.warning("Unexpected stop_reason: %s", response.stop_reason)
@@ -158,18 +190,37 @@ class InvestigationAgent:
     def _parse_result(text: str, cypher_used: list[str]) -> InvestigationResult:
         import re
 
+        def _clean(s: str) -> str:
+            """Strip markdown bold/italic markers and surrounding whitespace."""
+            return s.strip().strip("*").strip()
+
         def _section(header: str) -> str:
             m = re.search(rf"{header}:\s*(.+?)(?=\n[A-Z ]+:|$)", text, re.DOTALL | re.IGNORECASE)
             return m.group(1).strip() if m else ""
 
-        entity_line = _section("ENTITY")
-        entity_id = entity_line.split(" ")[0] if entity_line else ""
+        # ENTITY: **BRW-0001** (Borrower) → strip ** and take first token
+        # Entity ID: try ENTITY: line first, then fall back to first entity ID in text
+        entity_match = re.search(r"ENTITY:\s*\*{0,2}\s*([\w-]+)", text, re.IGNORECASE)
+        if entity_match:
+            entity_id = _clean(entity_match.group(1))
+        else:
+            id_match = re.search(r"\b((?:BRW|LOAN|ACC|JUR)-\d+)\b", text)
+            entity_id = id_match.group(1) if id_match else ""
 
-        risk_signals = re.findall(
-            r"\[(?:HIGH|MEDIUM|LOW)\]\s+.+", text, re.IGNORECASE
-        )
+        # Risk signals: strip trailing ** markdown artifacts from each line
+        raw_signals = re.findall(r"\[(?:HIGH|MEDIUM|LOW)\][^\n]+", text, re.IGNORECASE)
+        risk_signals = [re.sub(r"\*+$", "", s).rstrip() for s in raw_signals]
+
+        # Connections: try section parse; fall back to CONNECTIONS: line only
         connections_text = _section("CONNECTIONS")
-        next_steps = re.findall(r"^\d+\.\s+(.+)$", _section("RECOMMENDED NEXT STEPS"), re.MULTILINE)
+        if not connections_text:
+            m = re.search(r"CONNECTIONS:\s*(.+)", text, re.IGNORECASE)
+            connections_text = m.group(1).strip() if m else ""
+
+        # If final_text was empty (MAX_ITERATIONS hit mid tool_use), surface a note
+        if not text and cypher_used:
+            risk_signals = ["[INFO] Investigation incomplete — max iterations reached. "
+                            f"{len(cypher_used)} Cypher queries were executed."]
 
         return InvestigationResult(
             entity_id=entity_id,

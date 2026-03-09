@@ -11,6 +11,9 @@ pdfplumber>=0.11.0
 pyyaml>=6.0.0
 openai>=1.30.0
 
+# App
+streamlit>=1.35.0
+
 # Notebook
 jupyter>=1.1.0
 jupyterlab>=4.0.0

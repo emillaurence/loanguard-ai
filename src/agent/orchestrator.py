@@ -18,7 +18,7 @@ import json
 import logging
 import os
 import uuid
-from datetime import datetime, timezone
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any
 
 import anthropic
@@ -72,11 +72,16 @@ for a compliance officer or investigator.
 Your response must include:
 1. A direct answer to the original question (2–4 sentences).
 2. Key findings ranked by severity (HIGH first).
-3. Cited regulation IDs, requirement IDs, and threshold IDs where applicable.
+3. Cited regulation IDs, requirement IDs, threshold IDs, and entity IDs where applicable.
 4. 3–5 concrete recommended next steps.
 
-Be concise. Use plain language. Cite specific IDs (LOAN-0002, APG-223-THR-008).
-Do not repeat the same finding multiple times.
+CRITICAL CITATION RULE: The context below includes an AVAILABLE REGULATIONS section
+listing every regulation that exists in the knowledge graph. Only cite regulation IDs,
+acts, standards, or rules that appear in that list or verbatim in the agent outputs.
+Do NOT invent or infer any external reference (acts, guides, FATF recommendations, etc.)
+that is not explicitly present in the data provided to you.
+
+Be concise. Use plain language. Do not repeat the same finding multiple times.
 """
 
 
@@ -105,6 +110,7 @@ class Orchestrator:
         self.client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
         self._compliance_agent = ComplianceAgent(tools, execute_tool_fn, model)
         self._investigation_agent = InvestigationAgent(tools, execute_tool_fn, model)
+        self._graph_regulation_ids: list[str] = self._fetch_regulation_ids()
 
     def run(self, question: str) -> InvestigationResponse:
         """
@@ -123,24 +129,45 @@ class Orchestrator:
         routing = self._route(question)
         logger.info("[%s] Routing: %s", session_id, routing)
 
-        # Step 2: Dispatch to specialist agents
+        # Step 2: Dispatch to specialist agents (parallel when both are needed)
         compliance_result = None
         investigation_result = None
 
-        if routing.get("needs_compliance_agent"):
-            try:
-                compliance_result = self._compliance_agent.run(question)
-                logger.info("[%s] Compliance verdict: %s", session_id,
-                            compliance_result.verdict)
-            except Exception as e:
-                logger.error("[%s] ComplianceAgent failed: %s", session_id, e)
+        needs_compliance   = routing.get("needs_compliance_agent", False)
+        needs_investigation = routing.get("needs_investigation_agent", False)
 
-        if routing.get("needs_investigation_agent"):
-            try:
-                investigation_result = self._investigation_agent.run(question)
-                logger.info("[%s] Investigation complete", session_id)
-            except Exception as e:
-                logger.error("[%s] InvestigationAgent failed: %s", session_id, e)
+        if needs_compliance and needs_investigation:
+            with ThreadPoolExecutor(max_workers=2) as pool:
+                futures = {
+                    pool.submit(self._compliance_agent.run, question):   "compliance",
+                    pool.submit(self._investigation_agent.run, question): "investigation",
+                }
+                for future in as_completed(futures):
+                    label = futures[future]
+                    try:
+                        result = future.result()
+                        if label == "compliance":
+                            compliance_result = result
+                            logger.info("[%s] Compliance verdict: %s", session_id, result.verdict)
+                        else:
+                            investigation_result = result
+                            logger.info("[%s] Investigation complete", session_id)
+                    except Exception as e:
+                        logger.error("[%s] %sAgent failed: %s", session_id, label.capitalize(), e)
+        else:
+            if needs_compliance:
+                try:
+                    compliance_result = self._compliance_agent.run(question)
+                    logger.info("[%s] Compliance verdict: %s", session_id, compliance_result.verdict)
+                except Exception as e:
+                    logger.error("[%s] ComplianceAgent failed: %s", session_id, e)
+
+            if needs_investigation:
+                try:
+                    investigation_result = self._investigation_agent.run(question)
+                    logger.info("[%s] Investigation complete", session_id)
+                except Exception as e:
+                    logger.error("[%s] InvestigationAgent failed: %s", session_id, e)
 
         # Step 3: Synthesise
         response = self._synthesise(
@@ -155,6 +182,21 @@ class Orchestrator:
     # ------------------------------------------------------------------
     # Private helpers
     # ------------------------------------------------------------------
+
+    def _fetch_regulation_ids(self) -> list[str]:
+        """Query the graph for all Regulation node IDs at startup."""
+        try:
+            result = self.execute_tool(
+                "read-neo4j-cypher",
+                {"query": "MATCH (r:Regulation) RETURN r.regulation_id AS id ORDER BY r.regulation_id LIMIT 50"},
+            )
+            rows = result.get("rows", [])
+            ids = [row["id"] for row in rows if row.get("id")]
+            logger.info("Graph regulations found: %s", ids)
+            return ids
+        except Exception as e:
+            logger.warning("Could not fetch regulation IDs from graph: %s", e)
+            return []
 
     def _route(self, question: str) -> dict:
         """Classify question intent using a single Claude call."""
@@ -196,7 +238,11 @@ class Orchestrator:
         """Merge specialist outputs into a single InvestigationResponse."""
 
         # Build context for synthesis
-        context_parts: list[str] = [f"Original question: {question}\n"]
+        reg_list = ", ".join(self._graph_regulation_ids) if self._graph_regulation_ids else "unknown"
+        context_parts: list[str] = [
+            f"AVAILABLE REGULATIONS (these are the only regulations in the knowledge graph): {reg_list}\n",
+            f"Original question: {question}\n",
+        ]
         all_cypher: list[dict] = []
         all_findings: list[dict] = []
         verdict = "INFORMATIONAL"
@@ -208,7 +254,7 @@ class Orchestrator:
                 f"Compliance agent result:\n"
                 f"  Verdict: {compliance_result.verdict}\n"
                 f"  Confidence: {compliance_result.confidence}\n"
-                f"  Requirements: {compliance_result.requirement_ids}\n"
+                f"  Requirements checked: {compliance_result.requirement_ids}\n"
                 f"  Threshold breaches: {compliance_result.threshold_breaches}\n"
                 f"  Reasoning steps: {compliance_result.reasoning_steps}\n"
             )

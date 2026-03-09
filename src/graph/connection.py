@@ -86,9 +86,17 @@ class Neo4jConnection:
             raise RuntimeError("Call connect() before run_query().")
 
         params = params or {}
-        with self._driver.session() as session:
-            result = session.run(cypher, params)
-            return [record.data() for record in result]
+        for attempt in range(2):
+            try:
+                with self._driver.session() as session:
+                    result = session.run(cypher, params)
+                    return [record.data() for record in result]
+            except Exception as e:
+                if attempt == 0:
+                    logger.warning("Query failed (%s), reconnecting…", e)
+                    self.connect()
+                else:
+                    raise
 
     # ------------------------------------------------------------------
     # Context manager support

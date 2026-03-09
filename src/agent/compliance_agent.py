@@ -16,6 +16,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import time
 from typing import Any, TYPE_CHECKING
 
 import anthropic
@@ -112,19 +113,40 @@ class ComplianceAgent:
         iterations = 0
         cypher_used: list[str] = []
         final_text = ""
+        assessment_id: str | None = None
 
         logger.info("ComplianceAgent: %s", question)
 
         while iterations < MAX_ITERATIONS:
             iterations += 1
-            response = self.client.messages.create(
-                model=self.model,
-                max_tokens=self.max_tokens,
-                system=SYSTEM_PROMPT,
-                tools=self.tools,
-                messages=messages,
-                temperature=0,
-            )
+            for attempt in range(3):
+                try:
+                    response = self.client.messages.create(
+                        model=self.model,
+                        max_tokens=self.max_tokens,
+                        system=SYSTEM_PROMPT,
+                        tools=self.tools,
+                        messages=messages,
+                        temperature=0,
+                    )
+                    break
+                except anthropic.RateLimitError as e:
+                    if attempt < 2:
+                        # Prefer API retry-after; fallback to capped exponential backoff (30s, 60s)
+                        retry_after = None
+                        try:
+                            h = getattr(e, "response", None) and getattr(e.response, "headers", None)
+                            if h:
+                                retry_after = h.get("retry-after")
+                                if retry_after is not None:
+                                    retry_after = min(int(float(retry_after)), 120)
+                        except (TypeError, ValueError):
+                            pass
+                        wait = retry_after if retry_after is not None else min(30 * (2**attempt), 120)
+                        logger.warning("Rate limited — waiting %ds (attempt %d/3)", wait, attempt + 1)
+                        time.sleep(wait)
+                    else:
+                        raise
 
             if response.stop_reason == "end_turn":
                 final_text = self._extract_text(response)
@@ -140,6 +162,9 @@ class ComplianceAgent:
                         if block.name == "read-neo4j-cypher" and block.input.get("query"):
                             cypher_used.append(block.input["query"])
                         result = self.execute_tool(block.name, block.input)
+                        # Capture assessment_id written to Layer 3
+                        if block.name == "persist_assessment" and isinstance(result, dict):
+                            assessment_id = result.get("assessment_id")
                         tool_results.append({
                             "type": "tool_result",
                             "tool_use_id": block.id,
@@ -151,7 +176,9 @@ class ComplianceAgent:
             logger.warning("Unexpected stop_reason: %s", response.stop_reason)
             break
 
-        return self._parse_result(final_text, cypher_used)
+        result = self._parse_result(final_text, cypher_used)
+        result.assessment_id = assessment_id
+        return result
 
     # ------------------------------------------------------------------
     # Helpers
@@ -173,15 +200,19 @@ class ComplianceAgent:
             m = re.search(pattern, text, re.IGNORECASE)
             return m.group(1).strip() if m else default
 
-        verdict = _find(r"VERDICT:\s*(\w+)", "INFORMATIONAL")
-        confidence_str = _find(r"CONFIDENCE:\s*([\d.]+)", "0.5")
-        reqs_str = _find(r"REQUIREMENTS CHECKED:\s*(.+)", "")
-        thresh_str = _find(r"THRESHOLDS BREACHED:\s*(.+)", "")
+        # Patterns tolerate markdown bold (`**VALUE**`) around values
+        verdict = _find(r"VERDICT:\s*\*{0,2}\s*(\w+)", "INFORMATIONAL")
+        confidence_str = _find(r"CONFIDENCE:\s*\*{0,2}\s*([\d.]+)", "0.5")
+        reqs_str = _find(r"REQUIREMENTS CHECKED:\s*\*{0,2}\s*(.+)", "")
+        thresh_str = _find(r"THRESHOLDS BREACHED:\s*\*{0,2}\s*(.+)", "")
         steps_raw = re.findall(r"^\d+\.\s+(.+)$", text, re.MULTILINE)
 
         confidence = float(confidence_str) if confidence_str else 0.5
-        requirement_ids = [r.strip() for r in reqs_str.split(",") if r.strip() and r.strip().lower() != "none"]
-        threshold_ids = [t.strip() for t in thresh_str.split(",") if t.strip() and t.strip().lower() != "none"]
+        def _clean(s: str) -> str:
+            return s.strip().strip("*").strip()
+
+        requirement_ids = [_clean(r) for r in reqs_str.split(",") if _clean(r) and _clean(r).lower() != "none"]
+        threshold_ids = [_clean(t) for t in thresh_str.split(",") if _clean(t) and _clean(t).lower() != "none"]
 
         return ComplianceResult(
             entity_id="",
