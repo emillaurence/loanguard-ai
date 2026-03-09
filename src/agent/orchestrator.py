@@ -59,6 +59,35 @@ Rules:
 """
 
 # ---------------------------------------------------------------------------
+# Threshold ID → (human description, severity) for enriching findings panel.
+# Mirrors the key thresholds in GRAPH_SCHEMA_HINT and ComplianceAgent system prompt.
+# ---------------------------------------------------------------------------
+
+_THRESHOLD_META: dict[str, tuple[str, str]] = {
+    "APG-223-THR-003": (
+        "Serviceability buffer must be >= 3.0 percentage points above the loan rate.",
+        "HIGH",
+    ),
+    "APG-223-THR-006": (
+        "Non-salary income (rental, self-employed) must be haircut by >= 20% in serviceability calculations.",
+        "MEDIUM",
+    ),
+    "APG-223-THR-008": (
+        "LVR >= 90% (including capitalised LMI) requires senior management review with Board oversight.",
+        "HIGH",
+    ),
+    "APS-112-THR-031": (
+        "Commercial property must apply a >= 40% haircut to assessed value when calculating LVR.",
+        "HIGH",
+    ),
+    "APS-112-THR-032": (
+        "Lenders Mortgage Insurance must cover >= 40% of the loan loss to qualify for capital relief.",
+        "HIGH",
+    ),
+}
+
+
+# ---------------------------------------------------------------------------
 # Synthesis prompt
 # ---------------------------------------------------------------------------
 
@@ -70,17 +99,16 @@ for a compliance officer or investigator.
 
 Your response must include:
 1. A direct answer to the original question (2–4 sentences).
-2. Key findings ranked by severity (HIGH first).
-3. Cited regulation IDs, requirement IDs, threshold IDs, and entity IDs where applicable.
-4. 3–5 concrete recommended next steps.
+2. 3–5 concrete recommended next steps as a numbered list.
 
-CRITICAL CITATION RULE: The context below includes an AVAILABLE REGULATIONS section
-listing every regulation that exists in the knowledge graph. Only cite regulation IDs,
-acts, standards, or rules that appear in that list or verbatim in the agent outputs.
-Do NOT invent or infer any external reference (acts, guides, FATF recommendations, etc.)
-that is not explicitly present in the data provided to you.
+Do NOT reproduce or summarise the findings list — findings are displayed
+separately in the UI. Focus only on the answer and next steps.
 
-Be concise. Use plain language. Do not repeat the same finding multiple times.
+CITATION RULE: Only cite regulation IDs that appear in the AVAILABLE REGULATIONS
+list provided in the context (e.g. APG-223, APS-112, APS-220). Use the bare ID
+only — no qualifiers.
+
+Be concise. Use plain language.
 """
 
 
@@ -183,7 +211,8 @@ class Orchestrator:
         resp = self.client.messages.create(
             model=self.model,
             max_tokens=512,
-            system=ROUTING_SYSTEM,
+            system=[{"type": "text", "text": ROUTING_SYSTEM,
+                     "cache_control": {"type": "ephemeral"}}],
             messages=[{"role": "user", "content": question}],
             temperature=0,
         )
@@ -230,6 +259,38 @@ class Orchestrator:
         cited_sections: list[dict] = []
 
         if compliance_result:
+            verdict = compliance_result.verdict
+            confidence = compliance_result.confidence
+            for cypher in compliance_result.cypher_used:
+                all_cypher.append({"tool": "read-neo4j-cypher", "cypher": cypher})
+
+            # Primary source: findings Claude persisted to Layer 3 (rich descriptions,
+            # agent-assessed severities). Fall back to threshold_breaches conversion
+            # only if persist_assessment was never called or returned no findings.
+            if compliance_result.persisted_findings:
+                all_findings.extend(compliance_result.persisted_findings)
+            else:
+                for breach in compliance_result.threshold_breaches:
+                    tid = breach.get("threshold_id", "unknown")
+                    description, severity = _THRESHOLD_META.get(
+                        tid,
+                        (f"Threshold breached: {tid}", "HIGH"),
+                    )
+                    all_findings.append({
+                        "finding_type": "compliance_breach",
+                        "severity": severity,
+                        "description": description,
+                        "pattern_name": None,
+                    })
+
+            # Sort findings HIGH → MEDIUM → LOW → INFO for synthesis context
+            _sev_order = {"HIGH": 0, "MEDIUM": 1, "LOW": 2, "INFO": 3}
+            all_findings.sort(key=lambda f: _sev_order.get(f.get("severity", "INFO"), 3))
+
+            findings_lines = "\n".join(
+                f"  [{f.get('severity', 'INFO')}] {f.get('description', '')}"
+                for f in all_findings
+            )
             context_parts.append(
                 f"Compliance agent result:\n"
                 f"  Verdict: {compliance_result.verdict}\n"
@@ -237,18 +298,8 @@ class Orchestrator:
                 f"  Requirements checked: {compliance_result.requirement_ids}\n"
                 f"  Threshold breaches: {compliance_result.threshold_breaches}\n"
                 f"  Reasoning steps: {compliance_result.reasoning_steps}\n"
+                f"FINDINGS (use these exactly — do not re-assess severity):\n{findings_lines}\n"
             )
-            verdict = compliance_result.verdict
-            confidence = compliance_result.confidence
-            for i, cypher in enumerate(compliance_result.cypher_used):
-                all_cypher.append({"tool": "read-neo4j-cypher", "cypher": cypher})
-            for breach in compliance_result.threshold_breaches:
-                all_findings.append({
-                    "finding_type": "compliance_breach",
-                    "severity": "HIGH",
-                    "description": f"Threshold breach: {breach.get('threshold_id', 'unknown')}",
-                    "pattern_name": None,
-                })
 
         if investigation_result:
             context_parts.append(
@@ -267,6 +318,17 @@ class Orchestrator:
                     "description": signal,
                     "pattern_name": None,
                 })
+            # Re-sort after adding investigation findings
+            _sev_order = {"HIGH": 0, "MEDIUM": 1, "LOW": 2, "INFO": 3}
+            all_findings.sort(key=lambda f: _sev_order.get(f.get("severity", "INFO"), 3))
+            inv_findings_lines = "\n".join(
+                f"  [{f.get('severity', 'INFO')}] {f.get('description', '')}"
+                for f in all_findings
+                if f.get("finding_type") == "risk_signal"
+            )
+            context_parts.append(
+                f"FINDINGS from investigation (use these exactly):\n{inv_findings_lines}\n"
+            )
 
         if not compliance_result and not investigation_result:
             return InvestigationResponse(
@@ -281,7 +343,8 @@ class Orchestrator:
         synthesis_response = self.client.messages.create(
             model=self.model,
             max_tokens=2048,
-            system=SYNTHESIS_SYSTEM,
+            system=[{"type": "text", "text": SYNTHESIS_SYSTEM,
+                     "cache_control": {"type": "ephemeral"}}],
             messages=[{"role": "user", "content": "\n".join(context_parts)}],
             temperature=0,
         )

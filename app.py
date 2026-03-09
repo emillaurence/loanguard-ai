@@ -578,6 +578,12 @@ def _render_routing(routing: dict) -> None:
         """,
         unsafe_allow_html=True,
     )
+    if routing.get("entity_ids") or routing.get("regulations"):
+        st.markdown(
+            '<div class="section-label">Pipeline Graph — hover nodes for detail</div>',
+            unsafe_allow_html=True,
+        )
+        _render_routing_graph(routing)
 
 
 def _render_findings(findings: list[dict]) -> None:
@@ -672,6 +678,260 @@ def _render_findings_chart(findings: list[dict]) -> None:
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
 
+def _render_evidence_graph(cited_sections: list[dict], cited_chunks: list[dict]) -> None:
+    """Plotly network graph: Regulation → Section → Chunk."""
+    import plotly.graph_objects as go
+
+    if not cited_sections or not cited_chunks:
+        return
+
+    # ── Build node sets ──────────────────────────────────────────────────────
+    reg_ids  = sorted({s.get("regulation_id") or "" for s in cited_sections} - {""})
+    sec_list = cited_sections   # each has section_id, title, regulation_id
+    chk_list = cited_chunks     # each has chunk_id, section_id, text_excerpt
+
+    # x columns
+    X_REG, X_SEC, X_CHK = 0.0, 1.5, 3.0
+
+    def _y_positions(n: int) -> list[float]:
+        if n == 1:
+            return [0.5]
+        return [i / (n - 1) for i in range(n)]
+
+    reg_pos  = {rid: (X_REG, y) for rid, y in zip(reg_ids, _y_positions(len(reg_ids)))}
+    sec_pos  = {s["section_id"]: (X_SEC, y)
+                for s, y in zip(sec_list, _y_positions(len(sec_list)))}
+    chk_pos  = {c["chunk_id"]: (X_CHK, y)
+                for c, y in zip(chk_list, _y_positions(len(chk_list)))}
+
+    # ── Edge traces ──────────────────────────────────────────────────────────
+    edge_x, edge_y = [], []
+
+    def _add_edge(x0, y0, x1, y1):
+        edge_x += [x0, x1, None]
+        edge_y += [y0, y1, None]
+
+    for s in sec_list:
+        rid = s.get("regulation_id") or ""
+        sid = s.get("section_id") or ""
+        if rid in reg_pos and sid in sec_pos:
+            _add_edge(*reg_pos[rid], *sec_pos[sid])
+
+    for c in chk_list:
+        sid = c.get("section_id") or ""
+        cid = c.get("chunk_id") or ""
+        if sid in sec_pos and cid in chk_pos:
+            _add_edge(*sec_pos[sid], *chk_pos[cid])
+
+    edge_trace = go.Scatter(
+        x=edge_x, y=edge_y,
+        mode="lines",
+        line=dict(width=1.2, color="#c8d3e0"),
+        hoverinfo="none",
+    )
+
+    # ── Node traces ──────────────────────────────────────────────────────────
+    def _node_trace(positions, labels, hover_texts, color, symbol="circle", size=22):
+        xs = [p[0] for p in positions]
+        ys = [p[1] for p in positions]
+        return go.Scatter(
+            x=xs, y=ys,
+            mode="markers+text",
+            marker=dict(size=size, color=color, symbol=symbol,
+                        line=dict(width=1.5, color="white")),
+            text=labels,
+            textposition="top center",
+            textfont=dict(size=10),
+            customdata=hover_texts,
+            hovertemplate="%{customdata}<extra></extra>",
+        )
+
+    reg_trace = _node_trace(
+        positions=[reg_pos[r] for r in reg_ids],
+        labels=reg_ids,
+        hover_texts=[f"<b>Regulation</b><br>{r}" for r in reg_ids],
+        color="#28a745", size=26,
+    )
+
+    sec_trace = _node_trace(
+        positions=[sec_pos[s["section_id"]] for s in sec_list],
+        labels=[s.get("section_id", "")[:12] for s in sec_list],
+        hover_texts=[
+            f"<b>Section</b><br>{s.get('section_id','')}<br>"
+            f"<i>{(s.get('title') or '')[:60]}</i>"
+            for s in sec_list
+        ],
+        color="#0d6efd", size=20,
+    )
+
+    chk_trace = _node_trace(
+        positions=[chk_pos[c["chunk_id"]] for c in chk_list],
+        labels=[c.get("chunk_id", "")[-8:] for c in chk_list],
+        hover_texts=[
+            f"<b>Chunk</b><br>{c.get('chunk_id','')}<br>"
+            f"Score: {c.get('similarity_score', '')}<br>"
+            f"<i>{(c.get('text_excerpt') or '')[:120]}…</i>"
+            for c in chk_list
+        ],
+        color="#fd7e14", size=16,
+    )
+
+    n_nodes = len(reg_ids) + len(sec_list) + len(chk_list)
+    fig = go.Figure(data=[edge_trace, reg_trace, sec_trace, chk_trace])
+    fig.update_layout(
+        height=max(200, 60 * max(len(reg_ids), len(sec_list), len(chk_list))),
+        margin=dict(l=20, r=20, t=10, b=10),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        xaxis=dict(visible=False, range=[-0.3, 3.5]),
+        yaxis=dict(visible=False, range=[-0.15, 1.15]),
+        showlegend=False,
+        annotations=[
+            dict(x=X_REG, y=1.12, text="Regulation", showarrow=False,
+                 font=dict(size=10, color="#28a745"), xref="x", yref="y"),
+            dict(x=X_SEC, y=1.12, text="Section", showarrow=False,
+                 font=dict(size=10, color="#0d6efd"), xref="x", yref="y"),
+            dict(x=X_CHK, y=1.12, text="Chunk", showarrow=False,
+                 font=dict(size=10, color="#fd7e14"), xref="x", yref="y"),
+        ],
+    )
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+
+
+def _render_routing_graph(routing: dict) -> None:
+    """Plotly mini-graph: entities → regulations → agents → orchestrator."""
+    import plotly.graph_objects as go
+
+    entity_ids   = routing.get("entity_ids") or []
+    entity_types = routing.get("entity_types") or []
+    reg_ids      = routing.get("regulations") or []
+
+    agents = []
+    if routing.get("needs_compliance_agent"):    agents.append("ComplianceAgent")
+    if routing.get("needs_investigation_agent"): agents.append("InvestigationAgent")
+
+    if not entity_ids and not reg_ids:
+        return
+
+    # ── Positions ─────────────────────────────────────────────────────────────
+    X_ENT, X_REG, X_AGT, X_ORC = 0.0, 1.5, 3.0, 4.5
+
+    def _ys(n):
+        if n == 1: return [0.5]
+        return [i / (n - 1) for i in range(n)]
+
+    ent_pairs = list(zip(entity_ids, entity_types + [""] * len(entity_ids)))
+    ent_pos   = {eid: (X_ENT, y) for (eid, _), y in zip(ent_pairs, _ys(len(ent_pairs) or 1))}
+    reg_pos   = {rid: (X_REG, y) for rid, y in zip(reg_ids, _ys(len(reg_ids) or 1))}
+    agt_pos   = {a: (X_AGT, y) for a, y in zip(agents, _ys(len(agents) or 1))}
+    orc_pos   = {"Orchestrator": (X_ORC, 0.5)}
+
+    # ── Edges ─────────────────────────────────────────────────────────────────
+    edge_x, edge_y = [], []
+
+    def _edge(p0, p1):
+        edge_x.extend([p0[0], p1[0], None])
+        edge_y.extend([p0[1], p1[1], None])
+
+    for eid, etype in ent_pairs:
+        for rid in reg_ids:
+            _edge(ent_pos[eid], reg_pos[rid])
+
+    for rid in reg_ids:
+        for agt in agents:
+            _edge(reg_pos[rid], agt_pos[agt])
+
+    for agt in agents:
+        _edge(agt_pos[agt], orc_pos["Orchestrator"])
+
+    edge_trace = go.Scatter(
+        x=edge_x, y=edge_y,
+        mode="lines",
+        line=dict(width=1.2, color="#c8d3e0"),
+        hoverinfo="none",
+    )
+
+    # ── Node helpers ──────────────────────────────────────────────────────────
+    def _scatter(xs, ys, labels, hover_texts, color, size=22):
+        return go.Scatter(
+            x=xs, y=ys,
+            mode="markers+text",
+            marker=dict(size=size, color=color, line=dict(width=1.5, color="white")),
+            text=labels,
+            textposition="top center",
+            textfont=dict(size=10),
+            customdata=hover_texts,
+            hovertemplate="%{customdata}<extra></extra>",
+        )
+
+    traces = [edge_trace]
+
+    if ent_pairs:
+        TYPE_COLOUR = {
+            "LoanApplication": "#0d6efd",
+            "Borrower": "#fd7e14",
+            "BankAccount": "#6f42c1",
+            "Transaction": "#dc3545",
+        }
+        traces.append(_scatter(
+            xs=[ent_pos[e][0] for e, _ in ent_pairs],
+            ys=[ent_pos[e][1] for e, _ in ent_pairs],
+            labels=[e for e, _ in ent_pairs],
+            hover_texts=[f"<b>{e}</b><br>Type: {t or '?'}" for e, t in ent_pairs],
+            color=[TYPE_COLOUR.get(t, "#6c757d") for _, t in ent_pairs],
+            size=24,
+        ))
+
+    if reg_ids:
+        traces.append(_scatter(
+            xs=[reg_pos[r][0] for r in reg_ids],
+            ys=[reg_pos[r][1] for r in reg_ids],
+            labels=reg_ids,
+            hover_texts=[f"<b>{r}</b><br>APRA Regulation" for r in reg_ids],
+            color="#28a745", size=22,
+        ))
+
+    if agents:
+        traces.append(_scatter(
+            xs=[agt_pos[a][0] for a in agents],
+            ys=[agt_pos[a][1] for a in agents],
+            labels=[a.replace("Agent", "\nAgent") for a in agents],
+            hover_texts=[f"<b>{a}</b><br>Specialist agent" for a in agents],
+            color="#0dcaf0", size=20,
+        ))
+
+    traces.append(_scatter(
+        xs=[orc_pos["Orchestrator"][0]],
+        ys=[orc_pos["Orchestrator"][1]],
+        labels=["Orchestrator"],
+        hover_texts=["<b>Orchestrator</b><br>Routes & synthesises results"],
+        color="#6f42c1", size=26,
+    ))
+
+    col_labels = []
+    if ent_pairs: col_labels.append(dict(x=X_ENT, text="Entities", color="#6c757d"))
+    if reg_ids:   col_labels.append(dict(x=X_REG, text="Regulations", color="#28a745"))
+    if agents:    col_labels.append(dict(x=X_AGT, text="Agents", color="#0dcaf0"))
+    col_labels.append(dict(x=X_ORC, text="Orchestrator", color="#6f42c1"))
+
+    fig = go.Figure(data=traces)
+    fig.update_layout(
+        height=200,
+        margin=dict(l=20, r=20, t=30, b=10),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        xaxis=dict(visible=False, range=[-0.5, 5.2]),
+        yaxis=dict(visible=False, range=[-0.2, 1.3]),
+        showlegend=False,
+        annotations=[
+            dict(x=lbl["x"], y=1.22, text=lbl["text"], showarrow=False,
+                 font=dict(size=10, color=lbl["color"]), xref="x", yref="y")
+            for lbl in col_labels
+        ],
+    )
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+
+
 def _render_evidence(cited_sections: list[dict], cited_chunks: list[dict]) -> None:
     col_sec, col_chk = st.columns(2)
 
@@ -718,6 +978,13 @@ def _render_evidence(cited_sections: list[dict], cited_chunks: list[dict]) -> No
             st.markdown(html_parts, unsafe_allow_html=True)
         else:
             st.markdown("*No cited chunks.*")
+
+    if cited_sections and cited_chunks:
+        st.markdown(
+            '<div class="section-label">Regulatory Path — hover nodes for detail</div>',
+            unsafe_allow_html=True,
+        )
+        _render_evidence_graph(cited_sections, cited_chunks)
 
 
 def render_response(resp) -> None:
