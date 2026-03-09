@@ -368,22 +368,20 @@ with st.sidebar:
     st.markdown("### Example questions")
     for q in EXAMPLES:
         if st.button(q, use_container_width=True):
-            st.session_state["pending_question"] = q
+            st.session_state["question_input"] = q
+            st.session_state["auto_submit"] = True
 
 # ── Chat history ─────────────────────────────────────────────────────────────
 if "history" not in st.session_state:
-    st.session_state.history = []  # list of {"role": "user"|"assistant", "content": ...}
-
-# Pre-fill input if an example button was clicked
-pending = st.session_state.pop("pending_question", "")
+    st.session_state.history = []
 
 col_input, col_btn = st.columns([8, 1])
 with col_input:
     question = st.text_input(
         "Ask a compliance or investigation question",
-        value=pending,
         placeholder="e.g. Is LOAN-0002 compliant with APG-223?",
         label_visibility="collapsed",
+        key="question_input",
     )
 with col_btn:
     ask = st.button("Ask", type="primary", use_container_width=True)
@@ -393,7 +391,8 @@ if st.button("Clear chat", type="secondary"):
     st.rerun()
 
 # ── Run question ──────────────────────────────────────────────────────────────
-if ask and question.strip():
+auto_submit = st.session_state.pop("auto_submit", False)
+if (ask or auto_submit) and question.strip():
     st.session_state.history.append({"role": "user", "content": question.strip()})
     with st.spinner("Thinking…"):
         try:
