@@ -211,7 +211,7 @@ def persist_assessment(
             created_at=created_at,
         )
 
-        finding_ids: list[str] = []
+        persisted_findings: list[dict] = []
         for i, f in enumerate(findings or []):
             fid = f"FIND-{assessment_id}-{i:03d}"
             merge_finding(
@@ -225,7 +225,13 @@ def persist_assessment(
                 related_entity_id=f.get("related_entity_id"),
                 related_entity_type=f.get("related_entity_type"),
             )
-            finding_ids.append(fid)
+            persisted_findings.append({
+                "finding_id": fid,
+                "finding_type": f.get("finding_type", "information"),
+                "severity": f.get("severity", "INFO"),
+                "description": f.get("description", ""),
+                "pattern_name": f.get("pattern_name"),
+            })
 
         step_ids: list[str] = []
         for i, s in enumerate(reasoning_steps or []):
@@ -244,7 +250,7 @@ def persist_assessment(
 
         return {
             "assessment_id": assessment_id,
-            "finding_ids": finding_ids,
+            "findings": persisted_findings,
             "step_ids": step_ids,
         }
     finally:

@@ -641,7 +641,7 @@ def merge_assessment(
             a.created_at    = $created_at
         WITH a
         MATCH (e:{entity_type} {{{id_prop}: $entity_id}})
-        MERGE (a)-[:ABOUT]->(e)
+        MERGE (e)-[:HAS_ASSESSMENT]->(a)
         WITH a
         MATCH (reg:Regulation {{regulation_id: $regulation_id}})
         MERGE (a)-[:ASSESSED_UNDER]->(reg)

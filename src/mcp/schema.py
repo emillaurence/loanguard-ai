@@ -162,7 +162,7 @@ Node: ReasoningStep
 
 ### LAYER 3 Relationships
 
-(Assessment)-[:ABOUT]->(LoanApplication|Borrower)
+(LoanApplication|Borrower)-[:HAS_ASSESSMENT]->(Assessment)
 (Assessment)-[:ASSESSED_UNDER]->(Requirement|Regulation)
 (Assessment)-[:HAS_FINDING]->(Finding)
 (Assessment)-[:HAS_STEP]->(ReasoningStep)
@@ -388,6 +388,7 @@ class ComplianceResult:
     section_ids: list[str] = field(default_factory=list)
     chunk_ids: list[str] = field(default_factory=list)
     threshold_breaches: list[dict] = field(default_factory=list)
+    persisted_findings: list[dict] = field(default_factory=list)
     reasoning_steps: list[str] = field(default_factory=list)
     cypher_used: list[str] = field(default_factory=list)
     assessment_id: str | None = None
