@@ -23,12 +23,13 @@ from typing import Any
 import anthropic
 
 from src.agent.compliance_agent import ComplianceAgent
+from src.agent.config import MODEL
 from src.agent.investigation_agent import InvestigationAgent
 from src.mcp.schema import GRAPH_SCHEMA_HINT, InvestigationResponse
 
 logger = logging.getLogger(__name__)
 
-MODEL = "claude-sonnet-4-6"
+_SEV_ORDER: dict[str, int] = {"HIGH": 0, "MEDIUM": 1, "LOW": 2, "INFO": 3}
 
 # ---------------------------------------------------------------------------
 # Routing prompt
@@ -422,8 +423,7 @@ class Orchestrator:
                     })
 
             # Sort findings HIGH → MEDIUM → LOW → INFO for synthesis context
-            _sev_order = {"HIGH": 0, "MEDIUM": 1, "LOW": 2, "INFO": 3}
-            all_findings.sort(key=lambda f: _sev_order.get(f.get("severity", "INFO"), 3))
+            all_findings.sort(key=lambda f: _SEV_ORDER.get(f.get("severity", "INFO"), 3))
 
             findings_lines = "\n".join(
                 f"  [{f.get('severity', 'INFO')}] {f.get('description', '')}"
@@ -483,8 +483,7 @@ class Orchestrator:
                     "regulation_id": _reg_id,
                 })
             # Re-sort after adding investigation findings
-            _sev_order = {"HIGH": 0, "MEDIUM": 1, "LOW": 2, "INFO": 3}
-            all_findings.sort(key=lambda f: _sev_order.get(f.get("severity", "INFO"), 3))
+            all_findings.sort(key=lambda f: _SEV_ORDER.get(f.get("severity", "INFO"), 3))
             inv_findings_lines = "\n".join(
                 f"  [{f.get('severity', 'INFO')}] {f.get('description', '')}"
                 for f in all_findings

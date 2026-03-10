@@ -22,6 +22,7 @@ from typing import Any, TYPE_CHECKING
 import anthropic
 
 from src.agent._security import guard_tool_result
+from src.agent.config import MODEL, MAX_TOKENS, TOOL_RESULT_CHAR_LIMIT
 from src.mcp.schema import GRAPH_SCHEMA_HINT, ComplianceResult
 
 if TYPE_CHECKING:
@@ -29,11 +30,9 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-MODEL = "claude-sonnet-4-6"
-MAX_TOKENS = 8096
 MAX_ITERATIONS = 8
 MAX_HISTORY_PAIRS = 4
-_TOOL_RESULT_CHAR_LIMIT = 3000
+_TOOL_RESULT_CHAR_LIMIT = TOOL_RESULT_CHAR_LIMIT
 
 SYSTEM_PROMPT = f"""You are a financial services compliance officer with expert knowledge
 of APRA prudential standards (APS-112, APG-223, APS-220).

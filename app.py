@@ -45,192 +45,8 @@ logging.getLogger("openai").setLevel(logging.WARNING)
 logging.getLogger("neo4j.notifications").setLevel(logging.ERROR)
 logging.getLogger(__name__).info("Log file: %s", _LOG_FILE)
 
-# ── Tool definitions (inline, matches 311_agent_setup.ipynb) ─────────────────
-
-NEO4J_MCP_TOOLS = [
-    {
-        "name": "read-neo4j-cypher",
-        "description": (
-            "Execute a read-only Cypher query against the Neo4j graph database. "
-            "Returns result rows as a list of dicts. "
-            "YOU generate the Cypher — use the GRAPH_SCHEMA_HINT in the system prompt. "
-            "Always include LIMIT (max 100). Never use MERGE/CREATE/DELETE/SET."
-        ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "query": {
-                    "type": "string",
-                    "description": "Valid read-only Cypher query with LIMIT clause.",
-                },
-                "params": {
-                    "type": "object",
-                    "description": "Optional parameter dict for parameterised queries.",
-                    "default": {},
-                },
-            },
-            "required": ["query"],
-        },
-    },
-    {
-        "name": "write-neo4j-cypher",
-        "description": (
-            "Execute a write Cypher query (MERGE, CREATE, SET) against Neo4j. "
-            "Use ONLY for Layer 3 Assessment/Finding/ReasoningStep writes. "
-            "Prefer persist_assessment tool for structured Layer 3 writes."
-        ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "query": {"type": "string", "description": "Write Cypher query."},
-                "params": {"type": "object", "default": {}},
-            },
-            "required": ["query"],
-        },
-    },
-]
-
-FASTMCP_TOOL_DEFS = [
-    {
-        "name": "traverse_compliance_path",
-        "description": (
-            "Cross-layer compliance traversal. "
-            "Walks entity → Borrower → Jurisdiction (RESIDES_IN/REGISTERED_IN) "
-            "→ Regulation (APPLIES_TO_JURISDICTION) → Section → Requirement → Threshold. "
-            "Call this FIRST for any compliance question to get the full regulatory framework. "
-            "Returns applicable thresholds for the entity jurisdiction and loan type."
-        ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "entity_id":     {"type": "string", "description": "e.g. 'LOAN-0002' or 'BRW-0001'"},
-                "entity_type":   {"type": "string", "enum": ["LoanApplication", "Borrower"]},
-                "regulation_id": {"type": "string", "description": "Optional regulation filter.", "default": ""},
-            },
-            "required": ["entity_id", "entity_type"],
-        },
-    },
-    {
-        "name": "retrieve_regulatory_chunks",
-        "description": (
-            "Semantic similarity search over regulatory Chunk nodes using the "
-            "chunk_embeddings Neo4j vector index (OpenAI text-embedding-3-small, cosine). "
-            "Use to retrieve supporting regulation text when writing a finding."
-        ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "query_text":    {"type": "string", "description": "Regulatory concept to search."},
-                "regulation_id": {"type": "string", "default": "", "description": "Optional filter: e.g. 'APG-223'"},
-                "top_k":         {"type": "integer", "default": 5, "description": "Number of chunks (max 20)."},
-            },
-            "required": ["query_text"],
-        },
-    },
-    {
-        "name": "detect_graph_anomalies",
-        "description": (
-            "Run one or more anomaly patterns in a single call — always batch all relevant patterns. "
-            "pattern_names values: 'transaction_structuring', 'high_lvr_loans', "
-            "'high_risk_industry', 'layered_ownership', 'high_risk_jurisdiction', "
-            "'guarantor_concentration'."
-        ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "pattern_names": {
-                    "type": "array",
-                    "items": {
-                        "type": "string",
-                        "enum": [
-                            "transaction_structuring", "high_lvr_loans", "high_risk_industry",
-                            "layered_ownership", "high_risk_jurisdiction", "guarantor_concentration",
-                        ],
-                    },
-                    "description": "List of patterns to run — pass all relevant ones in one call.",
-                },
-                "entity_id": {"type": "string", "default": "", "description": "Optional entity scope."},
-            },
-            "required": ["pattern_names"],
-        },
-    },
-    {
-        "name": "persist_assessment",
-        "description": (
-            "Persist a compliance Assessment with Findings and ReasoningSteps to Layer 3 (Neo4j). "
-            "Idempotent MERGE. Call after completing compliance analysis to store reasoning."
-        ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "entity_id":       {"type": "string"},
-                "entity_type":     {"type": "string", "enum": ["LoanApplication", "Borrower"]},
-                "regulation_id":   {"type": "string"},
-                "verdict":         {"type": "string", "enum": ["COMPLIANT", "NON_COMPLIANT", "REQUIRES_REVIEW", "ANOMALY_DETECTED", "INFORMATIONAL"]},
-                "confidence":      {"type": "number", "minimum": 0, "maximum": 1},
-                "findings":        {"type": "array", "items": {"type": "object"}},
-                "reasoning_steps": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "description": {"type": "string", "description": "What this reasoning step checked or concluded."},
-                            "cypher_used":  {"type": "string", "description": "The Cypher query used in this step, if any."},
-                            "section_ids":  {"type": "array", "items": {"type": "string"}, "description": "section_id values returned by traverse_compliance_path or read-neo4j-cypher that informed this step."},
-                            "chunk_ids":    {"type": "array", "items": {"type": "string"}, "description": "chunk_id values returned by retrieve_regulatory_chunks that informed this step."},
-                        },
-                        "required": ["description"],
-                    },
-                },
-                "agent":           {"type": "string", "default": "compliance_agent"},
-            },
-            "required": ["entity_id", "entity_type", "regulation_id", "verdict", "confidence"],
-        },
-    },
-    {
-        "name": "trace_evidence",
-        "description": (
-            "Walk a stored Assessment back to all cited regulatory nodes. "
-            "Returns findings, reasoning steps, cited sections (with text), "
-            "and cited chunks (with text excerpt). "
-            "Use when asked 'why was this flagged?' or 'show your reasoning'."
-        ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "assessment_id": {"type": "string", "description": "e.g. 'ASSESS-LOAN-0002-APG-223-2026-03-10-143022'"},
-            },
-            "required": ["assessment_id"],
-        },
-    },
-    {
-        "name": "evaluate_thresholds",
-        "description": (
-            "Evaluate a list of Threshold dicts against the entity's stored values. "
-            "Call after traverse_compliance_path, passing the threshold list from its result. "
-            "Returns structured PASS/BREACH/unknown per threshold so verdicts are "
-            "grounded in deterministic data rather than LLM arithmetic."
-        ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "entity_id":   {"type": "string", "description": "e.g. 'LOAN-0002' or 'BRW-0001'"},
-                "entity_type": {"type": "string", "enum": ["LoanApplication", "Borrower"]},
-                "thresholds": {
-                    "type": "array",
-                    "items": {"type": "object"},
-                    "description": (
-                        "List of threshold dicts from traverse_compliance_path. "
-                        "Each should have threshold_id, metric, operator, value, unit."
-                    ),
-                },
-            },
-            "required": ["entity_id", "entity_type", "thresholds"],
-        },
-    },
-]
-
-TOOLS = NEO4J_MCP_TOOLS + FASTMCP_TOOL_DEFS
+# ── Tool definitions ─────────────────────────────────────────────────────────
+from src.mcp.tool_defs import FASTMCP_TOOL_DEFS, NEO4J_MCP_TOOLS, TOOLS  # noqa: E402
 
 EXAMPLES = [
     "Is LOAN-0002 compliant with APG-223?",
@@ -281,7 +97,6 @@ SEV_BAR_COLOURS = {
     "INFO":   "#17a2b8",
 }
 
-_WRITE_KEYWORDS = {"MERGE", "CREATE", "DELETE", "SET", "DETACH"}
 
 
 # ── CSS injection ─────────────────────────────────────────────────────────────
@@ -552,52 +367,11 @@ def _get_connection():
 
 @st.cache_resource
 def _get_orchestrator():
+    from src.agent.dispatcher import make_execute_tool
     from src.agent.orchestrator import Orchestrator
-    from src.mcp.tools_impl import (
-        detect_graph_anomalies,
-        evaluate_thresholds,
-        persist_assessment,
-        retrieve_regulatory_chunks,
-        trace_evidence,
-        traverse_compliance_path,
-    )
 
     conn = _get_connection()
-
-    def execute_tool(tool_name: str, tool_input: dict) -> dict:
-        logger = logging.getLogger("execute_tool")
-        logger.info("Tool: %s | inputs: %s", tool_name, list(tool_input.keys()))
-        try:
-            if tool_name == "read-neo4j-cypher":
-                query = tool_input.get("query", "")
-                params = tool_input.get("params", {})
-                query_words = set(re.findall(r"\b[A-Z]+\b", query.upper()))
-                if query_words & _WRITE_KEYWORDS:
-                    return {"error": "read-neo4j-cypher does not allow write operations."}
-                return {"rows": conn.run_query(query, params)}
-            elif tool_name == "write-neo4j-cypher":
-                query = tool_input.get("query", "")
-                params = tool_input.get("params", {})
-                return {"rows": conn.run_query(query, params)}
-            elif tool_name == "traverse_compliance_path":
-                return traverse_compliance_path(**tool_input)
-            elif tool_name == "retrieve_regulatory_chunks":
-                return retrieve_regulatory_chunks(**tool_input)
-            elif tool_name == "detect_graph_anomalies":
-                return detect_graph_anomalies(**tool_input)
-            elif tool_name == "persist_assessment":
-                return persist_assessment(**tool_input)
-            elif tool_name == "trace_evidence":
-                return trace_evidence(**tool_input)
-            elif tool_name == "evaluate_thresholds":
-                return evaluate_thresholds(**tool_input)
-            else:
-                return {"error": f"Unknown tool: {tool_name}"}
-        except Exception as e:
-            logger.error("Tool %s failed: %s", tool_name, e)
-            return {"error": str(e)}
-
-    return Orchestrator(tools=TOOLS, execute_tool_fn=execute_tool)
+    return Orchestrator(tools=TOOLS, execute_tool_fn=make_execute_tool(conn))
 
 
 # ── Response rendering ────────────────────────────────────────────────────────
