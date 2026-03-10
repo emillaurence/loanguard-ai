@@ -145,9 +145,12 @@ Agents have access to two categories of tools:
 
 | Tool | Description |
 |---|---|
-| `read-neo4j-cypher` | Executes a read-only Cypher query directly against the graph. Used by the `ComplianceAgent` for ad-hoc entity lookups not covered by the FastMCP tools. Write keywords (`CREATE`, `MERGE`, `DELETE`, etc.) are blocked at the dispatcher level. |
+| `read-neo4j-cypher` | Executes a read-only Cypher query directly against the graph. Used by agents for ad-hoc entity lookups not covered by the FastMCP tools. Write keywords (`CREATE`, `MERGE`, `DELETE`, etc.) are blocked at the dispatcher level. |
+| `write-neo4j-cypher` | Executes write Cypher queries against Neo4j. Restricted to Layer 3 Assessment/Finding/ReasoningStep writes. Prefer `persist_assessment` for structured Layer 3 writes. |
 
 > The Neo4j MCP naming convention is used so agent prompts remain portable to environments where the real Neo4j MCP server is running.
+
+All tool definitions (for Claude's tool-use API) are the single source of truth in `src/mcp/tool_defs.py` — imported by `app.py` and any agent setup notebooks.
 
 ---
 
@@ -249,17 +252,24 @@ loanguard-ai/
 │   │   ├── orchestrator.py         # Routing and synthesis; calls both specialist agents
 │   │   ├── compliance_agent.py     # Agentic loop; evaluate_thresholds mandatory step
 │   │   ├── investigation_agent.py  # Graph traversal and anomaly detection
-│   │   ├── _security.py            # Prompt injection defence (guard_tool_result)
-│   │   └── tools.py                # Tool definitions for Claude's tool-use API
+│   │   ├── anomaly_detector.py     # Standalone AnomalyDetector class (run named patterns)
+│   │   ├── dispatcher.py           # make_execute_tool() factory — single execute_tool impl
+│   │   ├── config.py               # Shared constants: MODEL, MAX_TOKENS, WRITE_KEYWORDS
+│   │   └── _security.py            # Prompt injection defence (guard_tool_result)
 │   ├── graph/
 │   │   ├── connection.py           # Neo4jConnection driver wrapper
 │   │   └── queries.py              # Parameterised Cypher helpers organised by layer
 │   ├── mcp/
 │   │   ├── schema.py               # GRAPH_SCHEMA_HINT, ANOMALY_REGISTRY, Verdict, Severity, dataclasses
+│   │   ├── tool_defs.py            # Single source of truth for all tool definitions (TOOLS)
 │   │   ├── tools_impl.py           # Plain Python tool implementations (import these directly)
 │   │   └── investigation_server.py # FastMCP server registering all tools
+│   ├── retriever/
+│   │   └── graphrag.py             # GraphRAGRetriever: NL → Cypher via Claude → Neo4j
 │   └── document/
-│       └── utils.py                # PDF processing and Claude streaming utilities
+│       ├── config.py               # load_document_config() for document_config.yaml
+│       ├── pdf_utils.py            # PDF text extraction utilities
+│       └── utils.py                # Claude streaming utilities (call_claude_stream_json)
 ├── data/
 │   ├── layer_1/                    # Financial entity CSVs (entities/ and links/)
 │   ├── layer_2/                    # APRA regulatory documents and processed data

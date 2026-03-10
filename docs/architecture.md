@@ -254,7 +254,9 @@ Agents have access to two categories of tools.
 
 **FastMCP tools** — implemented as plain Python in `src/mcp/tools_impl.py` and registered with the FastMCP server in `src/mcp/investigation_server.py` using `@mcp.tool()`. Notebooks and agents import from `tools_impl` directly — not from the server.
 
-**Simulated Neo4j MCP tool** (`read-neo4j-cypher`) — defined with the same tool schema as the [official Neo4j MCP server](https://github.com/neo4j-contrib/mcp-neo4j) but dispatched locally via `Neo4jConnection` (no external MCP process or stdio transport). This keeps agent prompts portable: the `ComplianceAgent` references `read-neo4j-cypher` as a "Neo4j MCP tool" so the same prompt works in environments where the real Neo4j MCP server is running. Write keywords (`CREATE`, `MERGE`, `DELETE`, `SET`, `REMOVE`, `DROP`) are blocked at the dispatcher level in `app.py`.
+**Simulated Neo4j MCP tools** — defined with the same tool schema as the [official Neo4j MCP server](https://github.com/neo4j-contrib/mcp-neo4j) but dispatched locally via `Neo4jConnection` (no external MCP process or stdio transport). This keeps agent prompts portable.
+
+All tool definitions (for Claude's tool-use API) are the single source of truth in `src/mcp/tool_defs.py` — imported by `app.py` and any agent setup notebooks. The execute_tool dispatcher is the single source of truth in `src/agent/dispatcher.py` (`make_execute_tool(conn)`).
 
 ### Tool 1: `traverse_compliance_path`
 
@@ -340,19 +342,23 @@ Evaluates a list of threshold definitions against an entity's stored property va
 
 `informational` thresholds always return N/A and are excluded from verdict aggregation. Conditional thresholds (e.g. THR-006 which only applies when `income_type != 'salary'`) return N/A when the condition is not met.
 
-### Simulated Neo4j MCP tool: `read-neo4j-cypher`
+### Simulated Neo4j MCP tools: `read-neo4j-cypher` and `write-neo4j-cypher`
 
-This tool is not in `tools_impl.py`. It is defined inline in `app.py` (`NEO4J_MCP_TOOLS`) with the same schema as the official [Neo4j MCP server](https://github.com/neo4j-contrib/mcp-neo4j) and dispatched directly via `Neo4jConnection.run_query()`.
+These tools are defined in `src/mcp/tool_defs.py` (`NEO4J_MCP_TOOLS`) with the same schema as the official [Neo4j MCP server](https://github.com/neo4j-contrib/mcp-neo4j). They are dispatched locally by `make_execute_tool()` in `src/agent/dispatcher.py` via `Neo4jConnection.run_query()` — no external MCP process is involved.
 
-**Parameters:**
+**`read-neo4j-cypher`**
 - `query` (str) — a read-only Cypher query
 - `params` (dict, optional) — query parameters
+- Returns: `{"rows": [...]}` — a list of result dicts
+- Security: write keywords (`MERGE`, `CREATE`, `DELETE`, `SET`, `DETACH`, `REMOVE`, `DROP`) are whole-word matched and blocked at the dispatcher level (see `src/agent/config.py`)
 
-**Returns:** `{"rows": [...]}` — a list of result dicts.
+**`write-neo4j-cypher`**
+- `query` (str) — a write Cypher query (`MERGE`, `CREATE`, `SET`, etc.)
+- `params` (dict, optional) — query parameters
+- Returns: `{"rows": [...]}`
+- Use only for Layer 3 Assessment/Finding/ReasoningStep writes; prefer `persist_assessment` for structured writes
 
-**Security:** The dispatcher in `app.py` scans the query for write keywords (`CREATE`, `MERGE`, `DELETE`, `SET`, `REMOVE`, `DROP`) and returns an error if any are found, preventing write operations through this read-only path.
-
-**Why the Neo4j MCP naming?** The `ComplianceAgent` system prompt refers to this as a "Neo4j MCP tool" so the same prompt is portable to deployments where the real Neo4j MCP server process is running over stdio. In this project, no external MCP process is involved.
+**Why the Neo4j MCP naming?** Agent prompts reference these as "Neo4j MCP tools" so they remain portable to deployments where the real Neo4j MCP server process is running over stdio. In this project, no external MCP process is involved.
 
 ---
 
