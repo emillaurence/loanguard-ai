@@ -171,10 +171,11 @@ Each `Threshold` node has a `threshold_type` field that controls how the `evalua
 
 | Threshold ID | Metric | Type | Condition |
 |---|---|---|---|
-| THR-003 | Serviceability buffer | minimum | `assessment_rate - indicative_rate >= 3 percentage points` |
-| THR-006 | Non-salary income haircut | minimum | `non_salary_income_haircut_pct >= 20%` — only applies when `income_type != 'salary'` |
-| THR-007 | Rental income haircut | minimum | `rental_income_haircut_pct >= 20%` — only applies when `rental_income_gross` is present |
-| THR-008 | High LVR | trigger | `lvr >= 90%` — fires senior management review concern |
+| THR-001 | Serviceability buffer | minimum | `serviceability_interest_rate_buffer >= 3 percentage points` |
+| THR-002 | Credit card repayment rate | informational | `credit_card_revolving_debt_repayment_rate == 3%` — reference value only, excluded from verdict |
+| THR-003 | Non-salary income haircut | minimum | `income_haircut_non_salary >= 20%` — only applies when income type is non-salary |
+| THR-004 | Rental income haircut | minimum | `income_haircut_rental >= 20%` — only applies when `rental_income_gross` is present |
+| THR-005 | High LVR | trigger | `LVR >= 90%` — fires senior management review concern |
 
 ### Verdict logic
 
