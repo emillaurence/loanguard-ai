@@ -100,13 +100,13 @@ def retrieve_regulatory_chunks(
 
 @mcp.tool()
 def detect_graph_anomalies(
-    pattern_name: str,
+    pattern_names: list[str],
     entity_id: str = "",
 ) -> dict:
     """
-    Run a named rule-based anomaly detection pattern against the graph.
+    Run one or more anomaly detection patterns in a single call.
 
-    pattern_name values:
+    pattern_names values (pass as many as needed in one call):
       'transaction_structuring'  — sub-$10k suspicious transfers (finds ACC-0596)
       'high_lvr_loans'           — LVR >= 90 (finds LOAN-0002, LOAN-0013)
       'high_risk_industry'       — gambling/fin-assets (finds BRW-0624, BRW-0627)
@@ -115,10 +115,10 @@ def detect_graph_anomalies(
       'guarantor_concentration'  — guarantor on 2+ loans
 
     Args:
-        pattern_name: One of the pattern names listed above.
-        entity_id:    Optional — scope results to one entity where supported.
+        pattern_names: List of pattern names to run — batch all relevant ones.
+        entity_id:     Optional — scope results to one entity where supported.
     """
-    return _detect_graph_anomalies(pattern_name, entity_id)
+    return _detect_graph_anomalies(pattern_names, entity_id)
 
 
 @mcp.tool()

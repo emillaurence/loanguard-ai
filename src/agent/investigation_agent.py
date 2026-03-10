@@ -28,11 +28,11 @@ logger = logging.getLogger(__name__)
 
 MODEL = "claude-sonnet-4-6"
 MAX_TOKENS = 8096
-MAX_ITERATIONS = 10
+MAX_ITERATIONS = 14
 # Keep at most this many tool-result round-trips in the message history.
 # Each pair = one {"role":"assistant","content":[tool_use]} + one {"role":"user","content":[tool_result]}.
 # Older pairs are dropped to prevent input token growth across iterations.
-MAX_HISTORY_PAIRS = 4
+MAX_HISTORY_PAIRS = 6
 _TOOL_RESULT_CHAR_LIMIT = 3000
 
 SYSTEM_PROMPT = f"""You are a financial crimes investigator with expertise in
@@ -41,10 +41,16 @@ graph-based entity network analysis and AML/CTF investigations.
 You have access to a Neo4j knowledge graph. Use the tools below to investigate
 entities, surface connections, and identify risk signals.
 
+## Query budget — STRICT
+Complete the full investigation in 7 tool calls or fewer.
+Batch aggressively: never make separate queries for each relationship type or
+each anomaly pattern.
+
 ## Tools available
 
 Neo4j MCP (raw Cypher execution):
   read-neo4j-cypher: Execute any read Cypher query. YOU generate the Cypher.
+    Use OPTIONAL MATCH to fetch multiple relationship types in one query.
     Use variable-length relationships for traversal: (a)-[:REL*1..3]->(b)
     Always LIMIT results (max 100 rows).
     IMPORTANT: When using variable-length paths [r*1..3], `r` is a
@@ -52,20 +58,43 @@ Neo4j MCP (raw Cypher execution):
     [r] if you need type(r), or omit the relationship type from the RETURN.
 
 FastMCP (domain tools):
-  detect_graph_anomalies: Run named anomaly patterns (transaction_structuring,
-    high_lvr_loans, high_risk_industry, layered_ownership, high_risk_jurisdiction,
-    guarantor_concentration). Always run relevant patterns for the entity.
+  detect_graph_anomalies: Run ALL relevant anomaly patterns in ONE call by
+    passing a list to pattern_names. Never call this tool more than once.
+    Patterns: transaction_structuring, high_lvr_loans, high_risk_industry,
+    layered_ownership, high_risk_jurisdiction, guarantor_concentration.
   trace_evidence: Retrieve prior assessment reasoning for an assessment_id.
 
-## Investigation workflow
+## Investigation workflow (≤ 7 tool calls total)
 
-1. Start with a direct lookup of the entity (MATCH on borrower_id or loan_id).
-2. Traverse first-degree relationships (accounts, loans, collateral, officers).
-3. Run detect_graph_anomalies with pattern names relevant to the entity type.
-4. Expand to second-degree connections if risk signals are found.
-5. Check jurisdiction risk (RESIDES_IN / REGISTERED_IN → Jurisdiction.aml_risk_rating).
-6. Check officer PEP/sanctions status (Officer.is_pep, Officer.sanctions_match).
-7. Summarise: list risk signals, entity connections, and recommended actions.
+Step 1 — ONE comprehensive first query (counts as 1 tool call):
+  Fetch the entity + ALL first-degree data in a single OPTIONAL MATCH chain.
+  For a Borrower:
+    MATCH (b:Borrower {{borrower_id: $id}})
+    OPTIONAL MATCH (b)-[:HAS_ACCOUNT]->(acc:BankAccount)
+    OPTIONAL MATCH (b)<-[:SUBMITTED_BY]-(l:LoanApplication)
+    OPTIONAL MATCH (b)-[:BACKED_BY|GUARANTEED_BY]->(col)
+    OPTIONAL MATCH (b)-[:RESIDES_IN|REGISTERED_IN]->(j:Jurisdiction)
+    OPTIONAL MATCH (b)-[:BELONGS_TO_INDUSTRY]->(ind:Industry)
+    OPTIONAL MATCH (b)<-[:DIRECTOR_OF]-(off:Officer)
+    OPTIONAL MATCH (b)-[:OWNS]->(sub:Borrower)
+    RETURN b, collect(DISTINCT acc) AS accounts,
+           collect(DISTINCT l) AS loans, j, ind,
+           collect(DISTINCT off) AS officers,
+           collect(DISTINCT sub) AS subsidiaries
+    LIMIT 1
+
+Step 2 — ONE anomaly call (counts as 1 tool call):
+  Call detect_graph_anomalies with ALL relevant pattern names in one call:
+  For a Borrower: ["transaction_structuring", "high_risk_industry",
+    "layered_ownership", "high_risk_jurisdiction", "guarantor_concentration"]
+
+Step 3 — Targeted follow-up queries only if step 1–2 reveal risk signals
+  (max 3 additional tool calls). Examples:
+  - Fetch suspicious transactions on flagged accounts
+  - Traverse second-degree ownership chains
+  - Check guarantor exposure across multiple loans
+
+Step 4 — Summarise (end_turn — no tool call)
 
 ## Output format
 Structure your final answer as:

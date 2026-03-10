@@ -1,6 +1,6 @@
 """
 LoanGuard AI - Streamlit Application
-Intelligent loan compliance monitoring and risk investigation AI Agents powered by Neo4j and Claude.
+Intelligent loan compliance monitoring and risk investigation powered by Neo4j · Claude Model · OpenAI embeddings
 Mirrors the ipywidgets UI in notebooks/316_orchestrator_and_chat.ipynb.
 """
 from __future__ import annotations
@@ -10,6 +10,7 @@ import logging
 import re
 import sys
 import tempfile
+import time
 from pathlib import Path
 
 import streamlit as st
@@ -30,7 +31,7 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
     handlers=[
         logging.StreamHandler(),
-        logging.FileHandler(_LOG_FILE, mode="a", encoding="utf-8"),
+        logging.FileHandler(_LOG_FILE, mode="w", encoding="utf-8"),
     ],
 )
 logging.getLogger("httpx").setLevel(logging.WARNING)
@@ -122,24 +123,28 @@ FASTMCP_TOOL_DEFS = [
     {
         "name": "detect_graph_anomalies",
         "description": (
-            "Run a named rule-based anomaly pattern against the graph. "
-            "pattern_name values: 'transaction_structuring', 'high_lvr_loans', "
+            "Run one or more anomaly patterns in a single call — always batch all relevant patterns. "
+            "pattern_names values: 'transaction_structuring', 'high_lvr_loans', "
             "'high_risk_industry', 'layered_ownership', 'high_risk_jurisdiction', "
             "'guarantor_concentration'."
         ),
         "input_schema": {
             "type": "object",
             "properties": {
-                "pattern_name": {
-                    "type": "string",
-                    "enum": [
-                        "transaction_structuring", "high_lvr_loans", "high_risk_industry",
-                        "layered_ownership", "high_risk_jurisdiction", "guarantor_concentration",
-                    ],
+                "pattern_names": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "transaction_structuring", "high_lvr_loans", "high_risk_industry",
+                            "layered_ownership", "high_risk_jurisdiction", "guarantor_concentration",
+                        ],
+                    },
+                    "description": "List of patterns to run — pass all relevant ones in one call.",
                 },
                 "entity_id": {"type": "string", "default": "", "description": "Optional entity scope."},
             },
-            "required": ["pattern_name"],
+            "required": ["pattern_names"],
         },
     },
     {
@@ -1972,7 +1977,7 @@ def _render_error(error_str: str) -> None:
     st.error(msg)
 
 
-def render_response(resp) -> None:
+def render_response(resp, elapsed_s: float | None = None) -> None:
     """Render an InvestigationResponse in the Streamlit UI."""
     _verdict_badge(resp.verdict, resp.confidence)
 
@@ -2038,12 +2043,17 @@ def render_response(resp) -> None:
     _aid_list = getattr(resp, "assessment_ids", None) or (
         [resp.assessment_id] if resp.assessment_id else []
     )
+    footer_parts: list[str] = []
     if _aid_list:
         ids_html = " &nbsp;·&nbsp; ".join(
             f"<code>{html.escape(aid)}</code>" for aid in _aid_list
         )
+        footer_parts.append(f'Assessment{"s" if len(_aid_list) > 1 else ""} stored: {ids_html}')
+    if elapsed_s is not None:
+        footer_parts.append(f'⏱ {elapsed_s:.1f}s')
+    if footer_parts:
         st.markdown(
-            f'<div class="assess-footer">Assessment{"s" if len(_aid_list) > 1 else ""} stored: {ids_html}</div>',
+            f'<div class="assess-footer">{" &nbsp;&nbsp;·&nbsp;&nbsp; ".join(footer_parts)}</div>',
             unsafe_allow_html=True,
         )
 
@@ -2059,7 +2069,7 @@ st.set_page_config(
 _inject_css()
 
 st.title("LoanGuard AI")
-st.markdown("**Intelligent loan compliance monitoring and risk investigation AI Agents powered by Neo4j and Claude**")
+st.markdown("**Intelligent loan compliance monitoring and risk investigation powered by Neo4j · Claude Model · OpenAI embeddings**")
 st.caption("Multi-agent pipeline: Orchestrator → ComplianceAgent + InvestigationAgent")
 
 # Initialise on first load only — skip spinner/banner on subsequent reruns
@@ -2117,10 +2127,19 @@ submit_question = question if ask else (st.session_state.get("question_input", "
 if submit_question.strip():
     st.session_state.history.append({"role": "user", "content": submit_question.strip()})
     with st.spinner("Thinking…"):
+        _start = time.time()
         try:
             resp = orchestrator.run(submit_question.strip())
-            st.session_state.history.append({"role": "assistant", "content": resp})
+            _elapsed = round(time.time() - _start, 1)
+            logging.getLogger(__name__).info(
+                "Question completed in %.1fs: %s", _elapsed, submit_question.strip()[:80]
+            )
+            st.session_state.history.append({"role": "assistant", "content": resp, "elapsed_s": _elapsed})
         except Exception as e:
+            _elapsed = round(time.time() - _start, 1)
+            logging.getLogger(__name__).info(
+                "Question failed after %.1fs: %s", _elapsed, submit_question.strip()[:80]
+            )
             st.session_state.history.append({"role": "assistant", "content": None, "error": str(e)})
     st.session_state["_clear_input"] = True
     st.rerun()
@@ -2141,4 +2160,4 @@ for _user_msg, _asst_msg in reversed(_pairs):
             if _asst_msg.get("error"):
                 _render_error(_asst_msg["error"])
             else:
-                render_response(_asst_msg["content"])
+                render_response(_asst_msg["content"], elapsed_s=_asst_msg.get("elapsed_s"))

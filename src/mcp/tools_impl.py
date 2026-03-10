@@ -109,45 +109,17 @@ def retrieve_regulatory_chunks(
 # ---------------------------------------------------------------------------
 
 def detect_graph_anomalies(
-    pattern_name: str,
+    pattern_names: list[str],
     entity_id: str = "",
 ) -> dict:
-    """Run a named rule-based anomaly detection pattern against the graph."""
-    if pattern_name not in ANOMALY_REGISTRY:
+    """Run one or more named anomaly detection patterns and return combined results."""
+    valid = set(ANOMALY_REGISTRY.keys())
+    unknown = [p for p in pattern_names if p not in valid]
+    if unknown:
         return {
-            "error": f"Unknown pattern '{pattern_name}'.",
-            "valid_patterns": list(ANOMALY_REGISTRY.keys()),
+            "error": f"Unknown pattern(s): {unknown}.",
+            "valid_patterns": list(valid),
         }
-
-    spec = ANOMALY_REGISTRY[pattern_name]
-    cypher = spec["cypher"]
-    params: dict = {}
-
-    if entity_id:
-        if pattern_name == "high_lvr_loans":
-            cypher = cypher.replace(
-                "MATCH (l:LoanApplication)",
-                "MATCH (l:LoanApplication {loan_id: $eid})",
-            )
-            params["eid"] = entity_id
-        elif pattern_name in (
-            "high_risk_industry", "guarantor_concentration",
-            "high_risk_jurisdiction", "layered_ownership",
-        ):
-            cypher = cypher.replace(
-                "MATCH (b:Borrower)",
-                "MATCH (b:Borrower {borrower_id: $eid})",
-            )
-            params["eid"] = entity_id
-
-    conn = _get_conn()
-    try:
-        rows = conn.run_query(cypher, params)
-    except Exception as e:
-        logger.error("Anomaly pattern %s failed: %s", pattern_name, e)
-        rows = []
-    finally:
-        conn.close()
 
     id_keys = {
         "transaction_structuring": "target_account",
@@ -157,17 +129,53 @@ def detect_graph_anomalies(
         "high_risk_jurisdiction":  "borrower_id",
         "guarantor_concentration": "borrower_id",
     }
-    id_key = id_keys.get(pattern_name, "")
-    entity_ids = [str(r[id_key]) for r in rows if r.get(id_key) is not None]
 
-    return {
-        "pattern_name": pattern_name,
-        "severity": spec["severity"],
-        "description": spec["description"],
-        "finding_count": len(rows),
-        "findings": rows,
-        "entity_ids": entity_ids,
-    }
+    conn = _get_conn()
+    results: list[dict] = []
+    try:
+        for pattern_name in pattern_names:
+            spec   = ANOMALY_REGISTRY[pattern_name]
+            cypher = spec["cypher"]
+            params: dict = {}
+
+            if entity_id:
+                if pattern_name == "high_lvr_loans":
+                    cypher = cypher.replace(
+                        "MATCH (l:LoanApplication)",
+                        "MATCH (l:LoanApplication {loan_id: $eid})",
+                    )
+                    params["eid"] = entity_id
+                elif pattern_name in (
+                    "high_risk_industry", "guarantor_concentration",
+                    "high_risk_jurisdiction", "layered_ownership",
+                ):
+                    cypher = cypher.replace(
+                        "MATCH (b:Borrower)",
+                        "MATCH (b:Borrower {borrower_id: $eid})",
+                    )
+                    params["eid"] = entity_id
+
+            try:
+                rows = conn.run_query(cypher, params)
+            except Exception as e:
+                logger.error("Anomaly pattern %s failed: %s", pattern_name, e)
+                rows = []
+
+            id_key     = id_keys.get(pattern_name, "")
+            entity_ids = [str(r[id_key]) for r in rows if r.get(id_key) is not None]
+            results.append({
+                "pattern_name":  pattern_name,
+                "severity":      spec["severity"],
+                "description":   spec["description"],
+                "finding_count": len(rows),
+                "findings":      rows,
+                "entity_ids":    entity_ids,
+            })
+    finally:
+        conn.close()
+
+    total = sum(r["finding_count"] for r in results)
+    return {"patterns_run": len(results), "total_findings": total, "results": results}
 
 
 # ---------------------------------------------------------------------------
