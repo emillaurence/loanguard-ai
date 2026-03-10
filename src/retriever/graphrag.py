@@ -14,10 +14,9 @@ Typical use:
 from __future__ import annotations
 import json
 import logging
-import os
 from typing import Any, TYPE_CHECKING
 
-import anthropic
+from src.agent.config import MODEL, make_anthropic_client
 
 if TYPE_CHECKING:
     from src.graph.connection import Neo4jConnection
@@ -64,11 +63,11 @@ class GraphRAGRetriever:
     def __init__(
         self,
         neo4j_conn: "Neo4jConnection",
-        model: str = "claude-sonnet-4-6",
+        model: str = MODEL,
     ) -> None:
         self.conn = neo4j_conn
         self.model = model
-        self.client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+        self.client = make_anthropic_client()
 
     # ------------------------------------------------------------------
     # Public API

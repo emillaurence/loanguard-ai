@@ -20,7 +20,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
-from src.mcp.schema import ANOMALY_REGISTRY, AnomalyFinding
+from src.mcp.schema import ANOMALY_REGISTRY, AnomalyFinding, SEV_ORDER
 
 if TYPE_CHECKING:
     from src.graph.connection import Neo4jConnection
@@ -117,7 +117,6 @@ class AnomalyDetector:
             List of AnomalyFinding objects where evidence is non-empty,
             ordered HIGH → MEDIUM → LOW.
         """
-        severity_order = {"HIGH": 0, "MEDIUM": 1, "LOW": 2}
         results: list[AnomalyFinding] = []
 
         for pattern_name in ANOMALY_REGISTRY:
@@ -130,7 +129,7 @@ class AnomalyDetector:
             else:
                 logger.debug("Pattern %s: no findings", pattern_name)
 
-        results.sort(key=lambda f: severity_order.get(f.severity, 9))
+        results.sort(key=lambda f: SEV_ORDER.get(f.severity, 9))
         return results
 
     def run_for_entity(self, entity_id: str, entity_type: str) -> list[AnomalyFinding]:

@@ -11,6 +11,7 @@ import pytest
 from unittest.mock import MagicMock, patch, call
 
 from src.agent.compliance_agent import ComplianceAgent
+from src.agent.utils import extract_text
 from src.mcp.schema import ComplianceResult
 
 
@@ -181,13 +182,13 @@ class TestExtractText:
         block.text = "Hello compliance world"
         response = MagicMock()
         response.content = [block]
-        assert ComplianceAgent._extract_text(response) == "Hello compliance world"
+        assert extract_text(response) == "Hello compliance world"
 
     def test_returns_empty_if_no_text(self):
         block = MagicMock(spec=[])  # no .text attribute
         response = MagicMock()
         response.content = [block]
-        result = ComplianceAgent._extract_text(response)
+        result = extract_text(response)
         assert result == ""
 
 

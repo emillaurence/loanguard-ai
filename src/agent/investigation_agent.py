@@ -16,14 +16,13 @@ from __future__ import annotations
 
 import json
 import logging
-import os
-import time
 from typing import Any
 
 import anthropic
 
 from src.agent._security import guard_tool_result
-from src.agent.config import MODEL, MAX_TOKENS, TOOL_RESULT_CHAR_LIMIT
+from src.agent.config import MODEL, MAX_TOKENS, TOOL_RESULT_CHAR_LIMIT, make_anthropic_client
+from src.agent.utils import call_claude_with_retry, extract_text, trim_message_history
 from src.mcp.schema import GRAPH_SCHEMA_HINT, PATTERN_HINTS, InvestigationResult
 
 logger = logging.getLogger(__name__)
@@ -135,7 +134,7 @@ class InvestigationAgent:
         self.execute_tool = execute_tool_fn
         self.model = model
         self.max_tokens = max_tokens
-        self.client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+        self.client = make_anthropic_client()
 
     def run(self, question: str) -> InvestigationResult:
         """
@@ -156,38 +155,19 @@ class InvestigationAgent:
 
         while iterations < MAX_ITERATIONS:
             iterations += 1
-            for attempt in range(3):
-                try:
-                    response = self.client.messages.create(
-                        model=self.model,
-                        max_tokens=self.max_tokens,
-                        system=[{"type": "text", "text": SYSTEM_PROMPT,
-                                 "cache_control": {"type": "ephemeral"}}],
-                        tools=self.tools,
-                        messages=messages,
-                        temperature=0,
-                    )
-                    break
-                except anthropic.RateLimitError as e:
-                    if attempt < 2:
-                        # Prefer API retry-after; fallback to capped exponential backoff (30s, 60s)
-                        retry_after = None
-                        try:
-                            h = getattr(e, "response", None) and getattr(e.response, "headers", None)
-                            if h:
-                                retry_after = h.get("retry-after")
-                                if retry_after is not None:
-                                    retry_after = min(int(float(retry_after)), 120)
-                        except (TypeError, ValueError):
-                            pass
-                        wait = retry_after if retry_after is not None else min(30 * (2**attempt), 120)
-                        logger.warning("Rate limited — waiting %ds (attempt %d/3)", wait, attempt + 1)
-                        time.sleep(wait)
-                    else:
-                        raise
+            response = call_claude_with_retry(
+                self.client,
+                model=self.model,
+                max_tokens=self.max_tokens,
+                system=[{"type": "text", "text": SYSTEM_PROMPT,
+                         "cache_control": {"type": "ephemeral"}}],
+                tools=self.tools,
+                messages=messages,
+                temperature=0,
+            )
 
             if response.stop_reason == "end_turn":
-                final_text = self._extract_text(response)
+                final_text = extract_text(response)
                 break
 
             if response.stop_reason == "tool_use":
@@ -210,17 +190,7 @@ class InvestigationAgent:
                         })
                 messages.append({"role": "user", "content": tool_results})
 
-                # Trim history to MAX_HISTORY_PAIRS to prevent input token growth.
-                # Always keep messages[0] (initial user question) + the last N pairs.
-                # Must preserve tool_use/tool_result pairs to avoid API errors.
-                max_msgs = 1 + MAX_HISTORY_PAIRS * 2
-                if len(messages) > max_msgs:
-                    tail = messages[-(MAX_HISTORY_PAIRS * 2):]
-                    # If tail starts with a user/tool_result, its assistant/tool_use was
-                    # trimmed off — drop it to avoid orphaned tool_result blocks.
-                    if tail[0].get("role") == "user":
-                        tail = tail[1:]
-                    messages = [messages[0]] + tail
+                messages = trim_message_history(messages, MAX_HISTORY_PAIRS)
 
                 continue
 
@@ -228,13 +198,6 @@ class InvestigationAgent:
             break
 
         return self._parse_result(final_text, cypher_used)
-
-    @staticmethod
-    def _extract_text(response: anthropic.types.Message) -> str:
-        for block in response.content:
-            if hasattr(block, "text"):
-                return block.text
-        return ""
 
     @staticmethod
     def _parse_result(text: str, cypher_used: list[str]) -> InvestigationResult:

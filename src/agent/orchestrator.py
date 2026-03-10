@@ -16,20 +16,16 @@ from __future__ import annotations
 
 import json
 import logging
-import os
 import uuid
 from typing import Any
 
-import anthropic
-
 from src.agent.compliance_agent import ComplianceAgent
-from src.agent.config import MODEL
+from src.agent.config import MODEL, make_anthropic_client
 from src.agent.investigation_agent import InvestigationAgent
-from src.mcp.schema import GRAPH_SCHEMA_HINT, InvestigationResponse
+from src.document.utils import strip_fences
+from src.mcp.schema import GRAPH_SCHEMA_HINT, InvestigationResponse, SEV_ORDER, VERDICT_PRIORITY
 
 logger = logging.getLogger(__name__)
-
-_SEV_ORDER: dict[str, int] = {"HIGH": 0, "MEDIUM": 1, "LOW": 2, "INFO": 3}
 
 # ---------------------------------------------------------------------------
 # Routing prompt
@@ -143,7 +139,7 @@ class Orchestrator:
         self.tools = tools
         self.execute_tool = execute_tool_fn
         self.model = model
-        self.client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+        self.client = make_anthropic_client()
         self._compliance_agent = ComplianceAgent(tools, execute_tool_fn, model)
         self._investigation_agent = InvestigationAgent(tools, execute_tool_fn, model)
         self._graph_regulation_ids: list[str] = self._fetch_regulation_ids()
@@ -225,14 +221,6 @@ class Orchestrator:
         Verdict is the worst-case across all assessments:
           NON_COMPLIANT > REQUIRES_REVIEW > ANOMALY_DETECTED > COMPLIANT > INFORMATIONAL
         """
-        _VERDICT_PRIORITY = {
-            "NON_COMPLIANT": 4,
-            "REQUIRES_REVIEW": 3,
-            "ANOMALY_DETECTED": 2,
-            "COMPLIANT": 1,
-            "INFORMATIONAL": 0,
-        }
-
         try:
             # Fetch findings across all assessments
             findings_result = self.execute_tool(
@@ -295,7 +283,7 @@ class Orchestrator:
             confidences: list[float] = []
             for m in meta_rows:
                 v = (m.get("verdict") or "INFORMATIONAL").upper()
-                if _VERDICT_PRIORITY.get(v, 0) > _VERDICT_PRIORITY.get(best_verdict, 0):
+                if VERDICT_PRIORITY.get(v, 0) > VERDICT_PRIORITY.get(best_verdict, 0):
                     best_verdict = v
                 if m.get("confidence") is not None:
                     confidences.append(float(m["confidence"]))
@@ -321,13 +309,8 @@ class Orchestrator:
             messages=[{"role": "user", "content": question}],
             temperature=0,
         )
-        text = resp.content[0].text.strip()
+        text = strip_fences(resp.content[0].text)
         try:
-            # Strip any accidental markdown fences
-            if text.startswith("```"):
-                text = text.split("```")[1]
-                if text.startswith("json"):
-                    text = text[4:]
             return json.loads(text)
         except json.JSONDecodeError:
             logger.warning("Routing returned non-JSON: %s", text)
@@ -423,7 +406,7 @@ class Orchestrator:
                     })
 
             # Sort findings HIGH → MEDIUM → LOW → INFO for synthesis context
-            all_findings.sort(key=lambda f: _SEV_ORDER.get(f.get("severity", "INFO"), 3))
+            all_findings.sort(key=lambda f: SEV_ORDER.get(f.get("severity", "INFO"), 3))
 
             findings_lines = "\n".join(
                 f"  [{f.get('severity', 'INFO')}] {f.get('description', '')}"
@@ -483,7 +466,7 @@ class Orchestrator:
                     "regulation_id": _reg_id,
                 })
             # Re-sort after adding investigation findings
-            all_findings.sort(key=lambda f: _SEV_ORDER.get(f.get("severity", "INFO"), 3))
+            all_findings.sort(key=lambda f: SEV_ORDER.get(f.get("severity", "INFO"), 3))
             inv_findings_lines = "\n".join(
                 f"  [{f.get('severity', 'INFO')}] {f.get('description', '')}"
                 for f in all_findings

@@ -47,6 +47,7 @@ logging.getLogger(__name__).info("Log file: %s", _LOG_FILE)
 
 # ── Tool definitions ─────────────────────────────────────────────────────────
 from src.mcp.tool_defs import FASTMCP_TOOL_DEFS, NEO4J_MCP_TOOLS, TOOLS  # noqa: E402
+from src.mcp.schema import SEV_ORDER  # noqa: E402
 
 EXAMPLES = [
     "Is LOAN-0002 compliant with APG-223?",
@@ -470,8 +471,7 @@ def _render_findings(findings: list[dict]) -> None:
         st.markdown("*No findings.*")
         return
 
-    _sev_order = {"HIGH": 0, "MEDIUM": 1, "LOW": 2, "INFO": 3}
-    sorted_findings = sorted(findings, key=lambda f: _sev_order.get(f.get("severity") or "INFO", 3))
+    sorted_findings = sorted(findings, key=lambda f: SEV_ORDER.get(f.get("severity") or "INFO", 3))
 
     cards_html = ""
     for f in sorted_findings:
@@ -714,6 +714,27 @@ def _fetch_finding_subgraph(
     }
 
 
+def _fetch_suspicious_txns(conn, borrower_id: str, limit: int = 5) -> list[dict]:
+    """Return flagged suspicious transactions for a borrower across all their accounts."""
+    return conn.run_query(
+        """
+        MATCH (b:Borrower {borrower_id: $bid})-[:HAS_ACCOUNT]->(acc:BankAccount)
+        MATCH (t:Transaction)
+        WHERE (t.from_account_id = acc.account_id OR t.to_account_id = acc.account_id)
+          AND t.flagged_suspicious = true
+        RETURN t.transaction_id AS transaction_id,
+               t.amount         AS amount,
+               t.currency       AS currency,
+               t.date           AS date,
+               t.type           AS type,
+               t.description    AS description
+        ORDER BY t.date DESC
+        LIMIT $limit
+        """,
+        {"bid": borrower_id, "limit": limit},
+    )
+
+
 @st.cache_data(ttl=300)
 def _fetch_entity_profile(entity_ids: tuple[str, ...]) -> dict:
     """Fetch Layer 1 entity profile data from Neo4j for each entity ID."""
@@ -752,23 +773,7 @@ def _fetch_entity_profile(entity_ids: tuple[str, ...]) -> dict:
             borrower_id = (row.get("borrower") or {}).get("borrower_id")
             suspicious: list[dict] = []
             if borrower_id:
-                suspicious = conn.run_query(
-                    """
-                    MATCH (b:Borrower {borrower_id: $bid})-[:HAS_ACCOUNT]->(acc:BankAccount)
-                    MATCH (t:Transaction)
-                    WHERE (t.from_account_id = acc.account_id OR t.to_account_id = acc.account_id)
-                      AND t.flagged_suspicious = true
-                    RETURN t.transaction_id AS transaction_id,
-                           t.amount         AS amount,
-                           t.currency       AS currency,
-                           t.date           AS date,
-                           t.type           AS type,
-                           t.description    AS description
-                    ORDER BY t.date DESC
-                    LIMIT 5
-                    """,
-                    {"bid": borrower_id},
-                )
+                suspicious = _fetch_suspicious_txns(conn, borrower_id)
             guarantors_basic = [g for g in (row.get("guarantors") or []) if g]
 
             # Fetch full BRW-* profile for each guarantor
@@ -800,23 +805,7 @@ def _fetch_entity_profile(entity_ids: tuple[str, ...]) -> dict:
                 if not g_rows:
                     continue
                 g_row = g_rows[0]
-                g_suspicious = conn.run_query(
-                    """
-                    MATCH (b:Borrower {borrower_id: $bid})-[:HAS_ACCOUNT]->(acc:BankAccount)
-                    MATCH (t:Transaction)
-                    WHERE (t.from_account_id = acc.account_id OR t.to_account_id = acc.account_id)
-                      AND t.flagged_suspicious = true
-                    RETURN t.transaction_id AS transaction_id,
-                           t.amount         AS amount,
-                           t.currency       AS currency,
-                           t.date           AS date,
-                           t.type           AS type,
-                           t.description    AS description
-                    ORDER BY t.date DESC
-                    LIMIT 5
-                    """,
-                    {"bid": g_id},
-                )
+                g_suspicious = _fetch_suspicious_txns(conn, g_id)
                 guarantor_profiles.append({
                     "entity_type":            "Borrower",
                     "borrower":               g_row.get("borrower") or {},
@@ -868,23 +857,7 @@ def _fetch_entity_profile(entity_ids: tuple[str, ...]) -> dict:
             if not rows:
                 continue
             row = rows[0]
-            suspicious = conn.run_query(
-                """
-                MATCH (b:Borrower {borrower_id: $bid})-[:HAS_ACCOUNT]->(acc:BankAccount)
-                MATCH (t:Transaction)
-                WHERE (t.from_account_id = acc.account_id OR t.to_account_id = acc.account_id)
-                  AND t.flagged_suspicious = true
-                RETURN t.transaction_id AS transaction_id,
-                       t.amount         AS amount,
-                       t.currency       AS currency,
-                       t.date           AS date,
-                       t.type           AS type,
-                       t.description    AS description
-                ORDER BY t.date DESC
-                LIMIT 5
-                """,
-                {"bid": eid},
-            )
+            suspicious = _fetch_suspicious_txns(conn, eid)
             profile[eid] = {
                 "entity_type":            "Borrower",
                 "borrower":               row.get("borrower") or {},
@@ -1818,11 +1791,10 @@ def render_response(resp, elapsed_s: float | None = None) -> None:
             _render_evidence(resp.cited_sections or [], resp.cited_chunks or [], chart_key=f"evidence_graph_{resp.session_id}")
 
     if resp.findings:
-        _sev_order = {"HIGH": 0, "MEDIUM": 1, "LOW": 2, "INFO": 3}
         _sev_emoji = {"HIGH": "🔴", "MEDIUM": "🟡", "LOW": "🟢", "INFO": "🔵"}
         _sev_css   = {"HIGH": "var(--sev-HIGH-fg)", "MEDIUM": "var(--sev-MEDIUM-fg)",
                       "LOW": "var(--sev-LOW-fg)", "INFO": "var(--sev-INFO-fg)"}
-        top_sev = min(resp.findings, key=lambda f: _sev_order.get(f.get("severity") or "INFO", 3)).get("severity") or "INFO"
+        top_sev = min(resp.findings, key=lambda f: SEV_ORDER.get(f.get("severity") or "INFO", 3)).get("severity") or "INFO"
         emoji   = _sev_emoji.get(top_sev, "")
         colour  = _sev_css.get(top_sev, "var(--text-secondary)")
         st.markdown(

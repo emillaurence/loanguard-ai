@@ -22,9 +22,8 @@ def mock_neo4j_conn():
 
 @pytest.fixture
 def mock_anthropic_client():
-    with patch("src.retriever.graphrag.anthropic.Anthropic") as mock_cls:
-        mock_client = MagicMock()
-        mock_cls.return_value = mock_client
+    mock_client = MagicMock()
+    with patch("src.retriever.graphrag.make_anthropic_client", return_value=mock_client):
         yield mock_client
 
 

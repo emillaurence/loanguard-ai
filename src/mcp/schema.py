@@ -199,11 +199,25 @@ class Verdict(StrEnum):
     INFORMATIONAL    = "INFORMATIONAL"
 
 
+# Worst-case ordering for verdict aggregation (higher = worse).
+VERDICT_PRIORITY: dict[str, int] = {
+    "NON_COMPLIANT":    4,
+    "REQUIRES_REVIEW":  3,
+    "ANOMALY_DETECTED": 2,
+    "COMPLIANT":        1,
+    "INFORMATIONAL":    0,
+}
+
+
 class Severity(StrEnum):
     HIGH   = "HIGH"
     MEDIUM = "MEDIUM"
     LOW    = "LOW"
     INFO   = "INFO"
+
+
+# Sort order for severity: lower number = higher priority in display/sort.
+SEV_ORDER: dict[str, int] = {"HIGH": 0, "MEDIUM": 1, "LOW": 2, "INFO": 3}
 
 
 # ---------------------------------------------------------------------------
