@@ -201,7 +201,7 @@ The Orchestrator constructs both specialist agents and owns the full session lif
 
 ### 2. ComplianceAgent (`src/agent/compliance_agent.py`)
 
-The ComplianceAgent runs an agentic loop (up to 10 iterations) against Claude's tool-use API. Its required workflow, in order:
+The ComplianceAgent runs an agentic loop (up to 8 iterations) against Claude's tool-use API. Its required workflow, in order:
 
 1. **`traverse_compliance_path`** — retrieves the regulatory subgraph including all `Threshold` nodes with their `threshold_type` field
 2. **`evaluate_thresholds`** — filters out `informational` thresholds and conditional N/A cases, evaluates all remaining thresholds as PASS / BREACH / TRIGGER
@@ -217,7 +217,7 @@ messages = [{role: user, content: query}]
       ▼
 ┌─────────────────────────────────────────┐
 │              AGENTIC LOOP               │
-│           (max 10 iterations)           │
+│           (max 8 iterations)            │
 │                                         │
 │  Claude API (temperature=0)             │
 │        │                                │
@@ -340,7 +340,7 @@ Evaluates a list of threshold definitions against an entity's stored property va
 
 **Returns:** A list of evaluation results. Each result includes the `threshold_id`, `metric`, `threshold_type`, `result` (PASS / BREACH / TRIGGER / N/A), and a `reason` string explaining the evaluation.
 
-`informational` thresholds always return N/A and are excluded from verdict aggregation. Conditional thresholds (e.g. THR-006 which only applies when `income_type != 'salary'`) return N/A when the condition is not met.
+`informational` thresholds always return N/A and are excluded from verdict aggregation. Conditional thresholds (e.g. THR-003 which only applies when `income_type != 'salary'`) return N/A when the condition is not met.
 
 ### Simulated Neo4j MCP tools: `read-neo4j-cypher` and `write-neo4j-cypher`
 
@@ -370,28 +370,28 @@ Every `Threshold` node in Layer 2 carries a `threshold_type` field. This is the 
 
 **`minimum`** — The entity's measured value must meet or equal the threshold value. Failing to meet the minimum constitutes a breach.
 
-- Example: `APG-223-THR-003` — `serviceability_interest_rate_buffer >= 3.0 percent`
+- Example: `APG-223-THR-001` — `serviceability_interest_rate_buffer >= 3.0 percent`
   - The buffer is computed as `serviceability_assessment_rate - interest_rate_indicative`
   - If the buffer is 2.5 percentage points, this is a BREACH → NON_COMPLIANT
-- Example: `APG-223-THR-006` — `non_salary_income_haircut >= 20%`
+- Example: `APG-223-THR-003` — `income_haircut_non_salary >= 20%`
   - Only evaluated when `income_type` is not `salary`
   - Returns N/A for pure salary borrowers
 
 **`maximum`** — The entity's measured value must not exceed the threshold value. Exceeding it constitutes a breach.
 
-- Example: `APG-223-THR-001` — `risk_management_framework_review_frequency <= 3 years`
-  - An ADI that has not reviewed its framework within three years is in breach
-- Example: `APG-223-THR-002` — `serviceability_policy_review_frequency <= 1 year`
+- Example: `APS-112-THR-087` — `single_asset_concentration <= 25.0 percent`
+  - An ADI whose exposure to a single asset exceeds 25% of the portfolio is in breach
+- Example: APS-112 large exposure limits — maximum percentage of capital to any single counterparty
 
 **`trigger`** — The threshold fires a monitoring concern when the condition is met. Unlike minimum/maximum, a trigger does not itself constitute a breach — it escalates the verdict to REQUIRES_REVIEW and generates a finding that senior management review has been triggered.
 
-- Example: `APG-223-THR-008` — `LVR >= 90.0 percent`
+- Example: `APG-223-THR-005` — `LVR >= 90.0 percent`
   - When LVR is at or above 90%, per APG-223 this requires senior management review with Board oversight
   - The loan is not automatically NON_COMPLIANT, but cannot be COMPLIANT — it is REQUIRES_REVIEW
 
 **`informational`** — An ADI-level reference value used in calculations, not a pass/fail gate for individual loan applications. These are excluded from verdict logic entirely.
 
-- Example: `APG-223-THR-004` — `credit_card_revolving_debt_repayment_rate == 3.0 percent per month`
+- Example: `APG-223-THR-002` — `credit_card_revolving_debt_repayment_rate == 3.0 percent per month`
   - This is an example of a suitably prudent approach, not a binding per-loan limit
 - Example: APS-112 risk weight tables — lookup values for capital calculation, not per-loan thresholds
 
@@ -419,7 +419,7 @@ The `ANOMALY_REGISTRY` in `src/mcp/schema.py` is the single source of truth for 
 | Pattern name | Severity | Description |
 |---|---|---|
 | `transaction_structuring` | HIGH | Multiple sub-$10,000 suspicious transfers flowing into the same bank account from distinct sources — consistent with structuring to avoid AUSTRAC threshold reporting obligations |
-| `high_lvr_loans` | HIGH | Loan applications with LVR >= 90%, linked to APG-223-THR-008, requiring senior management review |
+| `high_lvr_loans` | HIGH | Loan applications with LVR >= 90%, linked to APG-223-THR-005, requiring senior management review |
 | `high_risk_industry` | MEDIUM | Borrowers operating in industries with high AML sensitivity: Gambling (IND-9530), Financial Asset Investing (IND-6240), Liquor & Tobacco Wholesaling (IND-5120) |
 | `layered_ownership` | MEDIUM | Multi-hop OWNS chains of depth 2 or more, which may be used to obscure beneficial controllers or aggregate exposure across related entities |
 | `high_risk_jurisdiction` | HIGH | Borrowers residing in or registered in jurisdictions with `aml_risk_rating = 'high'`: Vanuatu (JUR-VU), Myanmar (JUR-MM), Cambodia (JUR-KH) |
@@ -496,6 +496,24 @@ class AnomalyPattern:
 
 `dict[str, AnomalyPattern]` — keys are snake_case pattern names used as the argument to `detect_graph_anomalies`. The registry is the authoritative list of what patterns exist; `PATTERN_HINTS` is auto-generated from it.
 
+### SEV_ORDER and VERDICT_PRIORITY
+
+Two module-level dicts in `src/mcp/schema.py` used for deterministic sorting and aggregation:
+
+```python
+SEV_ORDER: dict[str, int] = {"HIGH": 0, "MEDIUM": 1, "LOW": 2, "INFO": 3}
+
+VERDICT_PRIORITY: dict[str, int] = {
+    "NON_COMPLIANT":    4,
+    "REQUIRES_REVIEW":  3,
+    "ANOMALY_DETECTED": 2,
+    "COMPLIANT":        1,
+    "INFORMATIONAL":    0,
+}
+```
+
+The Orchestrator uses `VERDICT_PRIORITY` to aggregate the worst-case verdict across multiple assessments. `SEV_ORDER` is used to sort findings for display (HIGH first). Both are imported directly from `schema.py` — do not redefine them in agent or UI code.
+
 ### GRAPH_SCHEMA_HINT
 
 A multi-line string injected into every agent system prompt. It documents all node labels, properties, relationship types, and Cypher best practices, enabling Claude to generate valid Cypher queries without a separate schema lookup on every turn.
@@ -519,15 +537,23 @@ The `ComplianceAgent` marks its system prompt with `cache_control: ephemeral`. B
 
 ### Context windowing
 
-The agent message history is windowed to the last 4 message pairs before each Claude API call. This keeps the effective context size bounded regardless of how many tool calls have occurred in the session, preventing runaway token costs.
+Agent message history is windowed before each Claude API call to keep the effective context size bounded regardless of how many tool calls have occurred. `ComplianceAgent` retains the last 4 message pairs; `InvestigationAgent` retains the last 6 message pairs (reflecting its larger tool-call budget). Both agents always preserve the initial user question as `messages[0]`.
 
 ### Tool result truncation
 
 Every tool result is truncated to 3,000 characters before being appended to the message history. This prevents large Neo4j query results from consuming the context window. The truncation happens inside the tool dispatch logic before `guard_tool_result()` is called.
 
+### Shared agent utilities (`src/agent/utils.py`)
+
+Three utility functions are centralised here and imported by both specialist agents:
+
+- `call_claude_with_retry(client, **kwargs)` — wraps `client.messages.create` with up to 3 retry attempts on `RateLimitError`. Reads the `retry-after` response header when present; falls back to capped exponential backoff (30 s, 60 s, max 120 s).
+- `extract_text(response)` — returns the first text block from a Claude response, or an empty string when the response contains only tool-use blocks.
+- `trim_message_history(messages, max_pairs)` — trims to `max_pairs` tool-use/tool-result round-trips while always preserving `messages[0]` (the initial user question) and avoiding orphaned tool-result blocks.
+
 ### Rate limiting with exponential backoff
 
-All Claude API calls are wrapped with retry logic. On a rate limit error (HTTP 429), the code reads the `retry-after` response header if present; otherwise it uses exponential backoff with jitter. This prevents cascading failures under load.
+All Claude API calls are wrapped with retry logic via `call_claude_with_retry`. On a rate limit error (HTTP 429), the code reads the `retry-after` response header if present; otherwise it uses exponential backoff (30 s, 60 s, max 120 s). This prevents cascading failures under load.
 
 ### Streaming for long-running calls
 

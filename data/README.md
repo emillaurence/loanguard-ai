@@ -48,13 +48,13 @@ The central entity for compliance analysis. Each row is one loan application.
 | `submission_date` | date | Date the application was submitted |
 | `status` | str | Application status (e.g. `under_review`) |
 | `description` | str | Free-text description |
-| `serviceability_assessment_rate` | float | The rate used in the serviceability test — must exceed `interest_rate_indicative` by at least 3 percentage points (APG-223-THR-003) |
+| `serviceability_assessment_rate` | float | The rate used in the serviceability test — must exceed `interest_rate_indicative` by at least 3 percentage points (APG-223-THR-001) |
 | `income_type` | str | Borrower income type: `salary`, `self_employed`, `mixed`, or `rental` — determines which income haircut thresholds apply |
 | `non_salary_income_haircut_pct` | float (nullable) | Percentage haircut applied to non-salary income; present only when `income_type != 'salary'` |
 | `rental_income_gross` | float (nullable) | Gross annual rental income in AUD; present only when rental income exists |
 | `rental_income_haircut_pct` | float (nullable) | Percentage haircut applied to rental income; present only when `rental_income_gross` is present |
 
-The `serviceability_*`, `income_type`, `non_salary_income_*`, and `rental_income_*` fields are the serviceability fields added to support APG-223 threshold evaluation. They are the entity-side values that the `evaluate_thresholds` tool reads when assessing THR-003, THR-006, THR-007, and THR-008.
+The `serviceability_*`, `income_type`, `non_salary_income_*`, and `rental_income_*` fields are the serviceability fields added to support APG-223 threshold evaluation. They are the entity-side values that the `evaluate_thresholds` tool reads when assessing THR-001, THR-003, THR-004, and THR-005.
 
 #### `borrowers.csv`
 
@@ -229,16 +229,16 @@ The `threshold_type` column is the key design feature. It classifies how each th
 | `trigger` | Condition fires a monitoring concern | REQUIRES_REVIEW when true, no effect otherwise |
 | `informational` | ADI-level reference value, not a per-entity gate | Always N/A — excluded from verdict logic |
 
-The `condition_context` column is a JSON string describing applicability conditions. For example, `APG-223-THR-006` includes `{"applies_to": "non_salary_income"}` — when the loan's `income_type` is `salary`, this threshold is N/A for that loan.
+The `condition_context` column is a JSON string describing applicability conditions. For example, `APG-223-THR-003` includes `{"applies_to": "non_salary_income"}` — when the loan's `income_type` is `salary`, this threshold is N/A for that loan.
 
 Key APG-223 thresholds for loan evaluation:
 
 | Threshold ID | Metric | Type | Rule |
 |---|---|---|---|
-| `APG-223-THR-003` | `serviceability_interest_rate_buffer` | minimum | Buffer = `serviceability_assessment_rate - interest_rate_indicative` must be >= 3.0 percentage points |
-| `APG-223-THR-006` | `non_salary_income_haircut` | minimum | `non_salary_income_haircut_pct` must be >= 20% when `income_type != 'salary'` |
-| `APG-223-THR-007` | `rental_income_haircut` | minimum | `rental_income_haircut_pct` must be >= 20% when `rental_income_gross` is present |
-| `APG-223-THR-008` | `LVR` | trigger | LVR >= 90% fires senior management review concern |
+| `APG-223-THR-001` | `serviceability_interest_rate_buffer` | minimum | Buffer = `serviceability_assessment_rate - interest_rate_indicative` must be >= 3.0 percentage points |
+| `APG-223-THR-003` | `non_salary_income_haircut` | minimum | `non_salary_income_haircut_pct` must be >= 20% when `income_type != 'salary'` |
+| `APG-223-THR-004` | `rental_income_haircut` | minimum | `rental_income_haircut_pct` must be >= 20% when `rental_income_gross` is present |
+| `APG-223-THR-005` | `LVR` | trigger | LVR >= 90% fires senior management review concern |
 
 ### `chunks.csv`
 
@@ -323,7 +323,7 @@ Run notebook 216 (`216_validate_graph`) after any reload. It checks:
 | NON_COMPLIANT | 39 | 8% |
 | REQUIRES_REVIEW | 61 | 13% |
 
-Non-compliant loans typically have a serviceability buffer below 3 percentage points (THR-003 breach). Loans requiring review are predominantly those with LVR >= 90% (THR-008 trigger), or with missing conditional fields that prevent full evaluation.
+Non-compliant loans typically have a serviceability buffer below 3 percentage points (THR-001 breach). Loans requiring review are predominantly those with LVR >= 90% (THR-005 trigger), or with missing conditional fields that prevent full evaluation.
 
 ---
 

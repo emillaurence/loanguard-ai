@@ -209,11 +209,11 @@ The `ANOMALY_REGISTRY` includes six detection patterns that the `InvestigationAg
 | Pattern | Severity | Description |
 |---|---|---|
 | `transaction_structuring` | HIGH | Multiple sub-$10,000 suspicious transfers to the same account — consistent with AUSTRAC threshold structuring |
-| `high_lvr_loans` | HIGH | Loan applications with LVR >= 90% requiring senior management review under APG-223-THR-008 |
+| `high_lvr_loans` | HIGH | Loan applications with LVR >= 90% requiring senior management review under APG-223-THR-005 |
 | `high_risk_industry` | MEDIUM | Borrowers in high-AML-sensitivity industries (Gambling, Financial Asset Investing, Liquor & Tobacco) |
 | `layered_ownership` | MEDIUM | Multi-hop OWNS chains (depth >= 2) that may obscure beneficial ownership or aggregate exposure |
 | `high_risk_jurisdiction` | HIGH | Borrowers residing in or registered in high-AML-risk jurisdictions (Vanuatu, Myanmar, Cambodia) |
-| `guarantor_concentration` | MEDIUM | Borrowers acting as guarantor on 3 or more loans, creating undisclosed contingent liability |
+| `guarantor_concentration` | MEDIUM | Borrowers acting as guarantor on 2 or more loans, creating undisclosed contingent liability |
 
 ---
 
@@ -263,6 +263,7 @@ loanguard-ai/
 │   │   ├── anomaly_detector.py     # Standalone AnomalyDetector class (run named patterns)
 │   │   ├── dispatcher.py           # make_execute_tool() factory — single execute_tool impl
 │   │   ├── config.py               # Shared constants: MODEL, MAX_TOKENS, WRITE_KEYWORDS
+│   │   ├── utils.py                # Shared agent utilities (retry, extract_text, trim_history)
 │   │   └── _security.py            # Prompt injection defence (guard_tool_result)
 │   ├── graph/
 │   │   ├── connection.py           # Neo4jConnection driver wrapper
