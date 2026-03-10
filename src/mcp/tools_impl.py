@@ -17,6 +17,7 @@ from datetime import datetime, timezone
 from src.graph.connection import Neo4jConnection
 from src.graph.queries import (
     get_compliance_path,
+    get_entity_compliance_values,
     vector_search_chunks,
     get_assessment_with_evidence,
     merge_assessment,
@@ -318,3 +319,111 @@ def trace_evidence(assessment_id: str) -> dict:
         return evidence
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Tool 6
+# ---------------------------------------------------------------------------
+
+# Metric name → entity field from get_entity_compliance_values.
+# Only metrics that map directly to a stored entity property are listed;
+# everything else evaluates as "unknown".
+_METRIC_TO_FIELD: dict[str, str] = {
+    "LVR": "lvr",
+    "LVR_net_of_LMI": "lvr",  # approximation when LMI data absent
+}
+
+_OPS = {
+    ">=": lambda a, b: a >= b,
+    "<=": lambda a, b: a <= b,
+    ">":  lambda a, b: a > b,
+    "<":  lambda a, b: a < b,
+    "==": lambda a, b: a == b,
+}
+
+
+def evaluate_thresholds(
+    entity_id: str,
+    entity_type: str,
+    thresholds: list[dict],
+) -> dict:
+    """
+    Evaluate a list of Threshold dicts against the entity's actual values.
+
+    Each threshold dict should have: threshold_id, metric, operator, value, unit.
+    Returns a structured pass/fail result for each threshold so the compliance
+    agent can form a verdict from deterministic data rather than re-doing the maths.
+    """
+    conn = _get_conn()
+    try:
+        entity_values = get_entity_compliance_values(conn, entity_id, entity_type)
+    finally:
+        conn.close()
+
+    evaluation: list[dict] = []
+    for t in thresholds:
+        metric   = t.get("metric", "")
+        operator = t.get("operator", "")
+        limit    = t.get("value")
+        field    = _METRIC_TO_FIELD.get(metric)
+        actual   = entity_values.get(field) if field else None
+
+        if actual is None or limit is None or operator not in _OPS:
+            evaluation.append({
+                "threshold_id": t.get("threshold_id"),
+                "metric":       metric,
+                "operator":     operator,
+                "limit":        limit,
+                "unit":         t.get("unit"),
+                "actual":       actual,
+                "status":       "unknown",
+                "breached":     None,
+                "margin":       None,
+            })
+            continue
+
+        try:
+            actual_f = float(actual)
+            limit_f  = float(limit)
+            passes   = _OPS[operator](actual_f, limit_f)
+            evaluation.append({
+                "threshold_id": t.get("threshold_id"),
+                "metric":       metric,
+                "operator":     operator,
+                "limit":        limit_f,
+                "unit":         t.get("unit"),
+                "actual":       actual_f,
+                "status":       "PASS" if passes else "BREACH",
+                "breached":     not passes,
+                "margin":       round(actual_f - limit_f, 4),
+            })
+        except (TypeError, ValueError):
+            evaluation.append({
+                "threshold_id": t.get("threshold_id"),
+                "metric":       metric,
+                "operator":     operator,
+                "limit":        limit,
+                "unit":         t.get("unit"),
+                "actual":       actual,
+                "status":       "unknown",
+                "breached":     None,
+                "margin":       None,
+            })
+
+    breached = [r for r in evaluation if r["breached"] is True]
+    passed   = [r for r in evaluation if r["status"] == "PASS"]
+    unknown  = [r for r in evaluation if r["status"] == "unknown"]
+
+    return {
+        "entity_id":     entity_id,
+        "entity_type":   entity_type,
+        "entity_values": entity_values,
+        "evaluation":    evaluation,
+        "summary": {
+            "total":   len(evaluation),
+            "breached": len(breached),
+            "passed":   len(passed),
+            "unknown":  len(unknown),
+        },
+        "breached_threshold_ids": [r["threshold_id"] for r in breached],
+    }

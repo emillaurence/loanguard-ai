@@ -34,6 +34,7 @@ from src.mcp.tools_impl import (
     detect_graph_anomalies as _detect_graph_anomalies,
     persist_assessment as _persist_assessment,
     trace_evidence as _trace_evidence,
+    evaluate_thresholds as _evaluate_thresholds,
 )
 
 # ---------------------------------------------------------------------------
@@ -166,6 +167,28 @@ def trace_evidence(assessment_id: str) -> dict:
         assessment_id: e.g. 'ASSESS-LOAN-0002-APG-223-2026-03-10-143022'.
     """
     return _trace_evidence(assessment_id)
+
+
+@mcp.tool()
+def evaluate_thresholds(
+    entity_id: str,
+    entity_type: str,
+    thresholds: list[dict],
+) -> dict:
+    """
+    Evaluate a list of Threshold dicts against the entity's stored values.
+
+    Call after traverse_compliance_path. Pass the threshold list from its
+    result. Returns structured PASS/BREACH/unknown per threshold so the
+    compliance verdict is grounded in deterministic data.
+
+    Args:
+        entity_id:   e.g. 'LOAN-0002' or 'BRW-0001'.
+        entity_type: 'LoanApplication' or 'Borrower'.
+        thresholds:  List of threshold dicts from traverse_compliance_path,
+                     each with threshold_id, metric, operator, value, unit.
+    """
+    return _evaluate_thresholds(entity_id, entity_type, thresholds)
 
 
 # ---------------------------------------------------------------------------

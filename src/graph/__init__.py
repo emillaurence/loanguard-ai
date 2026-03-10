@@ -6,6 +6,7 @@ from .queries import (
     # Layer 2
     get_requirements_for_loan_type,
     get_compliance_path,
+    get_entity_compliance_values,
     vector_search_chunks,
     # Layer 3
     get_assessments_for_entity,
@@ -23,6 +24,7 @@ __all__ = [
     # Layer 2
     "get_requirements_for_loan_type",
     "get_compliance_path",
+    "get_entity_compliance_values",
     "vector_search_chunks",
     # Layer 3
     "get_assessments_for_entity",

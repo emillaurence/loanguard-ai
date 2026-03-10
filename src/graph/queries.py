@@ -290,6 +290,43 @@ def get_compliance_path(
     return result
 
 
+def get_entity_compliance_values(
+    conn: "Neo4jConnection",
+    entity_id: str,
+    entity_type: str,
+) -> dict:
+    """
+    Fetch the numeric/measurable properties of a LoanApplication or Borrower
+    that can be evaluated against Threshold nodes.
+
+    Returns a flat dict; missing fields are absent (not None).
+    """
+    if entity_type == "LoanApplication":
+        rows = conn.run_query(
+            """
+            MATCH (l:LoanApplication {loan_id: $id})
+            RETURN l.lvr                        AS lvr,
+                   l.interest_rate_indicative   AS interest_rate_pct,
+                   l.amount                     AS loan_amount,
+                   l.loan_term_years            AS loan_term_years,
+                   l.loan_type                  AS loan_type
+            LIMIT 1
+            """,
+            {"id": entity_id},
+        )
+    else:
+        rows = conn.run_query(
+            """
+            MATCH (b:Borrower {borrower_id: $id})
+            OPTIONAL MATCH (b)<-[:SUBMITTED_BY]-(l:LoanApplication)
+            RETURN l.lvr                        AS lvr,
+                   l.interest_rate_indicative   AS interest_rate_pct,
+                   l.amount                     AS loan_amount
+            LIMIT 1
+            """,
+            {"id": entity_id},
+        )
+    return {k: v for k, v in (rows[0] if rows else {}).items() if v is not None}
 
 
 def vector_search_chunks(

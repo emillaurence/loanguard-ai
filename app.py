@@ -196,6 +196,31 @@ FASTMCP_TOOL_DEFS = [
             "required": ["assessment_id"],
         },
     },
+    {
+        "name": "evaluate_thresholds",
+        "description": (
+            "Evaluate a list of Threshold dicts against the entity's stored values. "
+            "Call after traverse_compliance_path, passing the threshold list from its result. "
+            "Returns structured PASS/BREACH/unknown per threshold so verdicts are "
+            "grounded in deterministic data rather than LLM arithmetic."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "entity_id":   {"type": "string", "description": "e.g. 'LOAN-0002' or 'BRW-0001'"},
+                "entity_type": {"type": "string", "enum": ["LoanApplication", "Borrower"]},
+                "thresholds": {
+                    "type": "array",
+                    "items": {"type": "object"},
+                    "description": (
+                        "List of threshold dicts from traverse_compliance_path. "
+                        "Each should have threshold_id, metric, operator, value, unit."
+                    ),
+                },
+            },
+            "required": ["entity_id", "entity_type", "thresholds"],
+        },
+    },
 ]
 
 TOOLS = NEO4J_MCP_TOOLS + FASTMCP_TOOL_DEFS
@@ -523,6 +548,7 @@ def _get_orchestrator():
     from src.agent.orchestrator import Orchestrator
     from src.mcp.tools_impl import (
         detect_graph_anomalies,
+        evaluate_thresholds,
         persist_assessment,
         retrieve_regulatory_chunks,
         trace_evidence,
@@ -556,6 +582,8 @@ def _get_orchestrator():
                 return persist_assessment(**tool_input)
             elif tool_name == "trace_evidence":
                 return trace_evidence(**tool_input)
+            elif tool_name == "evaluate_thresholds":
+                return evaluate_thresholds(**tool_input)
             else:
                 return {"error": f"Unknown tool: {tool_name}"}
         except Exception as e:
