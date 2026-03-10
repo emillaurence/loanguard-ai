@@ -45,6 +45,12 @@ logs/
 # macOS
 .DS_Store
 
+# Application log
+loanguard.log
+
+# Editor
+.vscode/
+
 # Claude Code
 CLAUDE.md
 temp_prompt.md

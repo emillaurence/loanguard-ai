@@ -30,15 +30,7 @@ logger = logging.getLogger(__name__)
 
 def _extract_entity_ids(rows: list[dict], pattern_name: str) -> list[str]:
     """Pull the primary entity ID from each result row based on the pattern."""
-    id_keys = {
-        "transaction_structuring": "target_account",
-        "high_lvr_loans":          "loan_id",
-        "high_risk_industry":      "borrower_id",
-        "layered_ownership":       "ultimate_owner_id",
-        "high_risk_jurisdiction":  "borrower_id",
-        "guarantor_concentration": "borrower_id",
-    }
-    key = id_keys.get(pattern_name, "")
+    key = ANOMALY_REGISTRY[pattern_name].id_key if pattern_name in ANOMALY_REGISTRY else ""
     return [str(r[key]) for r in rows if r.get(key) is not None]
 
 
@@ -78,7 +70,7 @@ class AnomalyDetector:
             )
 
         spec = ANOMALY_REGISTRY[pattern_name]
-        cypher = spec["cypher"]
+        cypher = spec.cypher
         params: dict = {}
 
         # Scope to entity if the pattern supports it and entity_id is supplied
@@ -107,9 +99,9 @@ class AnomalyDetector:
 
         return AnomalyFinding(
             pattern_name=pattern_name,
-            severity=spec["severity"],
-            description=spec["description"],
-            cypher_used=spec["cypher"].strip(),
+            severity=spec.severity,
+            description=spec.description,
+            cypher_used=spec.cypher.strip(),
             evidence=rows,
             entity_ids=entity_ids,
         )

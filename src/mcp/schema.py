@@ -9,6 +9,7 @@ Provides:
 
 from __future__ import annotations
 from dataclasses import dataclass, field
+from enum import StrEnum
 from typing import Any
 
 
@@ -185,19 +186,60 @@ All APRA regulations link to JUR-AU-FED.
 
 
 # ---------------------------------------------------------------------------
-# Anomaly Registry
-# Each entry: Cypher query confirmed against real data + metadata.
+# Enums — single source of truth for verdict and severity strings
+# StrEnum values compare equal to their string equivalents, so existing
+# comparisons like verdict == "NON_COMPLIANT" continue to work.
 # ---------------------------------------------------------------------------
 
-ANOMALY_REGISTRY: dict[str, dict] = {
-    "transaction_structuring": {
-        "description": (
+class Verdict(StrEnum):
+    COMPLIANT        = "COMPLIANT"
+    NON_COMPLIANT    = "NON_COMPLIANT"
+    REQUIRES_REVIEW  = "REQUIRES_REVIEW"
+    ANOMALY_DETECTED = "ANOMALY_DETECTED"
+    INFORMATIONAL    = "INFORMATIONAL"
+
+
+class Severity(StrEnum):
+    HIGH   = "HIGH"
+    MEDIUM = "MEDIUM"
+    LOW    = "LOW"
+    INFO   = "INFO"
+
+
+# ---------------------------------------------------------------------------
+# Anomaly Pattern — typed container for each detection pattern.
+# id_key: the RETURN column that holds the primary entity ID for this pattern.
+# params: default Cypher parameter values (e.g. thresholds, window sizes).
+# threshold_id: linked Layer 2 Threshold node, if any.
+# ---------------------------------------------------------------------------
+
+@dataclass
+class AnomalyPattern:
+    description: str
+    severity: str
+    cypher: str
+    id_key: str
+    params: dict[str, Any] = field(default_factory=dict)
+    threshold_id: str = ""
+
+
+# ---------------------------------------------------------------------------
+# Anomaly Registry
+# Each entry: Cypher query confirmed against real data + metadata.
+# id_key, severity, and description are co-located here — single source of
+# truth used by tools_impl, anomaly_detector, and agent system prompts.
+# ---------------------------------------------------------------------------
+
+ANOMALY_REGISTRY: dict[str, AnomalyPattern] = {
+    "transaction_structuring": AnomalyPattern(
+        description=(
             "Multiple sub-$10,000 suspicious transfers flowing into the same "
             "bank account from distinct sources. Pattern consistent with "
             "structuring to avoid AUSTRAC threshold reporting."
         ),
-        "severity": "HIGH",
-        "cypher": """
+        severity=Severity.HIGH,
+        id_key="target_account",
+        cypher="""
 MATCH (t:Transaction)-[:TO_ACCOUNT]->(target:BankAccount)
 WHERE t.flagged_suspicious = true
   AND t.amount < 10000
@@ -219,17 +261,18 @@ RETURN target.account_id   AS target_account,
 ORDER BY tx_count DESC
 LIMIT 20
 """,
-    },
+    ),
 
-    "high_lvr_loans": {
-        "description": (
+    "high_lvr_loans": AnomalyPattern(
+        description=(
             "Loan applications with LVR >= 90%. Per APG-223-THR-008, LVRs "
             "above 90% (including capitalised LMI) require senior management "
             "review with Board oversight."
         ),
-        "severity": "HIGH",
-        "threshold_id": "APG-223-THR-008",
-        "cypher": """
+        severity=Severity.HIGH,
+        id_key="loan_id",
+        threshold_id="APG-223-THR-008",
+        cypher="""
 MATCH (l:LoanApplication)
 WHERE l.lvr >= 90
 MATCH (l)-[:SUBMITTED_BY]->(b:Borrower)
@@ -245,16 +288,17 @@ RETURN l.loan_id            AS loan_id,
        c.valuation_source   AS valuation_source
 ORDER BY l.lvr DESC
 """,
-    },
+    ),
 
-    "high_risk_industry": {
-        "description": (
+    "high_risk_industry": AnomalyPattern(
+        description=(
             "Borrowers operating in industries with high AML sensitivity "
             "(Gambling, Financial Asset Investing, Liquor & Tobacco). "
             "Requires enhanced due diligence."
         ),
-        "severity": "MEDIUM",
-        "cypher": """
+        severity=Severity.MEDIUM,
+        id_key="borrower_id",
+        cypher="""
 MATCH (b:Borrower)-[:BELONGS_TO_INDUSTRY]->(i:Industry)
 WHERE i.aml_sensitivity = 'high'
    OR i.risk_category = 'high'
@@ -271,16 +315,17 @@ RETURN b.borrower_id        AS borrower_id,
        collect(DISTINCT a.account_id) AS account_ids
 ORDER BY i.aml_sensitivity DESC, b.borrower_id
 """,
-    },
+    ),
 
-    "layered_ownership": {
-        "description": (
+    "layered_ownership": AnomalyPattern(
+        description=(
             "Multi-hop OWNS chains (depth >= 2). Complex beneficial ownership "
             "structures may be used to obscure true controllers or aggregate "
             "exposure across related entities."
         ),
-        "severity": "MEDIUM",
-        "cypher": """
+        severity=Severity.MEDIUM,
+        id_key="ultimate_owner_id",
+        cypher="""
 MATCH path = (owner:Borrower)-[:OWNS*2..]->(subsidiary:Borrower)
 WITH owner,
      subsidiary,
@@ -302,16 +347,17 @@ RETURN owner.borrower_id       AS ultimate_owner_id,
 ORDER BY chain_depth DESC, owner.borrower_id
 LIMIT 30
 """,
-    },
+    ),
 
-    "high_risk_jurisdiction": {
-        "description": (
+    "high_risk_jurisdiction": AnomalyPattern(
+        description=(
             "Borrowers residing in or registered in jurisdictions with "
             "aml_risk_rating = 'high' (Vanuatu JUR-VU, Myanmar JUR-MM, "
             "Cambodia JUR-KH). Requires enhanced AML/CTF due diligence."
         ),
-        "severity": "HIGH",
-        "cypher": """
+        severity=Severity.HIGH,
+        id_key="borrower_id",
+        cypher="""
 MATCH (b:Borrower)-[r:RESIDES_IN|REGISTERED_IN]->(j:Jurisdiction)
 WHERE j.aml_risk_rating = 'high'
 OPTIONAL MATCH (b)<-[:SUBMITTED_BY]-(l:LoanApplication)
@@ -328,16 +374,17 @@ RETURN b.borrower_id            AS borrower_id,
        collect(DISTINCT a.account_id) AS account_ids
 ORDER BY j.jurisdiction_id, b.borrower_id
 """,
-    },
+    ),
 
-    "guarantor_concentration": {
-        "description": (
+    "guarantor_concentration": AnomalyPattern(
+        description=(
             "Borrowers acting as guarantor on 3 or more loan applications. "
             "High guarantor concentration creates contingent liability "
             "exposure that may not be apparent from single-loan review."
         ),
-        "severity": "MEDIUM",
-        "cypher": """
+        severity=Severity.MEDIUM,
+        id_key="borrower_id",
+        cypher="""
 MATCH (b:Borrower)<-[:GUARANTEED_BY]-(l:LoanApplication)
 WITH b,
      count(l)                             AS guarantor_degree,
@@ -355,8 +402,15 @@ RETURN b.borrower_id           AS borrower_id,
 ORDER BY guarantor_degree DESC, total_guaranteed_aud DESC
 LIMIT 20
 """,
-    },
+    ),
 }
+
+# Auto-generated from registry — single source of truth for agent system prompts.
+# Updated automatically when patterns are added, renamed, or re-described.
+PATTERN_HINTS: str = "\n".join(
+    f"    '{name}' — {p.description.split('.')[0]}."
+    for name, p in ANOMALY_REGISTRY.items()
+)
 
 
 # ---------------------------------------------------------------------------

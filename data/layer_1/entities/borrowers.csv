@@ -7,7 +7,7 @@ BRW-0005,Mohammed Wu,individual,natural_person,1992-05-15,TFN-0005-XXX,0,0,651,m
 BRW-0006,Sophie Becker,individual,natural_person,1998-02-26,TFN-0006-XXX,0,0,658,medium,active
 BRW-0007,James Fischer,individual,natural_person,1985-09-14,TFN-0007-XXX,0,0,671,medium,active
 BRW-0008,Paul Adams,individual,natural_person,1998-05-04,TFN-0008-XXX,0,0,620,high,active
-BRW-0009,Aisha Liu,individual,natural_person,1988-10-03,TFN-0009-XXX,0,0,682,medium,active
+BRW-0009,Aisha Liu,individual,natural_person,1988-10-03,TFN-0009-XXX,300000,0,682,medium,active
 BRW-0010,Brian Jackson,individual,natural_person,1969-05-02,TFN-0010-XXX,0,0,722,low,active
 BRW-0011,Alan Thompson,individual,natural_person,1986-04-09,TFN-0011-XXX,0,0,677,medium,active
 BRW-0012,Mia Murphy,individual,natural_person,2001-07-19,TFN-0012-XXX,0,0,715,medium,active

@@ -9,7 +9,6 @@ import html
 import logging
 import re
 import sys
-import tempfile
 import time
 from pathlib import Path
 
@@ -23,19 +22,27 @@ if str(ROOT) not in sys.path:
 
 load_dotenv(ROOT / ".env")
 
-# ── Logging — console + temporary file (untracked, auto-deleted on exit) ─────
-_LOG_FILE = Path(tempfile.gettempdir()) / "graphrag_streamlit.log"
+# ── Logging — console + project-root log file (gitignored) ───────────────────
+_LOG_FILE = ROOT / "loanguard.log"
+
+# Explicitly truncate before opening. Using mode="a" (append) after the
+# explicit truncate avoids null-byte padding caused by multiple Streamlit
+# process handles seeking to different positions in the same file.
+_LOG_FILE.write_bytes(b"")
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
     handlers=[
         logging.StreamHandler(),
-        logging.FileHandler(_LOG_FILE, mode="w", encoding="utf-8"),
+        logging.FileHandler(_LOG_FILE, mode="a", encoding="utf-8"),
     ],
 )
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logging.getLogger("openai").setLevel(logging.WARNING)
+# Suppress neo4j's GqlStatusObject notification warnings — their repr contains
+# non-printable characters that corrupt the log file with binary content.
+logging.getLogger("neo4j.notifications").setLevel(logging.ERROR)
 logging.getLogger(__name__).info("Log file: %s", _LOG_FILE)
 
 # ── Tool definitions (inline, matches 311_agent_setup.ipynb) ─────────────────
@@ -1711,6 +1718,7 @@ def _render_evidence_graph(cited_sections: list[dict], cited_chunks: list[dict],
     edge_x, edge_y = [], []
 
     def _add_edge(x0, y0, x1, y1):
+        nonlocal edge_x, edge_y
         edge_x += [x0, x1, None]
         edge_y += [y0, y1, None]
 
@@ -1965,14 +1973,17 @@ def _render_evidence(cited_sections: list[dict], cited_chunks: list[dict], chart
             html_parts = ""
             for c in cited_chunks:
                 chunk_id = html.escape(c.get("chunk_id", ""))
-                score    = c.get("similarity_score", "")
-                score_str = f"{score:.3f}" if isinstance(score, float) else html.escape(str(score))
+                score    = c.get("similarity_score")
+                if isinstance(score, (int, float)):
+                    score_badge = f'<span style="font-size:11px;color:var(--accent);">score: {score:.3f}</span>'
+                else:
+                    score_badge = '<span style="font-size:11px;color:var(--text-secondary);font-style:italic;">cited</span>'
                 excerpt  = html.escape((c.get("text_excerpt") or "")[:200])
                 html_parts += f"""
 <div class="card" style="padding:0.5rem 0.75rem;">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
     <code style="font-size:11px;">{chunk_id}</code>
-    <span style="font-size:11px;color:var(--text-secondary);">score: {score_str}</span>
+    {score_badge}
   </div>
   <div style="font-size:12px;color:#495057;font-style:italic;">{excerpt}&hellip;</div>
 </div>

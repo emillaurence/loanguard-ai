@@ -1,27 +1,27 @@
 from_section_id,to_section_id,reference_type,description,confidence
-APG-223-S1,APS-220-S1,supplements,This PPG should be read in conjunction with APS 220 Credit Risk Management.,high
-APG-223-S4,APS-220-ATT-A,requires,"Under Attachment C of APS 220, ADIs must apply a buffer over a loan's interest rate of at least 3.0 per cent, unless determined otherwise by APRA.",medium
-APG-223-S4,APS-112-ATT-A-RES-PROP,requires,APRA expects an ADI to have processes to determine whether loans approved through overrides would be treated as standard or non-standard loans for capital purposes under APS 112.,medium
-APG-223-S6,APS-220-ATT-A,requires,An ADI is required to have regard to the requirements governing security valuation practices as detailed in Attachment A of APS 220.,high
-APS-112-S8,APS-220-S1,requires,Defaulted exposure is defined by reference to the non-performing exposure definition in APS 220.,medium
-APS-112-ATT-A,APS-112-ATT-E,requires,Defaulted property exposures must be risk-weighted in accordance with Attachment E rather than Attachment A.,high
-APS-112-ATT-A,APS-112-ATT-C-S1,requires,Undrawn committed amounts included in the LVR loan amount calculation are determined in accordance with Attachment C.,high
-APS-112-ATT-A-LVR-CALC,APS-220-S1,requires,Property valuations must be appraised independently using prudently conservative criteria consistent with the requirements set out in APS 220.,medium
-APS-112-ATT-B-INTRO,APS-112-ATT-D-S1,requires,Unsettled and failed transactions must be risk-weighted in accordance with Attachment D to APS 112 rather than Attachment B.,high
-APS-112-ATT-B-INTRO,APS-112-ATT-E,requires,Defaulted exposures must be risk-weighted in accordance with Attachment E to APS 112 rather than Attachment B.,high
-APS-112-ATT-B-INTRO,APS-112-ATT-F,requires,"Where Attachment B requires risk weights based on external credit ratings, ADIs must also comply with the requirements in Attachment F to APS 112.",high
-APS-112-ATT-B-COVERED-BONDS,APS-112-ATT-A,requires,Residential and commercial property exposures in a covered bond cover pool must meet the standard loan requirements in paragraphs 3 to 7 of Attachment A for covered bonds issued in Australia.,high
-APS-112-ATT-B-S17,APS-112-ATT-B-COVERED-BONDS,requires,Unrated or non-qualifying covered bonds must be treated as bank exposures per Table 7; qualifying criteria are set out in paragraphs 15 and 16 of Attachment B.,high
+APG-223-S1,APS-220-S1,requires,This PPG should be read in conjunction with APS 220 Credit Risk Management.,high
+APG-223-S4,APS-220-ATT-B,requires,"Under Attachment C of APS 220, ADIs must apply a buffer over a loan's interest rate of at least 3.0 per cent, unless determined otherwise by APRA.",medium
+APG-223-S4,APS-112-S1,requires,APRA expects an ADI to have appropriate processes to determine whether loans approved through overrides would be treated as standard or non-standard loans for capital purposes under APS 112.,medium
+APG-223-S6,APS-220-ATT-A,requires,"An ADI is required to have regard to the requirements governing security valuation practices, including valuation of security in the form of property, as detailed in Attachment A of APS 220.",high
+APS-112-S8,APS-220-S1,requires,Defaulted exposure is defined as a non-performing exposure as defined in APS 220 Credit Risk Management.,high
+APS-112-ATT-A,APS-112-ATT-E,requires,Defaulted property exposures must be risk-weighted in accordance with Attachment E to this Prudential Standard rather than Attachment A.,high
+APS-112-ATT-A,APS-112-ATT-C,requires,The loan amount for LVR purposes includes any undrawn committed amount as set out in Attachment C to this Prudential Standard.,high
+APS-112-ATT-A-S3,APS-220-S1,requires,Property valuations must be appraised independently using prudently conservative criteria consistent with the requirements set out in APS 220.,medium
+APS-112-ATT-B-S1,APS-112-ATT-D,requires,Unsettled and failed transactions must be risk-weighted in accordance with Attachment D to APS 112 rather than Attachment B.,high
+APS-112-ATT-B-S1,APS-112-ATT-E,requires,Defaulted exposures must be risk-weighted in accordance with Attachment E to APS 112 rather than Attachment B.,high
+APS-112-ATT-B-S1,APS-112-ATT-F,requires,"Where Attachment B requires risk weights based on external credit ratings, ADIs must also comply with the requirements in Attachment F to APS 112.",high
+APS-112-ATT-B-S4,APS-112-ATT-A,requires,Residential and commercial property exposures in covered bond cover pools must meet the standard loan requirements in paragraphs 3 to 7 of Attachment A to APS 112.,high
+APS-112-ATT-B-S17,APS-112-ATT-B-S17,requires,Unrated or non-qualifying covered bonds must be treated as bank exposures and risk-weighted using Table 7 of Attachment B.,medium
 APS-112-ATT-B-S18,APS-112-ATT-B-S41,requires,Exposures through a third party as detailed in paragraph 41 must not be included as corporate exposures.,medium
-APS-112-ATT-C-S5,APS-112-ATT-A,requires,"After applying CCFs, ADIs must risk-weight off-balance sheet exposures according to the requirements in Attachments A, B and D to APS 112.",high
-APS-112-ATT-G,APS-112-ATT-B-INTRO,requires,Attachment G cross-references Attachment B of APS 112 for determining risk weights applicable to third-party banks holding cash collateral and for identifying sovereigns and financial institutions qualifying as core market participants.,high
-APS-112-ATT-G,APS-112-ATT-J-CDS,requires,Attachment G references Attachment J of APS 112 for the criteria that cash-funded credit-linked notes must fulfil to be treated as cash collateralised transactions.,high
-APS-112-ATT-F,APS-112-ATT-I,requires,Attachment F references Attachment I of APS 112 for the criteria that must be satisfied before a guarantee from a rated entity can be recognised for risk-weighting purposes for other entities within the same corporate group.,high
-APS-112-ATT-G-CONT-P41,APS-112-ATT-H,requires,Paragraph 33 requires that SFTs covered by an eligible bilateral netting agreement must meet the requirements detailed in Attachment H to this Prudential Standard.,high
-APS-112-ATT-H,APS-112-ATT-G,requires,Paragraphs 6 and 8 of Attachment H reference Attachment G for eligible collateral criteria in the banking book and for the simple or comprehensive approach to RWA calculation.,high
-APS-112-ATT-I-CURRENCY,APS-112-ATT-G-CONT-P41,requires,The currency mismatch haircut on guarantees must be adjusted for actual revaluation frequency in accordance with paragraph 32 of Attachment G to APS 112.,medium
-APS-112-ATT-J-PURCHASED,APS-112-ATT-G,elaborates,Cash-funded credit linked notes satisfying minimum credit derivative requirements may be treated as cash-collateralised transactions under Attachment G to APS 112.,high
-APS-112-ATT-J-CURRENCY,APS-112-ATT-G-CONT-P41,requires,The currency mismatch haircut on credit derivatives must be adjusted for actual revaluation frequency in accordance with paragraph 32 of Attachment G to APS 112.,medium
-APS-220-S17,APS-220-ATT-A,elaborates,Paragraph 46 refers to Attachment A for detailed requirements on collateral valuation policies and processes.,high
-APS-220-S24,APS-220-ATT-B,elaborates,Paragraph 108 refers to Attachment B for the prescribed provisioning approach that APRA may permit or require an ADI to implement.,high
-APS-220-ATT-B,APS-112-ATT-A-LMI,requires,Attachment B references APS 112 for the definition of eligible lenders mortgage insurer and for the eligible collateral provisions relevant to cash on deposit deductions in prescribed provisioning.,medium
+APS-112-ATT-B-S28,APS-112-ATT-B-S28,requires,Rated specialised lending exposures with issue-specific external credit ratings must use Table 10 risk weights.,medium
+APS-112-ATT-C,APS-112-ATT-D,requires,"After applying CCFs, ADIs must risk-weight off-balance sheet exposures according to the requirements in Attachments A, B and D to APS 112.",high
+APS-112-ATT-F,APS-112-ATT-I,requires,"Where a rated entity has guaranteed another entity's exposure, the guarantee may be recognised for risk-weighting purposes if the criteria in Attachment I are satisfied.",high
+APS-112-ATT-G,APS-112-ATT-J,requires,Cash-funded credit-linked notes issued by the ADI against banking book exposures may be treated as cash collateralised transactions if they fulfil the criteria for credit derivatives in Attachment J.,high
+APS-112-ATT-G-CONT1,APS-112-ATT-H,requires,Paragraph 33 requires that SFTs covered by an eligible bilateral netting agreement must meet the requirements detailed in Attachment H to this Prudential Standard.,high
+APS-112-ATT-H,APS-112-ATT-G,requires,Paragraphs 6 and 8 of Attachment H reference Attachment G for eligible collateral criteria and the simple or comprehensive approach for calculating RWA when netting loans and deposits.,high
+APS-112-ATT-I-CURR,APS-112-ATT-G,requires,Paragraph 10 of Attachment I requires that the currency mismatch haircut for guarantees be adjusted in accordance with paragraph 32 of Attachment G regarding revaluation frequency.,high
+APS-112-ATT-J,APS-112-ATT-G,requires,Paragraph 3 of Attachment J states that qualifying cash-funded credit linked notes may be treated as cash-collateralised transactions under Attachment G.,high
+APS-112-ATT-J,APS-112-ATT-G,requires,Paragraph 17 of Attachment J requires that the currency mismatch haircut for credit derivatives be adjusted in accordance with paragraph 32 of Attachment G regarding revaluation frequency.,high
+APS-220-S15,APS-220-ATT-A,elaborates,Paragraph 46 refers to Attachment A for detailed requirements on collateral valuation policies and processes.,high
+APS-220-S21,APS-220-ATT-B,elaborates,Paragraphs 108-109 refer to Attachment B for the prescribed provisioning approach that APRA may permit or require an ADI to implement.,high
+APS-220-ATT-B,APS-112-S1,requires,Attachment B references APS 112 for the definition of eligible lenders mortgage insurer and for eligible collateral provisions applicable to cash on deposit deductions.,medium

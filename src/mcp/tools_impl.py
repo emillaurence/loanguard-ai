@@ -122,21 +122,12 @@ def detect_graph_anomalies(
             "valid_patterns": list(valid),
         }
 
-    id_keys = {
-        "transaction_structuring": "target_account",
-        "high_lvr_loans":          "loan_id",
-        "high_risk_industry":      "borrower_id",
-        "layered_ownership":       "ultimate_owner_id",
-        "high_risk_jurisdiction":  "borrower_id",
-        "guarantor_concentration": "borrower_id",
-    }
-
     conn = _get_conn()
     results: list[dict] = []
     try:
         for pattern_name in pattern_names:
             spec   = ANOMALY_REGISTRY[pattern_name]
-            cypher = spec["cypher"]
+            cypher = spec.cypher
             params: dict = {}
 
             if entity_id:
@@ -162,12 +153,11 @@ def detect_graph_anomalies(
                 logger.error("Anomaly pattern %s failed: %s", pattern_name, e)
                 rows = []
 
-            id_key     = id_keys.get(pattern_name, "")
-            entity_ids = [str(r[id_key]) for r in rows if r.get(id_key) is not None]
+            entity_ids = [str(r[spec.id_key]) for r in rows if r.get(spec.id_key) is not None]
             results.append({
                 "pattern_name":  pattern_name,
-                "severity":      spec["severity"],
-                "description":   spec["description"],
+                "severity":      spec.severity,
+                "description":   spec.description,
                 "finding_count": len(rows),
                 "findings":      rows,
                 "entity_ids":    entity_ids,
@@ -254,6 +244,7 @@ def persist_assessment(
                 cypher_used=s.get("cypher_used"),
                 section_ids=s.get("section_ids", []),
                 chunk_ids=s.get("chunk_ids", []),
+                chunk_scores=s.get("chunk_scores"),
             )
             step_ids.append(sid)
 
@@ -278,9 +269,16 @@ def trace_evidence(assessment_id: str) -> dict:
 
         step_section_ids: list[str] = []
         step_chunk_ids: list[str] = []
+        chunk_score_map: dict[str, float] = {}
         for step in evidence.get("reasoning_steps", []):
             step_section_ids.extend(step.get("cited_section_ids", []))
             step_chunk_ids.extend(step.get("cited_chunk_ids", []))
+            # Recover similarity scores stored on CITES_CHUNK relationships
+            for entry in step.get("cited_chunk_scores") or []:
+                cid = entry.get("chunk_id")
+                score = entry.get("score")
+                if cid and score is not None:
+                    chunk_score_map[cid] = score
 
         cited_sections: list[dict] = []
         if step_section_ids:
@@ -310,7 +308,11 @@ def trace_evidence(assessment_id: str) -> dict:
                 {"ids": list(set(step_chunk_ids))},
             )
             cited_chunks = [
-                {**r, "text_excerpt": (r.get("text_excerpt") or "")[:400]}
+                {
+                    **r,
+                    "text_excerpt": (r.get("text_excerpt") or "")[:400],
+                    "similarity_score": chunk_score_map.get(r.get("chunk_id")),
+                }
                 for r in rows
             ]
 
@@ -331,6 +333,9 @@ def trace_evidence(assessment_id: str) -> dict:
 _METRIC_TO_FIELD: dict[str, str] = {
     "LVR": "lvr",
     "LVR_net_of_LMI": "lvr",  # approximation when LMI data absent
+    "interest_rate_serviceability_buffer": "serviceability_buffer_applied",
+    "non_salary_income_haircut": "non_salary_income_haircut_pct",
+    "rental_income_haircut": "rental_income_haircut_pct",
 }
 
 _OPS = {
@@ -385,18 +390,51 @@ def evaluate_thresholds(
         try:
             actual_f = float(actual)
             limit_f  = float(limit)
-            passes   = _OPS[operator](actual_f, limit_f)
-            evaluation.append({
-                "threshold_id": t.get("threshold_id"),
-                "metric":       metric,
-                "operator":     operator,
-                "limit":        limit_f,
-                "unit":         t.get("unit"),
-                "actual":       actual_f,
-                "status":       "PASS" if passes else "BREACH",
-                "breached":     not passes,
-                "margin":       round(actual_f - limit_f, 4),
-            })
+            threshold_type = t.get("threshold_type", "maximum")
+
+            if threshold_type == "informational":
+                evaluation.append({
+                    "threshold_id": t.get("threshold_id"),
+                    "metric":       metric,
+                    "operator":     operator,
+                    "limit":        limit_f,
+                    "unit":         t.get("unit"),
+                    "actual":       actual_f,
+                    "status":       "N/A",
+                    "breached":     None,
+                    "margin":       round(actual_f - limit_f, 4),
+                    "threshold_type": threshold_type,
+                })
+            elif threshold_type == "trigger":
+                # Condition firing = concern; passes means trigger did NOT fire
+                fired  = _OPS[operator](actual_f, limit_f)
+                evaluation.append({
+                    "threshold_id": t.get("threshold_id"),
+                    "metric":       metric,
+                    "operator":     operator,
+                    "limit":        limit_f,
+                    "unit":         t.get("unit"),
+                    "actual":       actual_f,
+                    "status":       "TRIGGER" if fired else "PASS",
+                    "breached":     fired,
+                    "margin":       round(actual_f - limit_f, 4),
+                    "threshold_type": threshold_type,
+                })
+            else:
+                # minimum or maximum: condition True = passes
+                passes = _OPS[operator](actual_f, limit_f)
+                evaluation.append({
+                    "threshold_id": t.get("threshold_id"),
+                    "metric":       metric,
+                    "operator":     operator,
+                    "limit":        limit_f,
+                    "unit":         t.get("unit"),
+                    "actual":       actual_f,
+                    "status":       "PASS" if passes else "BREACH",
+                    "breached":     not passes,
+                    "margin":       round(actual_f - limit_f, 4),
+                    "threshold_type": threshold_type,
+                })
         except (TypeError, ValueError):
             evaluation.append({
                 "threshold_id": t.get("threshold_id"),
@@ -413,6 +451,7 @@ def evaluate_thresholds(
     breached = [r for r in evaluation if r["breached"] is True]
     passed   = [r for r in evaluation if r["status"] == "PASS"]
     unknown  = [r for r in evaluation if r["status"] == "unknown"]
+    triggered = [r for r in evaluation if r["status"] == "TRIGGER"]
 
     return {
         "entity_id":     entity_id,
@@ -420,10 +459,12 @@ def evaluate_thresholds(
         "entity_values": entity_values,
         "evaluation":    evaluation,
         "summary": {
-            "total":   len(evaluation),
-            "breached": len(breached),
-            "passed":   len(passed),
-            "unknown":  len(unknown),
+            "total":     len(evaluation),
+            "breached":  len(breached),
+            "passed":    len(passed),
+            "unknown":   len(unknown),
+            "triggered": len(triggered),
         },
         "breached_threshold_ids": [r["threshold_id"] for r in breached],
+        "triggered_threshold_ids": [r["threshold_id"] for r in triggered],
     }

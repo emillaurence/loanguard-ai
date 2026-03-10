@@ -236,7 +236,8 @@ def get_compliance_path(
                t.operator           AS operator,
                t.value              AS threshold_value,
                t.unit               AS unit,
-               t.consequence        AS consequence
+               t.consequence        AS consequence,
+               t.threshold_type     AS threshold_type
         ORDER BY reg.regulation_id, req.requirement_id
         """,
         reg_params,
@@ -284,6 +285,7 @@ def get_compliance_path(
                     "value": row["threshold_value"],
                     "unit": row["unit"],
                     "consequence": row["consequence"],
+                    "threshold_type": row["threshold_type"],
                 }
             )
 
@@ -305,11 +307,15 @@ def get_entity_compliance_values(
         rows = conn.run_query(
             """
             MATCH (l:LoanApplication {loan_id: $id})
-            RETURN l.lvr                        AS lvr,
-                   l.interest_rate_indicative   AS interest_rate_pct,
-                   l.amount                     AS loan_amount,
-                   l.loan_term_years            AS loan_term_years,
-                   l.loan_type                  AS loan_type
+            RETURN l.lvr                              AS lvr,
+                   l.interest_rate_indicative         AS interest_rate_pct,
+                   l.amount                           AS loan_amount,
+                   l.loan_type                        AS loan_type,
+                   l.serviceability_assessment_rate   AS serviceability_assessment_rate,
+                   l.income_type                      AS income_type,
+                   l.non_salary_income_haircut_pct    AS non_salary_income_haircut_pct,
+                   l.rental_income_gross              AS rental_income_gross,
+                   l.rental_income_haircut_pct        AS rental_income_haircut_pct
             LIMIT 1
             """,
             {"id": entity_id},
@@ -319,14 +325,25 @@ def get_entity_compliance_values(
             """
             MATCH (b:Borrower {borrower_id: $id})
             OPTIONAL MATCH (b)<-[:SUBMITTED_BY]-(l:LoanApplication)
-            RETURN l.lvr                        AS lvr,
-                   l.interest_rate_indicative   AS interest_rate_pct,
-                   l.amount                     AS loan_amount
+            RETURN l.lvr                              AS lvr,
+                   l.interest_rate_indicative         AS interest_rate_pct,
+                   l.amount                           AS loan_amount,
+                   l.serviceability_assessment_rate   AS serviceability_assessment_rate,
+                   l.income_type                      AS income_type,
+                   l.non_salary_income_haircut_pct    AS non_salary_income_haircut_pct,
+                   l.rental_income_gross              AS rental_income_gross,
+                   l.rental_income_haircut_pct        AS rental_income_haircut_pct
             LIMIT 1
             """,
             {"id": entity_id},
         )
-    return {k: v for k, v in (rows[0] if rows else {}).items() if v is not None}
+    vals = {k: v for k, v in (rows[0] if rows else {}).items() if v is not None}
+    # Derived field: serviceability buffer = assessment rate − indicative rate
+    svc_rate = vals.get("serviceability_assessment_rate")
+    rate = vals.get("interest_rate_pct")
+    if svc_rate is not None and rate is not None:
+        vals["serviceability_buffer_applied"] = round(float(svc_rate) - float(rate), 4)
+    return vals
 
 
 def vector_search_chunks(
@@ -443,12 +460,14 @@ def get_assessment_with_evidence(
         """
         MATCH (a:Assessment {assessment_id: $id})-[:HAS_STEP]->(rs:ReasoningStep)
         OPTIONAL MATCH (rs)-[:CITES_SECTION]->(s:Section)
-        OPTIONAL MATCH (rs)-[:CITES_CHUNK]->(c:Chunk)
+        OPTIONAL MATCH (rs)-[rc:CITES_CHUNK]->(c:Chunk)
         RETURN rs.step_number   AS step_number,
                rs.description   AS description,
                rs.cypher_used   AS cypher_used,
                collect(DISTINCT s.section_id)  AS cited_section_ids,
-               collect(DISTINCT c.chunk_id)    AS cited_chunk_ids
+               collect(DISTINCT c.chunk_id)    AS cited_chunk_ids,
+               collect(DISTINCT {chunk_id: c.chunk_id, score: rc.similarity_score})
+                   AS cited_chunk_scores
         ORDER BY rs.step_number
         """,
         {"id": assessment_id},
@@ -547,8 +566,14 @@ def merge_reasoning_step(
     cypher_used: str | None,
     section_ids: list[str],
     chunk_ids: list[str],
+    chunk_scores: dict | None = None,
 ) -> None:
-    """Create a ReasoningStep and link it to cited sections/chunks."""
+    """Create a ReasoningStep and link it to cited sections/chunks.
+
+    chunk_scores maps chunk_id → similarity_score from the original vector search.
+    Scores are stored on the CITES_CHUNK relationship so they can be recovered by
+    trace_evidence without re-running the search.
+    """
     conn.run_query(
         """
         MERGE (rs:ReasoningStep {step_id: $sid})
@@ -576,12 +601,14 @@ def merge_reasoning_step(
             """,
             {"sid": step_id, "sec_id": sec_id},
         )
+    scores = chunk_scores or {}
     for chunk_id in chunk_ids:
         conn.run_query(
             """
             MATCH (rs:ReasoningStep {step_id: $sid})
             MATCH (c:Chunk {chunk_id: $cid})
-            MERGE (rs)-[:CITES_CHUNK]->(c)
+            MERGE (rs)-[r:CITES_CHUNK]->(c)
+            SET r.similarity_score = $score
             """,
-            {"sid": step_id, "cid": chunk_id},
+            {"sid": step_id, "cid": chunk_id, "score": scores.get(chunk_id)},
         )

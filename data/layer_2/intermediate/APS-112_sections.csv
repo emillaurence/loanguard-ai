@@ -50,10 +50,8 @@ APS-112,APS-112-S7,Scope,Scope,"Certain items are excluded from this Standard in
 (c) liabilities of a covered bond special purpose vehicle to an issuing ADI as specified in Prudential Standard APS 121 Covered Bonds; and
 (d) items that are subject to capital requirements under Prudential Standard APS 116 Capital Adequacy: Market Risk that do not have counterparty credit risk exposure under Prudential Standard APS 180 Capital Adequacy: Counterparty Credit Risk (APS 180).
 12. Subject to paragraph 13 of this Prudential Standard, an ADI must apply the requirements set out in this Prudential Standard to calculate risk-weighted assets (RWA) for any credit exposures of overseas banking subsidiaries that form part of the Level 2 group.
-13. For the purpose of calculating the Level 2 Regulatory Capital requirement for the credit exposures of an overseas banking subsidiary that is prudentially regulated by a prescribed New Zealand authority, an ADI must calculate RWA using the prescribed New Zealand authority's equivalent prudential rules as in force from time to time.2, 3
-2 Prescribed New Zealand authority has the meaning given in subsection 5(1) of the Banking Act.
-3 For APS 112 purposes, an ADI may exclude credit risk RWA that arise from securities held in the trading book when applying the prescribed New Zealand authority's equivalent prudential rules.",core,11-13,4,4
-APS-112,APS-112-S8,Definitions,Definitions,"This section provides definitions for key terms used throughout the Prudential Standard, including bank, commitment, LVR, LMI, RWA, defaulted exposure, eligible CRM, and various exposure types.","14. The following definitions are used in this Prudential Standard:
+13. For the purpose of calculating the Level 2 Regulatory Capital requirement for the credit exposures of an overseas banking subsidiary that is prudentially regulated by a prescribed New Zealand authority, an ADI must calculate RWA using the prescribed New Zealand authority's equivalent prudential rules as in force from time to time.2, 3",core,11-13,4,4
+APS-112,APS-112-S8,Definitions,Definitions,"This section provides definitions for key terms used throughout the Prudential Standard, including bank, commitment, CCF, defaulted exposure, LMI, LVR, non-standard loan, RWA, SFT, and others.","14. The following definitions are used in this Prudential Standard:
 (a) bank – means an ADI or overseas bank;
 (b) commitment – has the meaning given in paragraphs 1 to 3 of Attachment C to this Prudential Standard;
 (c) commodities finance – has the meaning given in paragraph 27(c) of Attachment B to this Prudential Standard;
@@ -103,11 +101,11 @@ Risk-weighted off-balance sheet exposures
 (a) RWA arising from its exposure to the SFT counterparty, where EAD is calculated in accordance with Attachment G to this Prudential Standard and is multiplied by the relevant risk weight applicable to the SFT counterparty; and
 (b) the capital requirement for the credit risk or market risk inherent in any securities the ADI lends or posts as collateral, if that risk remains with the ADI.
 4 Refer to Prudential Standard APS 210 Liquidity.",core,19-21,7,8
-APS-112,APS-112-S11,Credit risk mitigation,Credit Risk Mitigation,"Where multiple CRM techniques cover a single exposure, the exposure must be divided into separately calculated portions. ADIs must not recognise additional CRM where an ECAI rating already incorporates CRM, or where there is material positive correlation between counterparty credit quality and the CRM technique. All CRM documentation must be legally binding and enforceable, with periodic reviews of enforceability.","22. Where multiple CRM techniques cover a single exposure, an ADI must divide the exposure into portions covered by each CRM technique. The RWA of each portion must be calculated separately, and then totalled. If credit protection provided by a single protection provider has differing maturities, they must also be subdivided into separate protected portions.
+APS-112,APS-112-S11,Credit risk mitigation,Credit Risk Mitigation,"Where multiple CRM techniques cover a single exposure, the ADI must divide the exposure into separately calculated portions. ADIs must not recognise additional CRM where the risk weight already reflects CRM via an ECAI issue-specific rating, or where there is material positive correlation between counterparty credit quality and the CRM technique. All CRM documentation must be legally binding and enforceable, with periodic reviews to confirm ongoing enforceability.","22. Where multiple CRM techniques cover a single exposure, an ADI must divide the exposure into portions covered by each CRM technique. The RWA of each portion must be calculated separately, and then totalled. If credit protection provided by a single protection provider has differing maturities, they must also be subdivided into separate protected portions.
 23. An ADI must not recognise additional CRM on exposures where the risk weight is mapped from an ECAI issue-specific credit rating, and that credit rating already incorporates the recognition of CRM.
 24. An ADI must not recognise the use of CRM where the credit quality of the counterparty has a material positive correlation with the CRM technique used, or with any resulting residual risks (e.g. collateral in the form of securities issued by the counterparty to the credit exposure is considered to have a material positive correlation with the credit quality of the original counterparty).
 25. To obtain capital relief through the use of a CRM technique, all documentation must be binding on all parties and legally enforceable in all relevant jurisdictions. The ADI must have undertaken sufficient legal review to be satisfied of the legal enforceability of the CRM technique, and must undertake periodic reviews to confirm its ongoing enforceability.",core,22-25,8,8
-APS-112,APS-112-ATT-A,Attachment A,Risk Weights for Property Exposures,"Attachment A defines property exposures and sets out the criteria for classifying loans as standard or non-standard, LVR calculation rules, LMI eligibility, and the risk weight tables applicable to residential and commercial property exposures. Standard loan classification requires enforceable mortgage rights, registered first or qualifying second mortgage, documented serviceability assessment, appropriate property valuation, and accurate documentation.","Attachment A – Risk weights for property exposures
+APS-112,APS-112-ATT-A,Attachment A,Risk Weights for Property Exposures,"Attachment A sets out the classification criteria for standard and non-standard property loans, LVR calculation rules, LMI eligibility requirements, and the risk weight tables applicable to residential and commercial property exposures. Standard loans must meet requirements relating to mortgage enforcement rights, valuation, borrower serviceability assessment, and documentation.","Attachment A – Risk weights for property exposures
 1. A property exposure is an exposure that is secured by immovable real property. An ADI must risk weight its property exposures according to the requirements detailed in this Attachment, with the exception of defaulted property exposures, which must be risk-weighted in accordance with Attachment E to this Prudential Standard.
 Standard property loans
 2. A loan must meet all of the requirements set out in paragraphs 3 to 7 of this Attachment to be classified as standard.
@@ -131,7 +129,7 @@ Loan-to-valuation ratio
 10. The amount of the loan includes the outstanding loan amount (including accrued interest and fees) and any undrawn committed amount (as set out in Attachment C to this Prudential Standard), calculated gross of any provisions for defaulted exposures and other credit risk mitigants. If an ADI provides:
 (a) multiple loans secured by the same property and they are sequential in ranking order (i.e. there is no intermediate interest from another lender), the loan amounts must be aggregated and treated as a single exposure for the purpose of calculating the LVR; or
 (b) a loan that is secured by a second mortgage, the outstanding amount of the loan must be calculated as the sum of all claims on the borrower secured by both the first and second mortgages over the same property for the purpose of calculating the LVR.",attachment,1-10,9,10
-APS-112,APS-112-ATT-A-LVR-CALC,A.10-A.13,LVR Calculation Rules (Attachment A),"Sets out rules for calculating LVR including loan amortisation, property valuation requirements, use of current valuations for pre-2023 commercial exposures, and the application of CRM techniques. Specifies that LVR bands and risk weights must be determined before CRM is applied.","When calculating LVR, the loan amount will reduce if the loan amortises.
+APS-112,APS-112-ATT-A-S3,Attachment A (continued),LVR Calculation Rules – Property Valuation and CRM,"Sets out rules for maintaining property valuations at origination with limited exceptions, including haircuts for mixed-security exposures and adjustments for reverse mortgages. Permits CRM techniques to reduce exposure amounts but requires LVR band and risk weight to be determined before CRM application.","When calculating LVR, the loan amount will reduce if the loan amortises.
 11. The value of the property must be appraised independently using prudently conservative criteria, consistent with the requirements set out in APS 220.5 If a market value can be determined, the valuation must not be higher than the market value.6 For the purpose of calculating the property value:
 (a) the value of the property at origination must be maintained, unless:
 (i) an updated valuation is obtained as part of a new loan application process in relation to the mortgaged property;
@@ -141,8 +139,9 @@ APS-112,APS-112-ATT-A-LVR-CALC,A.10-A.13,LVR Calculation Rules (Attachment A),"S
 (c) for a reverse mortgage, where a borrower has been guaranteed a minimum share in the future sale proceeds of a mortgaged property, the calculation of the LVR for regulatory purposes must be adjusted by reducing the value of the mortgaged property by the quarantined percentage share.
 12. For exposures secured by commercial property that were originated prior to 1 January 2023, an ADI may use the current valuation, rather than the value of the property at origination, for the purpose of paragraph 11(a) of this Attachment.
 Credit risk mitigation
-13. An ADI may use eligible CRM techniques to reduce the exposure amount of a property exposure, but the LVR band and applicable risk weight must be determined before the application of the relevant CRM technique.",attachment,10-13,11,11
-APS-112,APS-112-ATT-A-RES-PROP,A.14,Residential Property Exposure Classification (Attachment A),"Defines residential property exposures and their sub-classifications including owner-occupied, principal-and-interest, and other standard residential property. Specifies rules for classifying loans with multiple purposes and resolving ambiguity between owner-occupied and investment classifications.","14. A residential property exposure is an exposure where the predominant security is an immovable property that has the nature of a dwelling, and satisfies all applicable laws and regulations enabling the property to be occupied for housing purposes. Residential property includes the following exposure types:
+13. An ADI may use eligible CRM techniques to reduce the exposure amount of a property exposure, but the LVR band and applicable risk weight must be determined before the application of the relevant CRM technique.",attachment,11-13,11,11
+APS-112,APS-112-ATT-A-S4,Attachment A (continued),Residential Property – Definition and Classification,"Defines residential property exposures and classifies them into owner-occupied principal-and-interest and other standard residential property categories. Specifies that where loan purpose is ambiguous or mixed, the predominant purpose governs classification, and any doubt defaults to 'other standard residential property'.","Residential property
+14. A residential property exposure is an exposure where the predominant security is an immovable property that has the nature of a dwelling, and satisfies all applicable laws and regulations enabling the property to be occupied for housing purposes. Residential property includes the following exposure types:
 (a) 'Owner-occupied' refers to a loan for the purpose of housing, where the funds are used for a residential property that is occupied, or to be occupied, by the borrower(s) as their principal place of residence. Where the loan is for a residential property that is different to the residential property against which the loan is secured, this definition refers to the occupation status of the residential property for which the loan has been obtained (not the occupation status of the residential property used as security). It includes:
 (i) a dwelling or residential land that is vacant while under construction, but that the borrower intends to occupy as a principal place of residence; and
 (ii) a part-time residence that is the principal place of residence of the borrower(s).
@@ -152,12 +151,14 @@ Where finance is to be used for more than one purpose (e.g. owner-occupied, inve
 (i) loans for a purpose other than owner-occupation, including for investment or business purposes;
 (ii) interest-only loans with an interest-only term of five years or less, where only interest is paid and principal is not automatically amortised; or
 (iii) other loans that do not meet both of the criteria in paragraphs 14(a) and 14(b) of this Attachment.",attachment,14,11,12
-APS-112,APS-112-ATT-A-LMI,A.15,Lenders' Mortgage Insurance Eligibility (Attachment A),"Specifies the conditions under which an ADI may reduce its capital requirement through LMI, including minimum loss coverage of 40 per cent and requirements for the insurer to be regulated by APRA (Level 1) or an overseas prudential regulator (Level 2).","15. An ADI may reduce its capital requirement through the application of LMI, where the insurance:
+APS-112,APS-112-ATT-A-S5,Attachment A (continued),Lenders' Mortgage Insurance – Eligibility Criteria,"Permits ADIs to reduce capital requirements through LMI where the insurance covers at least 40 per cent of the higher of original or outstanding loan amount. The insurer must be APRA-regulated for Level 1 capital purposes, or regulated by an overseas prudential regulator for Level 2 purposes in the case of overseas subsidiaries.","Lenders' mortgage insurance
+15. An ADI may reduce its capital requirement through the application of LMI, where the insurance:
 (a) provides cover for all losses up to at least 40 per cent of the higher of the original loan amount and outstanding loan amount; and
 (b) is provided by an eligible lenders' mortgage insurer, which means that:
 (i) for the purposes of Level 1 Regulatory Capital, the lenders' mortgage insurer must be regulated by APRA; and
 (ii) for the purposes of Level 2 Regulatory Capital, in the case of overseas subsidiaries of Australian ADIs, the lenders' mortgage insurer is regulated by an overseas prudential regulator.",attachment,15,12,13
-APS-112,APS-112-ATT-A-TABLE1,A.16,Risk Weights for Standard Residential Property Loans – Table 1 (Attachment A),"Requires ADIs to apply risk weights from Table 1 to standard residential property exposures based on loan classification (owner-occupied P&I or other standard), LMI status, and LVR band. Also provides a 35 per cent risk weight for loans under the Australian Government's Home Guarantee Scheme.","16. An ADI must apply the risk weights in Table 1 to its residential property exposures that satisfy all of the conditions of a standard loan as set out in paragraphs 3 to 7 of this Attachment, based on their classification as an owner-occupied principal-and-interest or other standard residential property exposure, the application of eligible LMI and the exposure's LVR.
+APS-112,APS-112-ATT-A-S6,Attachment A (continued),Risk Weights for Standard Residential Property Loans – Table 1,"Requires ADIs to apply risk weights from Table 1 to standard residential property exposures based on loan classification (owner-occupied P&I or other standard), LMI status, and LVR band. Also provides a 35 per cent risk weight for exposures under the Australian Government's Home Guarantee Scheme subject to specified conditions.","Risk weights for standard residential property loans
+16. An ADI must apply the risk weights in Table 1 to its residential property exposures that satisfy all of the conditions of a standard loan as set out in paragraphs 3 to 7 of this Attachment, based on their classification as an owner-occupied principal-and-interest or other standard residential property exposure, the application of eligible LMI and the exposure's LVR.
 Table 1 Risk weights for standard loans
 Risk weight (%)
 ≤ 50 50.01 60.01 70.01 80.01 90.01 > 100
@@ -180,7 +181,8 @@ LMI
 (a) the guarantee certificate expires or is released in accordance with the terms of the Deed of Guarantee in respect of the First Home Loan Deposit Scheme or the Family Home Guarantee Scheme; or
 (b) APRA determines that it no longer applies.
 APRA may determine that this treatment may also be applied to a similar guarantee scheme that is offered by the Australian Government or an Australian State or Territory government.",attachment,16-17,13,13
-APS-112,APS-112-ATT-A-TABLE2,A.18-A.21,Risk Weights for Non-Standard Residential Property Loans – Table 2 (Attachment A),"Defines non-standard residential property loans and specifies the risk weights in Table 2 applicable to them based on LVR. Includes specific non-standard categories such as interest-only loans with LVR above 80 per cent, reverse mortgages, shared equity mortgages, and SMSF loans. Allows reclassification to standard after 36 consecutive months of performing.","18. An exposure that is secured by residential property but does not meet any of the requirements set out in paragraphs 3 to 7 of this Attachment, must be classified as a non-standard loan.
+APS-112,APS-112-ATT-A-S7,Attachment A (continued),Risk Weights for Non-Standard Residential Property Loans – Table 2,"Defines non-standard residential property loans including interest-only loans with LVR above 80 per cent and term over five years, reverse mortgages, shared equity mortgages, and SMSF loans. Requires ADIs to apply risk weights from Table 2 based on LVR, and permits reclassification to standard after 36 consecutive months of performing.","Risk weights for non-standard residential property loans
+18. An exposure that is secured by residential property but does not meet any of the requirements set out in paragraphs 3 to 7 of this Attachment, must be classified as a non-standard loan.
 19. The following exposures must also be classified as non-standard loans:
 (a) interest only loans with an LVR greater than 80 per cent and an interest-only term that is specified in the loan contract as greater than five years or is of unspecified duration. The non-standard treatment applies while the loan remains on interest-only repayment terms. Exposures that meet the above criteria but are predominantly for business purposes may be excluded;
 (b) reverse mortgages, which are exposures that do not require principal-and-interest payments until termination of the facility. A risk weight of 50 per cent may only be applied to reverse mortgages where the criteria in paragraphs 3, 4, 6 and 7 of this Attachment are satisfied in addition to the LVR criteria in Table 2;
@@ -193,7 +195,8 @@ LVR (%) ≤ 60 > 60
 Reverse mortgages 50 100
 All other non-standard loans 100
 21. A loan secured by residential property which does not meet the criteria set out in paragraph 5 of this Attachment, and consequently must be classified as a non-standard loan, may be reclassified as a standard loan where the loan has been performing consecutively for the previous 36 months.",attachment,18-21,13,14
-APS-112,APS-112-ATT-A-COMM-PROP,A.22-A.26,Commercial Property Exposures – Risk Weights (Attachment A),"Defines commercial property exposures and sets out risk weights in Tables 3 and 4 based on whether repayment depends on property cash flows, LVR, and counterparty type. Specifies criteria for classifying exposures as not dependent on property cash flows, including borrower asset thresholds and diversification requirements.","22. A commercial property exposure is a property exposure that is not a residential property exposure as defined in paragraph 14 of this Attachment, and is not land acquisition, development and construction as defined in paragraphs 27 and 28 of this Attachment.
+APS-112,APS-112-ATT-A-S8,Attachment A (continued),Commercial Property – Definition and Risk Weights (Tables 3 and 4),"Defines commercial property exposures and requires ADIs to apply risk weights from Table 3 where repayment depends primarily on property cash flows, or Table 4 where it does not, based on LVR and standard/non-standard classification. Sets out criteria for the 'not dependent on property cash flows' classification including borrower asset thresholds and diversification requirements.","Commercial property
+22. A commercial property exposure is a property exposure that is not a residential property exposure as defined in paragraph 14 of this Attachment, and is not land acquisition, development and construction as defined in paragraphs 27 and 28 of this Attachment.
 Dependent on property cash flows
 23. If the prospects for repayment of the exposure depend primarily on the cash flows generated by the asset or other real estate assets owned by the borrower, an ADI must apply the risk weights in Table 3 based on LVR and the classification of the loan as standard or non-standard.
 Table 3 Risk weights for commercial property exposures – dependent on property cash flows
@@ -226,7 +229,8 @@ counterparties weight in Attachment B
 (i) greater than 25 per cent of portfolio net rental income for portfolios of retail shopping centres that typically require significant anchor tenants to attract specialty tenants; and
 (ii) greater than 10 per cent of portfolio net rental income for all other portfolios of real estate assets (e.g. commercial offices, industrial buildings, hotels), with the exception of Government tenants.
 26. Where an ADI has an exposure to commercial property that is used predominantly for forest or agricultural purposes, it may classify the exposure as 'not dependent', unless the property has been acquired specifically for lease or resale, and the servicing of the debt is dependent on such lease or resale (or the lease or resale of other properties).",attachment,22-26,14,16
-APS-112,APS-112-ATT-A-ADC,A.27-A.30,"Land Acquisition, Development and Construction (ADC) Exposures (Attachment A)","Defines ADC exposures and specifies that a 100 per cent risk weight may apply to ADC exposures secured by residential property if specific conditions are met, including debt-to-cost ratios and pre-sales requirements. All other ADC exposures attract a 150 per cent risk weight.","27. Land acquisition, development and construction (ADC) refers to property exposures where the security for the loan predominantly relates to any of the land acquisition for development and construction purposes, or development and construction of any residential or commercial property.
+APS-112,APS-112-ATT-A-S9,Attachment A (continued),"Land Acquisition, Development and Construction (ADC) Exposures",Defines ADC exposures as those where security predominantly relates to land acquisition or development and construction of residential or commercial property. Permits a 100 per cent risk weight for ADC exposures secured by residential property meeting specified conditions including debt-to-cost ratios and pre-sales requirements; all other ADC exposures attract a 150 per cent risk weight.,"Land acquisition, development and construction
+27. Land acquisition, development and construction (ADC) refers to property exposures where the security for the loan predominantly relates to any of the land acquisition for development and construction purposes, or development and construction of any residential or commercial property.
 28. All property exposures where the predominant property security is not fully completed must be included as ADC unless:
 (a) the property is used predominantly for forest or agricultural purposes; or
 (b) the loan is secured by residential property under construction, or by land upon which residential property will be constructed, where the property will be the primary residence of the borrower.
@@ -236,11 +240,13 @@ APS-112,APS-112-ATT-A-ADC,A.27-A.30,"Land Acquisition, Development and Construct
 (c) where the exposure to the borrower is greater than $5 million in aggregate for a single development, qualifying pre-sales for the underlying property are at least equal to 100 per cent of the total debt; and
 (d) the ADI has a policy that defines qualifying pre-sales and qualifying development costs for the purpose of meeting the requirements under paragraph 29 of this Attachment.
 30. An ADI must apply a risk weight of 150 per cent to all other ADC exposures.",attachment,27-30,16,16
-APS-112,APS-112-ATT-B-INTRO,B.1-B.2,Attachment B – Introduction and Scope,Establishes that Attachment B applies to all non-property exposures except unsettled/failed transactions (Attachment D) and defaulted exposures (Attachment E). Requires compliance with Attachment F when assigning risk weights based on external credit ratings.,"1. An ADI must risk-weight all exposures that are not property exposures according to the requirements detailed in this Attachment, with the exception of:
+APS-112,APS-112-ATT-B-S1,Attachment B,Risk Weights for Non-Property Exposures – Scope and Sovereign Exposures,"Requires ADIs to risk-weight all non-property exposures per Attachment B, with exceptions for unsettled/failed transactions (Attachment D) and defaulted exposures (Attachment E). Defines sovereign exposures and requires application of Table 5 risk weights based on external credit rating, with zero per cent available for Australian Government and RBA exposures denominated in Australian dollars.","Attachment B – Risk weights for non-property exposures
+1. An ADI must risk-weight all exposures that are not property exposures according to the requirements detailed in this Attachment, with the exception of:
 (a) unsettled and failed transactions, which must be risk-weighted in accordance with Attachment D to this Prudential Standard; and
 (b) defaulted exposures, which must be risk-weighted in accordance with Attachment E to this Prudential Standard.
-2. Where this Attachment requires an ADI to assign risk weights based on external credit ratings, an ADI must also comply with the requirements set out in Attachment F to this Prudential Standard.",attachment,1-2,17,17
-APS-112,APS-112-ATT-B-SOVEREIGN,B.3-B.5,Sovereign Exposures – Risk Weights (Attachment B),"Defines sovereign exposures including central governments, central banks, and eligible multilateral development banks. Requires ADIs to apply risk weights from Table 5 based on external credit rating, with Australian Government and RBA AUD-denominated exposures eligible for zero per cent risk weight.","3. A sovereign exposure includes:
+2. Where this Attachment requires an ADI to assign risk weights based on external credit ratings, an ADI must also comply with the requirements set out in Attachment F to this Prudential Standard.
+Sovereign exposures
+3. A sovereign exposure includes:
 (a) all exposures to Australian and overseas central and subnational governments, where a subnational government is defined as a government of a geographically defined part of a state which has powers to raise revenue and borrow money;
 (b) all exposures to the Reserve Bank of Australia and overseas central banks, where a central bank is defined as an entity which is responsible for overseeing and implementing the monetary policy of a state or group of states; and
 (c) all exposures to institutions and multilateral development banks eligible for a zero per cent risk weight.7
@@ -250,14 +256,16 @@ Credit rating
 1 2 3 4, 5 6 Unrated
 grade
 Risk weight (%) 0 20 50 100 150 100
-5. Exposures to the Australian Government and Reserve Bank of Australia that are denominated and funded in Australian dollars may be risk-weighted at zero per cent.",attachment,3-5,17,18
-APS-112,APS-112-ATT-B-PSE,B.6,Domestic Public Sector Entity Exposures – Risk Weights (Attachment B),"Requires ADIs to apply risk weights from Table 6 to domestic PSE exposures that do not qualify as sovereign exposures, based on the external credit rating of the PSE.","6. An ADI must apply the risk weights in Table 6 to its exposures to domestic public sector entities (PSEs) that do not meet the definition of a sovereign exposure, based on the external credit rating of the domestic PSE.
+5. Exposures to the Australian Government and Reserve Bank of Australia that are denominated and funded in Australian dollars may be risk-weighted at zero per cent.",attachment,1-5,17,18
+APS-112,APS-112-ATT-B-S2,Attachment B (continued),Domestic Public Sector Entity Exposures – Table 6,"Requires ADIs to apply risk weights from Table 6 to domestic PSE exposures that do not qualify as sovereign exposures, based on external credit rating.","Domestic public sector entities
+6. An ADI must apply the risk weights in Table 6 to its exposures to domestic public sector entities (PSEs) that do not meet the definition of a sovereign exposure, based on the external credit rating of the domestic PSE.
 Table 6 Risk weights for domestic PSEs
 Credit rating
 1 2 3 4, 5 6 Unrated
 grade
 Risk weight (%) 20 50 50 100 150 50",attachment,6,18,18
-APS-112,APS-112-ATT-B-BANK,B.7-B.13,Bank Exposures – Risk Weights (Attachment B),"Defines bank exposures and requires ADIs to apply risk weights from Tables 7 and 8 based on external credit rating and maturity. Specifies rules for unrated bank exposures, short-term exposures, issue-specific ratings, and prohibits use of ratings incorporating implicit government support.","7. An exposure to a bank counterparty includes all exposures, other than equity or subordinated debt, to an ADI or overseas bank. It includes any exposures to multilateral development banks that are not eligible to be risk-weighted at zero per cent in accordance with paragraph 3(c) of this Attachment.
+APS-112,APS-112-ATT-B-S3,Attachment B (continued),Bank Exposures – Tables 7 and 8,"Requires ADIs to apply risk weights from Table 7 to bank exposures based on external credit rating and maturity (short-term vs long-term), with short-term treatment available for exposures with original maturity of three months or less or trade-related exposures of six months or less. Unrated bank exposures must be risk-weighted at the higher of the standard floor or the sovereign risk weight of the bank's country of incorporation. Table 8 applies to short-term issue-specific rated exposures.","Bank exposures
+7. An exposure to a bank counterparty includes all exposures, other than equity or subordinated debt, to an ADI or overseas bank. It includes any exposures to multilateral development banks that are not eligible to be risk-weighted at zero per cent in accordance with paragraph 3(c) of this Attachment.
 8. An ADI must apply the risk weights in Table 7 to its bank exposures, based on the external credit rating of the bank.
 Table 7 Risk weights for bank exposures
 Credit rating
@@ -287,7 +295,8 @@ Risk weight (%) 20 50 100 150
 (b) of 2 or 3 under Table 8, then all unrated short-term exposures to that counterparty must be risk-weighted at 100 per cent; and
 (c) of 4 under Table 8, then all unrated exposures to that counterparty, whether they are short-term or long-term exposures, must be risk-weighted at 150 per cent.
 13. When assigning risk-weights to bank exposures based on external credit ratings, an ADI must not use ratings that incorporate assumptions of implicit government support.",attachment,7-13,18,19
-APS-112,APS-112-ATT-B-COVERED-BONDS,B.14-B.16,Covered Bond Exposures – Risk Weights (Attachment B),"Permits ADIs to apply reduced risk weights from Table 9 to rated covered bond exposures where the cover pool meets specified asset quality and composition criteria, including LVR limits on residential and commercial property assets. Requires semi-annual disclosure of cover pool information.","14. An ADI may apply the risk weights in Table 9 to its covered bond exposures with an issue-specific external credit rating, where the requirements set out in paragraphs 15 and 16 of this Attachment are met.
+APS-112,APS-112-ATT-B-S4,Attachment B (continued),Covered Bond Exposures – Tables 9,Permits ADIs to apply reduced risk weights from Table 9 to rated covered bond exposures where the cover pool meets specified asset eligibility criteria including LVR limits for residential and commercial property. Requires the cover pool to exceed the outstanding covered bond value by at least 10 per cent and mandates semi-annual disclosure of cover pool information.,"Covered bonds
+14. An ADI may apply the risk weights in Table 9 to its covered bond exposures with an issue-specific external credit rating, where the requirements set out in paragraphs 15 and 16 of this Attachment are met.
 Table 9 Risk weights for rated covered bond exposures
 Credit rating
 1 2, 3 4, 5 6
@@ -304,108 +313,114 @@ Risk weight (%) 10 20 50 100
 16. An ADI must be able to demonstrate to APRA that, at a minimum, the following information is available to the ADI on at least a semi-annual basis:
 (a) the value of the cover pool and outstanding covered bonds;
 (b) the geographical distribution and type of cover assets, loan size, interest rate and currency risks;",attachment,14-16,20,20
-APS-112,APS-112-ATT-B-S17,17,Unrated or Non-Qualifying Covered Bonds,Covered bonds that are unrated or fail to meet the requirements in paragraphs 15-16 must be treated as bank exposures and risk-weighted using Table 7.,"17. Where a covered bond is unrated or does not meet the requirements set out in paragraphs 15 and 16 of this Attachment, an ADI must treat the covered bond as a bank exposure and apply the risk weights in Table 7.",attachment,17,21,21
-APS-112,APS-112-ATT-B-S18,18,Corporate Exposures – Definition,"Corporate exposures cover all exposures to incorporated entities and other entities not fitting another asset class, including financial institutions (excluding banks). Equity, subordinated debt, and third-party exposures are excluded from this category.","18. An exposure to a corporate counterparty includes all exposures to incorporated entities, associations, partnerships, proprietorships, trusts, funds and other entities that do not meet the definition of any other asset class. Exposures to financial institutions, excluding banks but including insurance companies or securities companies, must be treated as corporate exposures. Exposures to equity or subordinated debt, or exposures through a third party as detailed in paragraph 41 of this Attachment, must not be included as corporate exposures.",attachment,18,21,21
+APS-112,APS-112-ATT-B-S17,17,Unrated or Non-Qualifying Covered Bonds,Covered bonds that are unrated or fail to meet the requirements in paragraphs 15-16 must be treated as bank exposures and risk-weighted using Table 7.,"17. Where a covered bond is unrated or does not meet the requirements set out in paragraphs 15 and 16 of this Attachment, an ADI must treat the covered bond as a bank exposure and apply the risk weights in Table 7.",core,17,21,21
+APS-112,APS-112-ATT-B-S18,18,Corporate Exposures – Definition,"Corporate exposures cover all exposures to incorporated entities, associations, partnerships, trusts, funds and other entities not fitting another asset class. Financial institutions (excluding banks) such as insurance and securities companies are treated as corporate exposures, while equity, subordinated debt, and third-party exposures are excluded.","18. An exposure to a corporate counterparty includes all exposures to incorporated entities, associations, partnerships, proprietorships, trusts, funds and other entities that do not meet the definition of any other asset class. Exposures to financial institutions, excluding banks but including insurance companies or securities companies, must be treated as corporate exposures. Exposures to equity or subordinated debt, or exposures through a third party as detailed in paragraph 41 of this Attachment, must not be included as corporate exposures.",core,18,21,21
 APS-112,APS-112-ATT-B-S19,19,General Corporate – Rated Exposures (Long-Term),"ADIs must apply risk weights from Table 10 to rated general corporate exposures, ranging from 20% for grade 1 to 150% for grades 5 and 6.","19. An ADI must apply the risk weights in Table 10 to its general corporate exposures with an external credit rating.
-
 Table 10 Risk weights for general corporate exposures
 Credit rating grade
 1 2 3 4 5, 6
 (long-term)
-Risk weight (%) 20 50 75 100 150",attachment,19,21,21
+Risk weight (%) 20 50 75 100 150",core,19,21,21
 APS-112,APS-112-ATT-B-S20,20,General Corporate – Rated Exposures (Short-Term),"ADIs must apply risk weights from Table 11 to short-term general corporate exposures with issue-specific external credit ratings, ranging from 20% for grade 1 to 150% for grade 4.","20. An ADI must apply the risk weights in Table 11 to short-term general corporate exposures with an issue-specific external credit rating.
-
 Table 11 Risk weights for general corporate exposures (short-term issue-specific credit ratings)
 Credit rating grade
 1 2 3 4
 (short-term)
-Risk weight (%) 20 50 100 150",attachment,20,21,21
-APS-112,APS-112-ATT-B-S21,21,General Corporate – Short-Term Grade 4 Contagion Rule,"If a general corporate exposure has a short-term issue-specific rating mapping to grade 4, all unrated exposures to that counterparty (short-term or long-term) must be risk-weighted at 150%.","21. If an ADI has a general corporate exposure with an issue-specific short-term external credit rating mapping to a credit rating grade of 4 under Table 11, then all unrated exposures to that counterparty, whether they are short-term or long-term exposures, must be risk-weighted at 150 per cent.",attachment,21,21,21
-APS-112,APS-112-ATT-B-S22,22,General Corporate – SME Definition,"An SME exposure is one to a corporate counterparty with total consolidated annual revenue below $75 million. Where revenue cannot be determined and the exposure is under $5 million, the ADI may treat it as an SME exposure.","22. An exposure to an SME is an exposure to a corporate counterparty with total consolidated annual revenue of less than $75 million. Where an ADI has an exposure to an SME that is part of a corporate group, it may be treated as an SME exposure provided the total consolidated annual revenue for the group is less than $75 million. Where a corporate counterparty's total consolidated annual revenue cannot be determined, and the exposure is less than $5 million, the ADI may treat the exposure as SME.",attachment,22,21,22
+Risk weight (%) 20 50 100 150",core,20,21,21
+APS-112,APS-112-ATT-B-S21,21,General Corporate – Short-Term Grade 4 Contagion Rule,"If a general corporate exposure has a short-term issue-specific rating mapping to grade 4, all unrated exposures to that counterparty (short-term or long-term) must be risk-weighted at 150%.","21. If an ADI has a general corporate exposure with an issue-specific short-term external credit rating mapping to a credit rating grade of 4 under Table 11, then all unrated exposures to that counterparty, whether they are short-term or long-term exposures, must be risk-weighted at 150 per cent.",core,21,21,21
+APS-112,APS-112-ATT-B-S22,22,General Corporate – SME Definition,"An SME exposure is one to a corporate counterparty with total consolidated annual revenue below $75 million. Where revenue cannot be determined and the exposure is less than $5 million, the ADI may treat it as an SME exposure.","22. An exposure to an SME is an exposure to a corporate counterparty with total consolidated annual revenue of less than $75 million. Where an ADI has an exposure to an SME that is part of a corporate group, it may be treated as an SME exposure provided the total consolidated annual revenue for the group is less than $75 million. Where a corporate counterparty's total consolidated annual revenue cannot be determined, and the exposure is less than $5 million, the ADI may treat the exposure as SME.",core,22,21,22
 APS-112,APS-112-ATT-B-S23,23,General Corporate – Unrated SME Risk Weights,ADIs must apply risk weights from Table 12 to unrated SME exposures: 75% for SME retail and 85% for SME corporate.,"23. An ADI must apply the risk weights in Table 12 to its unrated SME exposures.
-
 Table 12 Risk weights for unrated SME exposures
 Risk weight (%)
 SME retail 75
-SME corporate 85",attachment,23,22,22
+SME corporate 85",core,23,22,22
 APS-112,APS-112-ATT-B-S24,24,SME Retail Classification Criteria,"To qualify as SME retail, the exposure must be a small business lending facility or commitment (excluding derivatives, securities, and residential property-secured exposures) and the maximum aggregated exposure to the SME counterparty must be less than $1.5 million.","24. To be risk-weighted as SME retail, the following criteria must be satisfied:
 (a) the exposure is in the form of a small business lending facility or commitment. Derivatives and other securities such as bonds and equities, and exposures secured by residential property are excluded from this category; and
 (b) the maximum aggregated exposure to the SME counterparty is less than $1.5 million. For this purpose:
 (i) aggregated exposure means the gross amount, excluding the application of any credit risk mitigation. For off-balance sheet exposures, the gross amount must be calculated after applying CCFs; and
-(ii) the SME counterparty means either a single SME, or where the SME forms part of a corporate group, the broader group.",attachment,24,22,22
-APS-112,APS-112-ATT-B-S25,25,General Corporate – Other Unrated Exposures,"For unrated general corporate exposures not treated as SME, ADIs must either apply 100% risk weight to all exposures, or apply 85% to investment grade and 110% to non-investment grade corporates under an APRA-approved methodology. Investment grade assessment must consider business model complexity, industry performance, and operating environment risks.","25. For all other unrated general corporate exposures that are not treated as SME, an ADI must either:
+(ii) the SME counterparty means either a single SME, or where the SME forms part of a corporate group, the broader group.",core,24,22,22
+APS-112,APS-112-ATT-B-S25,25,General Corporate – Other Unrated Exposures,"For unrated general corporate exposures not treated as SME, ADIs must either apply 100% risk weight to all exposures, or apply 85% to investment grade and 110% to non-investment grade corporates under an APRA-approved methodology. Investment grade corporates must have adequate capacity to meet financial commitments robustly against adverse economic conditions.","25. For all other unrated general corporate exposures that are not treated as SME, an ADI must either:
 (a) assign a 100 per cent risk-weight to all exposures; or
 (b) assign an 85 per cent risk-weight to exposures to 'investment grade' corporates and a 110 per cent risk weight to exposures to 'non-investment grade' corporates where the ADI has in place an APRA approved methodology that differentiates between 'investment grade' and 'non-investment grade' corporates.
-An investment grade general corporate refers to a general corporate entity that has adequate capacity to meet its financial commitments in a timely manner and its ability to do so is assessed to be robust against adverse changes in the economic cycle and business conditions. When assessing whether a general corporate exposure is investment grade or non-investment grade, an ADI must assess the general corporate entity against the investment grade definition taking into account the complexity of its business model, performance against industry and peers, and risks posed by the entity's operating environment. An ADI must have sufficient information to conduct adequate due diligence for the assessment of whether the corporate entity is investment grade.",attachment,25,22,23
-APS-112,APS-112-ATT-B-S26,26,Specialised Lending – Classification Criteria,"A corporate exposure must be classified as specialised lending if it meets specific criteria including being object, project, or commodities finance; being to a special-purpose entity; having limited independent repayment capacity; and having the primary repayment source as asset-generated income.","26. A corporate exposure must be classified as a specialised lending exposure if it possesses the following characteristics, either in legal form or economic substance:
+An investment grade general corporate refers to a general corporate entity that has adequate capacity to meet its financial commitments in a timely manner and its ability to do so is assessed to be robust against adverse changes in the economic cycle and business conditions. When assessing whether a general corporate exposure is investment grade or non-investment grade, an ADI must assess the general corporate entity against the investment grade definition taking into account the complexity of its business model, performance against industry and peers, and risks posed by the entity's operating environment. An ADI must have sufficient information to conduct adequate due diligence for the assessment of whether the corporate entity is investment grade.",core,25,22,23
+APS-112,APS-112-ATT-B-S26,26,Specialised Lending – Classification Criteria,"A corporate exposure must be classified as specialised lending if it finances or operates physical assets through a special-purpose entity with little independent repayment capacity, the ADI has substantial control over assets and income, and the primary repayment source is asset-generated income.","26. A corporate exposure must be classified as a specialised lending exposure if it possesses the following characteristics, either in legal form or economic substance:
 (a) the exposure satisfies the definition of object finance, project finance or commodities finance as set out in paragraph 27 of this Attachment, is not a property exposure and is not secured by derivatives or other securities such as bonds or equities;
 (b) the exposure is typically to an entity that was created specifically to finance or operate physical assets;
 (c) other than the income that it receives from the assets being financed, the borrowing entity has little or no other material assets or activities, and therefore has little or no independent capacity to repay the obligation;
 (d) the terms of the obligation give the ADI a substantial degree of control over the assets and the income that it generates; and
-(e) as a result of the characteristics detailed in 26(a) to 26(d) of this paragraph, the primary source of repayment of the obligation is the income generated by the assets rather than the independent capacity of a broader commercial enterprise.",attachment,26,23,23
-APS-112,APS-112-ATT-B-S27,27,Specialised Lending – Sub-Classes,"Specialised lending includes three sub-classes: project finance (revenue from a single project), object finance (equipment acquisition repaid from specific asset cash flows), and commodities finance (short-term lending against exchange-traded commodities).","27. The specialised lending asset class includes the following three sub-classes:
+(e) as a result of the characteristics detailed in 26(a) to 26(d) of this paragraph, the primary source of repayment of the obligation is the income generated by the assets rather than the independent capacity of a broader commercial enterprise.",core,26,23,23
+APS-112,APS-112-ATT-B-S27,27,Specialised Lending – Sub-Classes,"Specialised lending includes three sub-classes: project finance (revenue from a single project), object finance (equipment acquisition repaid from specific asset cash flows), and commodities finance (short-term lending against exchange-traded commodities repaid from commodity sale proceeds).","27. The specialised lending asset class includes the following three sub-classes:
 (a) project finance, refers to the method of funding in which the lender looks primarily to the revenues generated by a single project, both as the source of repayment and as security for the loan;
 (b) object finance, refers to the method of funding the acquisition of equipment where the repayment of the loan is dependent on the cash flows generated by the specific assets that have been financed and pledged or assigned to the lender; and
-(c) commodities finance, refers to short-term lending to finance reserves, inventories, or receivables of exchange-traded commodities, where the loan will be repaid from the proceeds of the sale of the commodity and the borrower has no independent capacity to repay the loan.",attachment,27,23,23
-APS-112,APS-112-ATT-B-S28,28,Specialised Lending – Rated Exposures,"Where an issue-specific external credit rating is available for a specialised lending exposure, ADIs must apply the risk weights in Table 10.","28. Where an issue-specific external credit rating is available for a specialised lending exposure, an ADI must apply the risk weights in Table 10.",attachment,28,23,23
-APS-112,APS-112-ATT-B-S29,29,Specialised Lending – Unrated Exposures,ADIs must apply risk weights from Table 13 to unrated specialised lending exposures: 110% for project finance and 100% for object and commodities finance.,"29. An ADI must apply the risk weights in Table 13 to its unrated specialised lending exposures, including any exposures with an issuer-specific external credit rating.
-
+(c) commodities finance, refers to short-term lending to finance reserves, inventories, or receivables of exchange-traded commodities, where the loan will be repaid from the proceeds of the sale of the commodity and the borrower has no independent capacity to repay the loan.",core,27,23,23
+APS-112,APS-112-ATT-B-S28,28,Specialised Lending – Rated Exposures,"Where an issue-specific external credit rating is available for a specialised lending exposure, the ADI must apply the risk weights in Table 10.","28. Where an issue-specific external credit rating is available for a specialised lending exposure, an ADI must apply the risk weights in Table 10.",core,28,23,23
+APS-112,APS-112-ATT-B-S29,29,Specialised Lending – Unrated Risk Weights,ADIs must apply risk weights from Table 13 to unrated specialised lending exposures: 110% for project finance and 100% for object and commodities finance.,"29. An ADI must apply the risk weights in Table 13 to its unrated specialised lending exposures, including any exposures with an issuer-specific external credit rating.
 Table 13 Risk weights for unrated specialised lending exposures
 Risk weight (%)
 Project finance 110
-Object and commodities finance 100",attachment,29,23,24
-APS-112,APS-112-ATT-B-S30,30,Retail Exposures – Definition,A retail exposure is any exposure to one or more natural persons that is not a property exposure or margin lending exposure.,"30. A retail exposure is any exposure to one or more individuals (that is, natural persons), that is not a property exposure or margin lending exposure.",attachment,30,24,24
+Object and commodities finance 100",core,29,23,24
+APS-112,APS-112-ATT-B-S30,30,Retail Exposures – Definition,A retail exposure is any exposure to one or more natural persons that is not a property exposure or margin lending exposure.,"30. A retail exposure is any exposure to one or more individuals (that is, natural persons), that is not a property exposure or margin lending exposure.",core,30,24,24
 APS-112,APS-112-ATT-B-S31,31,Retail Exposures – Risk Weights,ADIs must apply risk weights from Table 14 to retail exposures: 75% for credit card exposures and 100% for other retail exposures.,"31. An ADI must apply the risk weights in Table 14 to its retail exposures, based on the product type.
-
 Table 14 Risk weights for retail exposures
 Risk weight (%)
 Credit card exposures 75
-Other retail exposures 100",attachment,31,24,24
-APS-112,APS-112-ATT-B-S32,32,Margin Lending Exposures,Margin lending exposures secured by eligible financial collateral attract a 20% risk weight; those secured by other collateral attract 100%.,"32. An ADI must apply a risk weight of 20 per cent to margin lending exposures secured by eligible financial collateral. Where a margin loan is secured by other collateral, an ADI must apply a risk weight of 100 per cent to its exposure.",attachment,32,24,24
-APS-112,APS-112-ATT-B-S33,33,Subordinated Debt,Subordinated debt not required to be deducted from regulatory capital under APS 111 must be risk-weighted at 150%.,"33. Subordinated debt includes any facility that is expressly subordinated to another facility, or has the effect of conveying economic subordination to another facility. Subordinated debt that is not required to be deducted from regulatory capital under APS 111 must be risk weighted at 150 per cent.",attachment,33,24,24
+Other retail exposures 100",core,31,24,24
+APS-112,APS-112-ATT-B-S32,32,Margin Lending Exposures – Risk Weights,Margin lending exposures secured by eligible financial collateral attract a 20% risk weight; those secured by other collateral attract 100%.,"32. An ADI must apply a risk weight of 20 per cent to margin lending exposures secured by eligible financial collateral. Where a margin loan is secured by other collateral, an ADI must apply a risk weight of 100 per cent to its exposure.",core,32,24,24
+APS-112,APS-112-ATT-B-S33,33,Subordinated Debt – Risk Weight,Subordinated debt not required to be deducted from regulatory capital under APS 111 must be risk-weighted at 150%.,"33. Subordinated debt includes any facility that is expressly subordinated to another facility, or has the effect of conveying economic subordination to another facility. Subordinated debt that is not required to be deducted from regulatory capital under APS 111 must be risk weighted at 150 per cent.",core,33,24,24
 APS-112,APS-112-ATT-B-S34,34,Equity Exposures – Definition,"Equity exposures are defined by economic substance and include direct and indirect ownership interests in entities. An instrument qualifies as equity if it is irredeemable, embodies no issuer obligation, and conveys a residual claim on assets or income.","34. Equity exposures must be defined on the basis of the economic substance of the instrument. Equity exposures include both direct and indirect ownership interests, whether voting or non-voting, in the assets and income of entities, including commercial enterprises and financial institutions. An instrument is considered to be an equity exposure if it meets the following criteria:
 (a) it is irredeemable, in that the return of invested funds can be achieved only by the sale of the investment, the sale of the rights to the investment or by the liquidation of the issuer;
 (b) it does not embody an obligation of the issuer; and
-(c) it conveys a residual claim on the assets or income of the issuer.",attachment,34,24,25
-APS-112,APS-112-ATT-B-S35,35,Equity Exposures – Instruments Treated as Equity,"Debt obligations, securities, derivatives, and other instruments conveying the economic substance of equity ownership must be treated as equity exposures. Convertible instruments are treated as equity from conversion (if at ADI's option) or from inception (if at issuer's option or automatic).","35. Debt obligations and other securities, units in trusts, derivatives or other instruments which are structured for the purpose, or have the effect, of conveying the economic substance of equity ownership must be treated as equity exposures. This includes options and warrants on equities and short positions in equity securities. In addition, if a debt instrument is convertible into equity at the option of an ADI, it should be treated by the ADI as equity on conversion. If such an instrument is convertible at the option of the issuer or automatically by the terms of the instrument, it should be treated by the ADI as equity from inception.",attachment,35,25,25
-APS-112,APS-112-ATT-B-S36,36,Equity Exposures – Debt/Equity Swaps,Instruments recorded as loans but arising from debt/equity swaps as part of orderly debt realisation or restructuring must be treated as equity exposures.,36. Equities that are recorded as a loan but arise from a debt/equity swap made as part of the orderly realisation or restructuring of the debt must be treated as an equity exposure.,attachment,36,25,25
-APS-112,APS-112-ATT-B-S37,37,Equity Exposures – Return Linked Instruments,Instruments with a return directly linked to equities must be treated as equity exposures.,37. Instruments with a return directly linked to equities must be treated as equity exposures.,attachment,37,25,25
+(c) it conveys a residual claim on the assets or income of the issuer.",core,34,24,25
+APS-112,APS-112-ATT-B-S35,35,Equity Exposures – Instruments Treated as Equity,"Debt obligations, securities, derivatives, and other instruments conveying the economic substance of equity ownership must be treated as equity exposures, including options, warrants, and convertible instruments.","35. Debt obligations and other securities, units in trusts, derivatives or other instruments which are structured for the purpose, or have the effect, of conveying the economic substance of equity ownership must be treated as equity exposures. This includes options and warrants on equities and short positions in equity securities. In addition, if a debt instrument is convertible into equity at the option of an ADI, it should be treated by the ADI as equity on conversion. If such an instrument is convertible at the option of the issuer or automatically by the terms of the instrument, it should be treated by the ADI as equity from inception.",core,35,25,25
+APS-112,APS-112-ATT-B-S36,36,Equity Exposures – Debt/Equity Swaps,Instruments recorded as loans but arising from debt/equity swaps as part of orderly debt realisation or restructuring must be treated as equity exposures.,36. Equities that are recorded as a loan but arise from a debt/equity swap made as part of the orderly realisation or restructuring of the debt must be treated as an equity exposure.,core,36,25,25
+APS-112,APS-112-ATT-B-S37,37,Equity Exposures – Return Linked Instruments,Instruments with a return directly linked to equities must be treated as equity exposures.,37. Instruments with a return directly linked to equities must be treated as equity exposures.,core,37,25,25
 APS-112,APS-112-ATT-B-S38,38,Equity Exposures – Risk Weights,"Equity exposures not deducted from Regulatory Capital must be risk-weighted at 250% if listed on a recognised exchange (or to banking/insurance subsidiaries at Level 1), and 400% if unlisted.","38. An ADI must risk-weight equity exposures that are not required to be deducted from Regulatory Capital under APS 111 at:
 (a) 250 per cent if the equity exposure is listed on a recognised exchange, or where the equity exposure is to the ADI's banking or insurance subsidiary at Level 1; and
-(b) 400 per cent if the equity exposure is not listed on a recognised exchange.",attachment,38,25,25
-APS-112,APS-112-ATT-B-S39,39,Lease Exposures – General Treatment,"Lease exposures include all lease and asset finance exposures regardless of counterparty type. Excluding residual value risk, ADIs must apply the risk weight of the counterparty as specified in Attachment B.","39. Lease exposures include all lease and asset finance exposures, irrespective of the counterparty type, and include exposures generated by the leasing of right-of-use assets. For lease exposures, excluding residual value risk, an ADI must apply the risk weight of the counterparty, as specified in this Attachment.",attachment,39,25,25
+(b) 400 per cent if the equity exposure is not listed on a recognised exchange.",core,38,25,25
+APS-112,APS-112-ATT-B-S39,39,Lease Exposures – Counterparty Risk Weight,"Lease exposures, including right-of-use asset leases, must be risk-weighted using the counterparty risk weight specified in Attachment B, excluding residual value risk.","39. Lease exposures include all lease and asset finance exposures, irrespective of the counterparty type, and include exposures generated by the leasing of right-of-use assets. For lease exposures, excluding residual value risk, an ADI must apply the risk weight of the counterparty, as specified in this Attachment.",core,39,25,25
 APS-112,APS-112-ATT-B-S40,40,Lease Exposures – Residual Value Risk,"Where an ADI bears residual value risk (e.g. as lessor in operating leases), it must measure aggregate residual value and apply risk weights from Table 15: 100% for the portion up to 10% of Tier 1 capital and 250% for the portion exceeding 10% of Tier 1 capital.","40. Where an ADI is exposed to residual value risk, such as when it acts as the lessor in operating leases, it must measure the aggregate residual value and apply the risk weights in Table 15 to the residual value of its leased assets.
-
 Table 15 Risk weights for residual value under lease exposures
-Risk weight (%) applying to the portion of aggregate residual value ≤ 10% of Tier 1 capital | Risk weight (%) applying to the portion of aggregate residual value > 10% of Tier 1 capital
-Exposures to residual value | 100 | 250",attachment,40,26,26
+Risk weight (%) applying Risk weight (%) applying
+to the portion of aggregate to the portion of aggregate
+residual value ≤ 10% of residual value > 10% of
+Tier 1 capital Tier 1 capital
+Exposures to
+100 250
+residual value",core,40,25,26
 APS-112,APS-112-ATT-B-S41,41,Exposures Through a Third Party,"ADIs must apply a 150% risk weight to credit exposures originated through a third party where the ADI did not conduct credit assessment, cannot administer workout/default processes, and has no direct recourse to the third party or borrower.","41. An ADI must apply a risk weight of 150 per cent to credit exposures originated through a third party, where the ADI:
 (a) does not undertake the credit assessment and approval of the underlying borrower under its own credit risk policies and processes;
 (b) is unable to administer the workout or default processes; and
 (c) does not have direct recourse to the third party or underlying borrower in the event of default.
-The risk weight prescribed in this paragraph must be applied to all such arrangements irrespective of the characterisation of the third party or underlying borrower.",attachment,41,26,26
+The risk weight prescribed in this paragraph must be applied to all such arrangements irrespective of the characterisation of the third party or underlying borrower.",core,41,26,26
 APS-112,APS-112-ATT-B-S42,42,Other Exposures – Risk Weights,"ADIs must apply risk weights from Table 16 to all other exposures not classified as property or other specified asset classes, including 0% for cash and gold bullion, 20% for cash items in collection, and 100% for fixed assets and all other exposures.","42. An ADI must apply the risk weights in Table 16 to all other exposures that are not property exposures or included within one of the other asset classes specified in this Attachment.
-
 Table 16 Risk weights for other exposures
 Risk weight (%)
 Cash owned and held at the ADI or in transit 0
-Gold bullion held at the ADI or held in another ADI on an allocated basis, to the extent the gold bullion assets are backed by gold bullion liabilities 0
-Cash items in the process of collection (e.g. cheques, draft and other items drawn on banks that are payable immediately upon presentation and that are in the process of collection) 20
-Investments in premises, plant and equipment, and all other fixed assets 100
-All other exposures not specified elsewhere 100",attachment,42,26,27
-APS-112,APS-112-ATT-B-S43,43,Currency Mismatch – Risk Weight Multiplier,"For exposures originated after 1 January 2023, ADIs must apply a 1.5x multiplier to the applicable risk weight for unhedged retail or residential property exposures to individuals where the lending currency differs from the borrower's income currency.","43. For exposures originated after 1 January 2023, an ADI must apply a 1.5 times multiplier to the applicable risk weight for any unhedged retail or residential property exposure to individuals, where the lending currency differs from the currency of the borrower's source of income.",attachment,43,27,27
-APS-112,APS-112-ATT-B-S44,44,Currency Mismatch – Definition of Unhedged Exposure,An unhedged exposure is one where the borrower has no natural or financial hedge against foreign exchange risk from currency mismatch. An exposure may only be treated as hedged if the natural or financial hedge covers at least 90% of the loan repayment amount.,"44. An unhedged exposure is an exposure to a borrower that has no natural or financial hedge against the foreign exchange risk resulting from the currency mismatch between the currency of the borrower's income and the currency of the loan. A natural hedge exists where the borrower receives foreign currency income that matches the currency of a given loan. A financial hedge generally includes a legal contract with a financial institution. For the purpose of the application of the multiplier, an ADI may only treat an exposure as hedged where the natural or financial hedge covers at least 90 per cent of the loan repayment amount.",attachment,44,27,27
-APS-112,APS-112-ATT-C-S1,1,Attachment C – Off-Balance Sheet Commitments: Definition of Commitment,"A commitment is any arrangement offered by an ADI and accepted by a borrower to extend credit, purchase assets, or issue credit substitutes, including SFTs and arrangements cancellable by the ADI at any time.","1. A commitment is any arrangement that has been offered by the ADI and accepted by the borrower to extend credit, purchase assets or issue credit substitutes. It includes SFTs.
-2. A commitment includes any arrangement that can be unconditionally cancelled by the ADI at any time without prior notice to the borrower. It also includes any such arrangement that can be cancelled by the ADI if conditions set out in the facility documentation are not met, including conditions that must be met by the borrower or third parties (conditions precedent) prior to any initial or subsequent drawdown under the arrangement.",attachment,1-2,28,28
-APS-112,APS-112-ATT-C-S3,3,Exclusion from Commitment Definition,"An arrangement may be excluded from the definition of commitment if the ADI receives no fees, the borrower must apply for each drawdown, the ADI has full authority over each drawdown, creditworthiness is assessed independently before each drawdown, and the borrower is a closely monitored corporate (not SME retail).","3. Where an ADI enters into an arrangement that meets all of the following conditions, it may be excluded from the definition of commitment:
+Gold bullion held at the ADI or held in another ADI on an
+allocated basis, to the extent the gold bullion assets are 0
+backed by gold bullion liabilities
+Cash items in the process of collection (e.g. cheques, draft
+and other items drawn on banks that are payable
+20
+immediately upon presentation and that are in the process of
+collection)
+Investments in premises, plant and equipment, and all other
+100
+fixed assets
+All other exposures not specified elsewhere 100",core,42,26,27
+APS-112,APS-112-ATT-B-S43,43,Currency Mismatch – Risk Weight Multiplier,"For exposures originated after 1 January 2023, ADIs must apply a 1.5x multiplier to the applicable risk weight for unhedged retail or residential property exposures to individuals where the lending currency differs from the borrower's income currency.","43. For exposures originated after 1 January 2023, an ADI must apply a 1.5 times multiplier to the applicable risk weight for any unhedged retail or residential property exposure to individuals, where the lending currency differs from the currency of the borrower's source of income.",core,43,27,27
+APS-112,APS-112-ATT-B-S44,44,Currency Mismatch – Definition of Unhedged Exposure,An unhedged exposure is one where the borrower has no natural or financial hedge against foreign exchange risk from currency mismatch. An ADI may treat an exposure as hedged only where the hedge covers at least 90% of the loan repayment amount.,"44. An unhedged exposure is an exposure to a borrower that has no natural or financial hedge against the foreign exchange risk resulting from the currency mismatch between the currency of the borrower's income and the currency of the loan. A natural hedge exists where the borrower receives foreign currency income that matches the currency of a given loan. A financial hedge generally includes a legal contract with a financial institution. For the purpose of the application of the multiplier, an ADI may only treat an exposure as hedged where the natural or financial hedge covers at least 90 per cent of the loan repayment amount.",core,44,27,27
+APS-112,APS-112-ATT-C,C,Attachment C – Off-Balance Sheet Commitments,"This attachment defines commitments, sets out exclusion criteria, specifies CCFs for various off-balance sheet transaction types in Table 17, and provides rules for applying CCFs to committed but undrawn amounts.","Attachment C – Off-balance sheet commitments
+1. A commitment is any arrangement that has been offered by the ADI and accepted by the borrower to extend credit, purchase assets or issue credit substitutes. It includes SFTs.
+2. A commitment includes any arrangement that can be unconditionally cancelled by the ADI at any time without prior notice to the borrower. It also includes any such arrangement that can be cancelled by the ADI if conditions set out in the facility documentation are not met, including conditions that must be met by the borrower or third parties (conditions precedent) prior to any initial or subsequent drawdown under the arrangement.
+3. Where an ADI enters into an arrangement that meets all of the following conditions, it may be excluded from the definition of commitment:
 (a) the ADI receives no fees or commissions to establish or maintain the arrangement;
 (b) the borrower is required to apply to the ADI for the initial and each subsequent drawdown;
 (c) the ADI has full authority, regardless of the fulfilment by the borrower of the conditions set out in the facility documentation, over the execution of each drawdown;
 (d) the ADI's decision on the execution of each drawdown is made only after assessing the creditworthiness of the borrower immediately prior to drawdown. This assessment of creditworthiness must be undertaken by an independent party and, at a minimum, include confirmation of the borrower's good credit standing and that no material adverse information has arisen subsequent to the limit approval or the most recent credit review that would affect the borrower's creditworthiness; and
-(e) the borrower is a corporate counterparty that is closely monitored on an ongoing basis, and is not an SME retail borrower.",attachment,3,28,28
-APS-112,APS-112-ATT-C-S4,4,Margin Lending – Committed Amount,"For margin lending, the committed amount is the maximum drawable amount based on loan terms and security value. If the ADI does not adjust the credit limit before drawdown following a decline in security value, it must use the original loan contract amount.","4. In respect of margin lending, the committed amount is the maximum amount that the borrower can draw down based on the terms of the loan (such as the notional credit limit and the maximum allowable LVR) and the value of the security underlying the loan. However, if an ADI does not adjust the credit limit before a drawdown in response to a decline in security value, then the ADI must use the original amount in the loan contract that is independent of the security value.",attachment,4,28,29
-APS-112,APS-112-ATT-C-S5,5,CCF Application to Off-Balance Sheet Commitments,"ADIs must multiply the committed but undrawn amount by the relevant CCF from Table 17 and then risk-weight the resulting exposure per Attachments A, B, and D. CCFs range from 0% for intraday limits to 100% for direct credit substitutes and certain other items.","5. Where a commitment exists, an ADI must multiply the committed but undrawn amount of the exposure by the relevant CCF in Table 17, and then risk-weight the exposure according to the relevant requirements set out in Attachments A, B and D to this Prudential Standard.
-
+(e) the borrower is a corporate counterparty that is closely monitored on an ongoing basis, and is not an SME retail borrower.
+4. In respect of margin lending, the committed amount is the maximum amount that the borrower can draw down based on the terms of the loan (such as the notional credit limit and the maximum allowable LVR) and the value of the security underlying the loan. However, if an ADI does not adjust the credit limit before a drawdown in response to a decline in security value, then the ADI must use the original amount in the loan contract that is independent of the security value.
+5. Where a commitment exists, an ADI must multiply the committed but undrawn amount of the exposure by the relevant CCF in Table 17, and then risk-weight the exposure according to the relevant requirements set out in Attachments A, B and D to this Prudential Standard.
 Table 17 CCFs
 Transaction type CCF (%)
 Direct credit substitutes 100
@@ -420,36 +435,38 @@ Performance-related contingencies 50
 Other commitments 40
 Short-term self-liquidating trade letters of credit arising from the movement of goods 20
 Intraday limits 0
-Irrevocable standby commitments under industry support arrangements 0",attachment,5,29,29
-APS-112,APS-112-ATT-C-S6,6,Lower CCF for Commitment to Off-Balance Sheet Exposure,"Where an ADI has given a commitment to provide an off-balance sheet exposure, it may apply the lower of the CCFs applicable to the commitment and the off-balance sheet exposure.","6. Where an ADI has given a commitment to provide an off-balance sheet exposure, it may apply the lower of the CCFs applicable to the commitment and the off-balance sheet exposure.",attachment,6,29,29
-APS-112,APS-112-ATT-D-S1,1,Attachment D – Unsettled and Failed Transactions: DvP Definition,"DvP transactions involve simultaneous exchange of securities or commodities for cash and expose ADIs to loss on the difference between agreed settlement price and current market price, including payment-versus-payment transactions.","1. Delivery-versus-payment (DvP) transactions include any transaction settled through a system which provides for the simultaneous exchange of securities or commodities for cash, and expose an ADI to the risk of loss on the difference between the transaction valued at the agreed settlement price and the transaction valued at the current market price. This includes payment-versus-payment transactions.",attachment,1,30,30
-APS-112,APS-112-ATT-D-S2,2,DvP Unsettled Transactions – Risk Weights,"ADIs must apply risk weights from Table 18 to unsettled DvP transactions (excluding SFTs) after their due delivery dates, applied to the positive current exposure amount. Risk weights escalate from 100% (5-15 days) to 1250% (46+ days).","2. An ADI must apply the risk weights in Table 18 to all DvP transactions, excluding SFTs, which remain unsettled after their due delivery dates. The amount that must be multiplied by the relevant risk weight is the positive current exposure amount of the DvP transaction, i.e. the difference between the agreed settlement price of the transaction and the current market price of the transaction where this would result in a loss to the ADI.
-
+Irrevocable standby commitments under industry support arrangements 0
+6. Where an ADI has given a commitment to provide an off-balance sheet exposure, it may apply the lower of the CCFs applicable to the commitment and the off-balance sheet exposure.",attachment,1-6,28,29
+APS-112,APS-112-ATT-D,D,Attachment D – Unsettled and Failed Transactions,"This attachment sets out capital requirements for DvP and non-DvP transactions that remain unsettled after their due delivery dates, including escalating risk weights for DvP transactions and specific treatment for non-DvP failed transactions.","Attachment D – Unsettled and failed transactions
+1. Delivery-versus-payment (DvP) transactions include any transaction settled through a system which provides for the simultaneous exchange of securities or commodities for cash, and expose an ADI to the risk of loss on the difference between the transaction valued at the agreed settlement price and the transaction valued at the current market price. This includes payment-versus-payment transactions.
+2. An ADI must apply the risk weights in Table 18 to all DvP transactions, excluding SFTs, which remain unsettled after their due delivery dates. The amount that must be multiplied by the relevant risk weight is the positive current exposure amount of the DvP transaction, i.e. the difference between the agreed settlement price of the transaction and the current market price of the transaction where this would result in a loss to the ADI.
 Table 18 Risk weights for DvP transactions
 Number of business days after settlement date Risk weight (%)
 5 to 15 100
 16 to 30 625
 31 to 45 937.5
-46 or more 1250",attachment,2,30,30
-APS-112,APS-112-ATT-D-S3,3,Non-DvP Failed Transactions – Capital Requirement Trigger,"ADIs must hold Regulatory Capital against non-DvP transactions where they have paid or delivered assets before receiving the counterpart, and in cross-border transactions, one or more days have elapsed since payment or delivery.","3. An ADI must hold Regulatory Capital against a non-DvP transaction which exposes the ADI to the risk of loss on the full amount of cash paid or deliverables delivered, where:
+46 or more 1250
+3. An ADI must hold Regulatory Capital against a non-DvP transaction which exposes the ADI to the risk of loss on the full amount of cash paid or deliverables delivered, where:
 (a) it has paid for debt instruments, equities, foreign currencies or commodities before receiving them or it has delivered debt instruments, equities, foreign currencies or commodities before receiving payment for them; and
-(b) in the case of a cross-border transaction, one day or more has elapsed since it made that payment or delivery.",attachment,3,30,30
-APS-112,APS-112-ATT-D-S4,4,Non-DvP Failed Transactions – Capital Calculation,"For non-DvP transactions, from the business day after payment/delivery up to four business days after counterparty payment is due, the ADI treats the transaction as an exposure. From five business days after payment/delivery until extinction, a 1250% risk weight applies to the value transferred plus positive current exposure.","4. An ADI must calculate the capital requirement for a non-DvP transaction as follows:
+(b) in the case of a cross-border transaction, one day or more has elapsed since it made that payment or delivery.
+4. An ADI must calculate the capital requirement for a non-DvP transaction as follows:
 (a) from the business day after the ADI has made its payment or delivery for up to and including four business days after the counterparty payment or delivery is due, the ADI must treat the transaction as an exposure; and
-(b) from five business days after the ADI has made its payment or delivery until extinction of the transaction, the ADI must apply a 1250 per cent risk weight to the value transferred plus the positive current exposure amount.",attachment,4,30,30
-APS-112,APS-112-ATT-D-S5,5,Non-DvP Transactions – Exposure Treatment Option,"Where a non-DvP transaction must be treated as an exposure under paragraph 4(a), an ADI may apply certain treatment options.","5. Where a non-DvP transaction must be treated as an exposure in accordance with paragraph 4(a) of this Attachment, an ADI may:
-
-July 2025
-(a) apply the relevant risk weight based on the counterparty as detailed in
+(b) from five business days after the ADI has made its payment or delivery until extinction of the transaction, the ADI must apply a 1250 per cent risk weight to the value transferred plus the positive current exposure amount.
+5. Where a non-DvP transaction must be treated as an exposure in accordance with paragraph 4(a) of this Attachment, an ADI may:",attachment,1-5,30,30
+APS-112,APS-112-ATT-D-CONT,D (continued),Attachment D – Equity Exposures (continued),"Provides guidance on risk-weighting equity exposures, allowing ADIs to apply counterparty-based risk weights from Attachment B or a 100 per cent risk weight for non-material exposures applied consistently.","(a) apply the relevant risk weight based on the counterparty as detailed in
 Attachment B to this Prudential Standard; or
 (b) where exposures are not material, apply a 100 per cent risk weight provided
 that all such exposures are risk-weighted consistently.
-APS 112 – Attachment D - 31",attachment,5,30,31
-APS-112,APS-112-ATT-E,E,Attachment E – Defaulted exposures,"This attachment specifies risk weights for defaulted exposures, distinguishing between residential property exposures and other defaulted exposures. Risk weights vary based on loan type, LMI status, and provision levels. ADIs may recognise eligible credit risk mitigation in calculating exposure amounts.","Attachment E – Defaulted exposures
-1. Where an exposure is in default, an ADI must apply the risk weights in Table 19 or Table 20 to the exposure amount, net of any provisions for defaulted exposures and partial write-offs.
-2. An ADI may recognise eligible credit risk mitigation in calculating the exposure amount.
+APS 112 – Attachment D - 31",attachment,whole,31,31
+APS-112,APS-112-ATT-E,E,Attachment E – Defaulted exposures,"Specifies risk weights for defaulted exposures, distinguishing between residential property exposures (Table 19) and other defaulted exposures (Table 20), with risk weights varying by loan type, LMI status, and provision coverage. ADIs may recognise eligible credit risk mitigation in calculating the exposure amount.","Attachment E – Defaulted exposures
+1. Where an exposure is in default, an ADI must apply the risk weights in Table 19
+or Table 20 to the exposure amount, net of any provisions for defaulted exposures
+and partial write-offs.
+2. An ADI may recognise eligible credit risk mitigation in calculating the exposure
+amount.
 Risk weights for residential property exposures
-3. An ADI must apply the risk weights in Table 19 to its defaulted residential property exposures.
+3. An ADI must apply the risk weights in Table 19 to its defaulted residential
+property exposures.
 Table 19 Risk weights for defaulted residential property exposures
 Risk weight (%)
 Owner-occupied principal-and-interest with LMI 80
@@ -458,139 +475,291 @@ Other standard residential property with LMI 95
 Other standard residential property without LMI 120
 Non-standard loans 150
 Risk weights for other defaulted exposures
-4. An ADI must apply the risk weights in Table 20 to its defaulted exposures that are not residential property exposures.
+4. An ADI must apply the risk weights in Table 20 to its defaulted exposures that
+are not residential property exposures.
 Table 20 Risk weights for other defaulted exposures
 Risk weight (%)
-Provisions for the defaulted exposure are ≥ 20 per cent of the outstanding exposure amount 100
-Provisions for the defaulted exposure are < 20 per cent of the outstanding exposure amount 150",attachment,1-4,32,32
-APS-112,APS-112-ATT-F,F,Attachment F – External credit ratings,"This attachment governs how ADIs may use external credit assessment institution (ECAI) ratings to determine risk weights, requiring solicited ratings used consistently and due diligence to ensure ratings appropriately reflect credit risk. It addresses issue-specific versus issuer ratings, multiple assessments, and currency-specific rating usage. Tables 21 and 22 map recognised long-term and short-term ratings from S&P, Moody's, and Fitch to credit rating grades.","Attachment F – External credit ratings
-1. An ADI may only use the solicited ratings of ECAIs to determine the credit rating grades that correspond to the risk weights for counterparties and exposures.19 Ratings must be used consistently for each type of exposure.
-2. An ADI must only use an ECAI rating that takes into account and reflects the entire amount of credit risk exposure that the ADI has with regard to all amounts owed to it.
-3. Where an ADI uses the ratings of ECAIs, it must perform due diligence to ensure that the external ratings appropriately and conservatively reflect the creditworthiness of the counterparty. If the due diligence analysis reflects higher risk characteristics than that implied by the exposure's external rating, an ADI must assign a risk weight at least one bucket higher than that determined by the external rating. Due diligence analysis must not result in the application of a lower risk weight than that determined by the external rating.
-4. An ADI must not use credit ratings for one entity within a corporate group to determine the risk weight for other entities within the same group. If a rated entity has guaranteed another entity's exposure to the ADI, the guarantee may be recognised for risk-weighting purposes if the criteria set out in Attachment I to this Prudential Standard are satisfied.
+Provisions for the defaulted exposure are ≥ 20 per cent of the
+100
+outstanding exposure amount
+Provisions for the defaulted exposure are < 20 per cent of the
+150
+outstanding exposure amount
+APS 112 – Attachment E - 32",attachment,1-4,32,32
+APS-112,APS-112-ATT-F,F,Attachment F – External credit ratings,"Sets out requirements for ADIs using External Credit Assessment Institution (ECAI) ratings, including use of solicited ratings only, due diligence obligations, rules for issue-specific versus issuer ratings, handling of multiple assessments, currency-specific rating use, and mapping of credit rating grades to risk weights via Tables 21 and 22.","Attachment F – External credit ratings
+1. An ADI may only use the solicited ratings of ECAIs to determine the credit rating
+grades that correspond to the risk weights for counterparties and exposures.19
+Ratings must be used consistently for each type of exposure.
+2. An ADI must only use an ECAI rating that takes into account and reflects the
+entire amount of credit risk exposure that the ADI has with regard to all amounts
+owed to it.
+3. Where an ADI uses the ratings of ECAIs, it must perform due diligence to ensure
+that the external ratings appropriately and conservatively reflect the
+creditworthiness of the counterparty. If the due diligence analysis reflects higher
+risk characteristics than that implied by the exposure's external rating, an ADI
+must assign a risk weight at least one bucket higher than that determined by the
+external rating. Due diligence analysis must not result in the application of a lower
+risk weight than that determined by the external rating.
+4. An ADI must not use credit ratings for one entity within a corporate group to
+determine the risk weight for other entities within the same group. If a rated entity
+has guaranteed another entity's exposure to the ADI, the guarantee may be
+recognised for risk-weighting purposes if the criteria set out in Attachment I to
+this Prudential Standard are satisfied.
 Issue-specific and issuer ratings
-5. Where an ADI has an exposure with an issue-specific rating, the risk weight of the exposure must be assigned based on this rating. Where an exposure does not have an issue-specific rating, the ADI must apply the following requirements:
-(a) where the counterparty has a specific rating for an issued debt, but the ADI's exposure is not an investment in that particular debt, a credit rating which maps to a risk weight lower than that which applies to an unrated exposure may only be applied if the exposure ranks senior or pari passu in all respects to the rated debt issue. If the exposure does not rank senior or pari passu with the rated debt issue, then the ADI must treat the exposure as unrated and apply the corresponding risk weight;
-(b) where the counterparty has an issuer rating, only senior exposures to that counterparty may be assigned a risk weight that corresponds to the issuer rating. If either the issuer or a single issue has a rating grade that maps to a risk weight higher than that applied to unrated exposures, then an exposure to that counterparty which ranks pari passu or is subordinated to either the senior unsecured issuer rating or the exposure with a low credit rating grade must be assigned the same risk weight as is applicable to the low credit rating grade; and
-(c) where the counterparty has a specific high-quality rating that only applies to a limited class of liabilities, this rating may only be used for exposures that fall within that class.
+5. Where an ADI has an exposure with an issue-specific rating, the risk weight of
+the exposure must be assigned based on this rating. Where an exposure does not
+have an issue-specific rating, the ADI must apply the following requirements:
+(a) where the counterparty has a specific rating for an issued debt, but the
+ADI's exposure is not an investment in that particular debt, a credit rating
+which maps to a risk weight lower than that which applies to an unrated
+exposure may only be applied if the exposure ranks senior or pari passu in
+all respects to the rated debt issue. If the exposure does not rank senior or
+pari passu with the rated debt issue, then the ADI must treat the exposure
+as unrated and apply the corresponding risk weight;
+(b) where the counterparty has an issuer rating, only senior exposures to that
+counterparty may be assigned a risk weight that corresponds to the issuer
+rating. If either the issuer or a single issue has a rating grade that maps to a
+risk weight higher than that applied to unrated exposures, then an exposure
+to that counterparty which ranks pari passu or is subordinated to either the
+senior unsecured issuer rating or the exposure with a low credit rating grade
+must be assigned the same risk weight as is applicable to the low credit
+rating grade; and
+(c) where the counterparty has a specific high-quality rating that only applies
+to a limited class of liabilities, this rating may only be used for exposures
+that fall within that class.
 Multiple assessments
-6. Where a counterparty has multiple ECAI general issuer ratings, or where an issue has multiple ECAI issue-specific ratings and these ratings correspond to multiple credit rating grades, an ADI must apply the following requirements:
-(a) where there are two ratings that correspond to different credit rating grades, the credit rating grade that corresponds to the higher risk weight must be used; or
-(b) where there are three or more ratings that correspond to different credit rating grades, the credit rating grades corresponding to the two lowest risk weights must be referred to and the higher of those two risk weights must be used.
+6. Where a counterparty has multiple ECAI general issuer ratings, or where an issue
+has multiple ECAI issue-specific ratings and these ratings correspond to multiple
+credit rating grades, an ADI must apply the following requirements:
+(a) where there are two ratings that correspond to different credit rating grades,
+the credit rating grade that corresponds to the higher risk weight must be
+used; or
+(b) where there are three or more ratings that correspond to different credit
+rating grades, the credit rating grades corresponding to the two lowest risk
+weights must be referred to and the higher of those two risk weights must
+be used.
 Domestic and foreign currency exposures
-7. An ADI must not use an ECAI rating that refers to an exposure denominated in a particular currency to derive the credit rating grade for another exposure to the same counterparty if that exposure is denominated in another currency.
+7. An ADI must not use an ECAI rating that refers to an exposure denominated in a
+particular currency to derive the credit rating grade for another exposure to the
+same counterparty if that exposure is denominated in another currency.
 Mapping of credit rating grades
-8. Where the ECAI is S&P Global Ratings, Moody's or Fitch Ratings, ratings must be mapped in accordance with Table 21 and Table 22.
+8. Where the ECAI is S&P Global Ratings, Moody's or Fitch Ratings, ratings must
+be mapped in accordance with Table 21 and Table 22.
 Table 21 Recognised long-term ratings and equivalent credit rating grades
-Credit rating grade | S&P Global Ratings | Moody's | Fitch Ratings
-1 | AAA | Aaa | AAA
-  | AA+ | Aa1 | AA+
-  | AA | Aa2 | AA
-  | AA- | Aa3 | AA-
-2 | A+ | A1 | A+
-  | A | A2 | A
-  | A- | A3 | A-
-3 | BBB+ | Baa1 | BBB+
-  | BBB | Baa2 | BBB
-  | BBB- | Baa3 | BBB-
-4 | BB+ | Ba1 | BB+
-  | BB | Ba2 | BB
-  | BB- | Ba3 | BB-
-5 | B+ | B1 | B+
-  | B | B2 | B
-  | B- | B3 | B-
-6 | CCC+ | Caa1 | CCC+
-  | CCC | Caa2 | CCC
-  | CCC- | Caa3 | CCC-
-  | CC | Ca | CC
-  | C | C | C
-  | D |  | D
+Credit rating S&P Global Moody's Fitch Ratings
+grade Ratings
+1 AAA Aaa AAA
+AA+ Aa1 AA+
+AA Aa2 AA
+AA- Aa3 AA-
+2 A+ A1 A+
+A A2 A
+A- A3 A-
+3 BBB+ Baa1 BBB+
+BBB Baa2 BBB
+BBB- Baa3 BBB-
+4 BB+ Ba1 BB+
+BB Ba2 BB
+BB- Ba3 BB-
+5 B+ B1 B+
+B B2 B
+B- B3 B-
+6 CCC+ Caa1 CCC+
+CCC Caa2 CCC
+CCC- Caa3 CCC-
+CC Ca CC
+C C C
+D D
 Table 22 Recognised short-term ratings and equivalent credit rating grades
-Credit rating grade | S&P Global Ratings | Moody's | Fitch Ratings
-1 | A-1 | P-1 | F-1
-2 | A-2 | P-2 | F-2
-3 | A-3 | P-3 | F-3
-4 | Others | Others | Others
-19 A solicited rating is a rating that has been initiated and paid for by the issuer or rated counterparty or a commercial associate of the issuer or rated counterparty. Sovereign exposures are excluded from the requirement to use solicited ratings.",attachment,1-8,33,35
-APS-112,APS-112-ATT-G,G,Attachment G – Collateralised transactions,"This attachment specifies how ADIs may apply credit risk mitigation for collateralised transactions, covering both the simple and comprehensive approaches to determining EAD and risk weights. It sets out minimum conditions for collateral recognition, eligible financial collateral, and specific risk weight floors and exceptions. ADIs must select one approach and apply it consistently across all banking book exposures with received collateral.","Attachment G – Collateralised transactions
+Credit rating S&P Global Moody's Fitch Ratings
+grade Ratings
+1 A-1 P-1 F-1
+2 A-2 P-2 F-2
+3 A-3 P-3 F-3
+4 Others Others Others
+APS 112 – Attachment F - 35",attachment,1-8,33,35
+APS-112,APS-112-ATT-G,G,Attachment G – Collateralised transactions,"Specifies how ADIs may apply credit risk mitigation for collateralised transactions, covering minimum conditions for collateral recognition, the simple approach (including eligible collateral and risk weight floors), and the comprehensive approach (including eligible collateral and EAD calculation methodology). ADIs must choose either the simple or comprehensive approach and apply it consistently across all banking book exposures.","Attachment G – Collateralised transactions
 1. This Attachment specifies how an ADI:
-(a) may apply credit risk mitigation to transactions secured by received collateral, to reduce its exposure amount for the purpose of calculating its Regulatory Capital requirement; and
-(b) must determine the EAD for SFTs or, for ADIs that use the simple approach, the risk weights.
+(a) may apply credit risk mitigation to transactions secured by received
+collateral, to reduce its exposure amount for the purpose of calculating its
+Regulatory Capital requirement; and
+(b) must determine the EAD for SFTs or, for ADIs that use the simple
+approach, the risk weights.
 2. In this Attachment:
-(a) 'received collateral' refers to eligible financial collateral (as defined in paragraphs 14 or 22 of this Attachment) that an ADI receives from the counterparty in a transaction, including where the counterparty has lent those securities to the ADI, or the transaction is a reverse repurchase agreement from the ADI's perspective; and
-(b) 'posted collateral' refers to collateral that an ADI posts to the counterparty in a transaction, including where the ADI has lent those securities to the counterparty, or the transaction is a repurchase agreement from the ADI's perspective.
-3. An ADI must select either the simple approach or the comprehensive approach and apply that approach consistently to all of its banking book exposures for which it has received collateral. An ADI that is approved to use the internal ratings-based approach to credit risk is not permitted to use the simple approach.
-4. For trading book exposures, an ADI must use the comprehensive approach where it has received collateral from the counterparty.
-5. Where an ADI acting as an agent in a SFT provides a guarantee that its principal will perform its obligations, the risk to the ADI is the same as if the ADI had entered into the transaction as the principal. In such circumstances, the ADI must calculate a Regulatory Capital requirement as if it were the principal.
+(a) 'received collateral' refers to eligible financial collateral (as defined in
+paragraphs 14 or 22 of this Attachment) that an ADI receives from the
+counterparty in a transaction, including where the counterparty has lent
+those securities to the ADI, or the transaction is a reverse repurchase
+agreement from the ADI's perspective; and
+(b) 'posted collateral' refers to collateral that an ADI posts to the counterparty
+in a transaction, including where the ADI has lent those securities to the
+counterparty, or the transaction is a repurchase agreement from the ADI's
+perspective.
+3. An ADI must select either the simple approach or the comprehensive approach
+and apply that approach consistently to all of its banking book exposures for
+which it has received collateral. An ADI that is approved to use the internal
+ratings-based approach to credit risk is not permitted to use the simple approach.
+4. For trading book exposures, an ADI must use the comprehensive approach where
+it has received collateral from the counterparty.
+5. Where an ADI acting as an agent in a SFT provides a guarantee that its principal
+will perform its obligations, the risk to the ADI is the same as if the ADI had
+entered into the transaction as the principal. In such circumstances, the ADI must
+calculate a Regulatory Capital requirement as if it were the principal.
 Minimum conditions for collateralised transactions
-6. There must be a contract between the ADI and the party lodging received collateral which establishes the ADI's direct, explicit, irrevocable and unconditional recourse to the received collateral. In the case of cash collateral, this may include a contractual right of set-off on credit balances, but a common law right of set-off is insufficient on its own to satisfy this condition.
-7. An ADI must take all steps necessary to obtain and maintain an enforceable security interest in the received collateral. The legal mechanism by which collateral is pledged or transferred must allow the ADI the right to liquidate or take legal possession of the received collateral in a timely manner. An ADI must have clear and robust procedures for the timely liquidation of collateral to ensure that any legal conditions required for declaring the default of the counterparty and liquidating the received collateral are observed.
-8. In the event of the counterparty's default, any requirement on the ADI to serve notice on the party lodging the received collateral must not unnecessarily impede the ADI's recourse to the received collateral.
-9. Where posted or received collateral is held by a custodian or a third party, the ADI must take reasonable steps to ensure that the custodian or third party segregates the collateral from other assets.
-10. Where the received collateral is lodged with an overseas branch of the ADI, the branch holding the collateral must be bound to act in accordance with the agreement between the ADI and the party lodging the received collateral.
-11. Where the received collateral is lodged by a third party, that third party must indemnify or guarantee the performance of the counterparty's obligations (or those of the party on which a claim is held) to the ADI. The ADI must ensure that the indemnity or guarantee is legally enforceable (e.g. that it will not fail for lack of consideration).
-12. An ADI must ensure that sufficient resources are devoted to the orderly operation of margin agreements with OTC derivative and securities-financing counterparties, as measured by the timeliness and accuracy of its outgoing calls and response time to incoming calls. An ADI must have collateral risk management policies in place to control, monitor and report:
-(a) the risk to which margin agreements expose it, such as the volatility and liquidity of the securities exchanged as collateral;
+6. There must be a contract between the ADI and the party lodging received
+collateral which establishes the ADI's direct, explicit, irrevocable and
+unconditional recourse to the received collateral. In the case of cash collateral,
+this may include a contractual right of set-off on credit balances, but a common
+law right of set-off is insufficient on its own to satisfy this condition.
+7. An ADI must take all steps necessary to obtain and maintain an enforceable
+security interest in the received collateral. The legal mechanism by which
+collateral is pledged or transferred must allow the ADI the right to liquidate or
+take legal possession of the received collateral in a timely manner. An ADI must
+have clear and robust procedures for the timely liquidation of collateral to ensure
+that any legal conditions required for declaring the default of the counterparty and
+liquidating the received collateral are observed.
+8. In the event of the counterparty's default, any requirement on the ADI to serve
+notice on the party lodging the received collateral must not unnecessarily impede
+the ADI's recourse to the received collateral.
+9. Where posted or received collateral is held by a custodian or a third party, the
+ADI must take reasonable steps to ensure that the custodian or third party
+segregates the collateral from other assets.
+10. Where the received collateral is lodged with an overseas branch of the ADI, the
+branch holding the collateral must be bound to act in accordance with the
+agreement between the ADI and the party lodging the received collateral.
+11. Where the received collateral is lodged by a third party, that third party must
+indemnify or guarantee the performance of the counterparty's obligations (or
+those of the party on which a claim is held) to the ADI. The ADI must ensure that
+the indemnity or guarantee is legally enforceable (e.g. that it will not fail for lack
+of consideration).
+12. An ADI must ensure that sufficient resources are devoted to the orderly operation
+of margin agreements with OTC derivative and securities-financing
+counterparties, as measured by the timeliness and accuracy of its outgoing calls
+and response time to incoming calls. An ADI must have collateral risk
+management policies in place to control, monitor and report:
+(a) the risk to which margin agreements expose it, such as the volatility and
+liquidity of the securities exchanged as collateral;
 (b) the concentration risk to particular types of collateral;
-(c) the re-use of collateral (both cash and non-cash) including the potential liquidity shortfalls resulting from the re-use of collateral received from counterparties; and
+(c) the re-use of collateral (both cash and non-cash) including the potential
+liquidity shortfalls resulting from the re-use of collateral received from
+counterparties; and
 (d) the surrender of rights on collateral posted to counterparties.
 The simple approach
-13. For received collateral to be recognised under the simple approach, it must be pledged for at least the life of the exposure (i.e. maturity mismatches are not permitted) and be marked-to-market and revalued with a minimum frequency of six months. The release of received collateral by the ADI must be conditional upon the repayment of the exposure. Received collateral may be reduced in proportion to the amount of the reduction in the exposure amount.
+13. For received collateral to be recognised under the simple approach, it must be
+pledged for at least the life of the exposure (i.e. maturity mismatches are not
+permitted) and be marked-to-market and revalued with a minimum frequency of
+six months. The release of received collateral by the ADI must be conditional
+upon the repayment of the exposure. Received collateral may be reduced in
+proportion to the amount of the reduction in the exposure amount.
 Eligible financial collateral under the simple approach
-14. An ADI using the simple approach may only recognise the following items as eligible financial collateral:
-(a) cash collateral (cash, certificates of deposit and bank bills issued by the ADI) on deposit with the ADI;20
+14. An ADI using the simple approach may only recognise the following items as
+eligible financial collateral:
+(a) cash collateral (cash, certificates of deposit and bank bills issued by the
+ADI) on deposit with the ADI;
 (b) gold bullion;
 (c) debt securities rated by an ECAI that have a credit rating grade of either:
-(i) four (or better) for long-term securities issued by sovereigns;21 or
-(ii) three (or better) for short-term or long-term securities issued by other counterparties;
+(i) four (or better) for long-term securities issued by sovereigns; or
+(ii) three (or better) for short-term or long-term securities issued by other
+counterparties;
 (d) debt securities not rated by an ECAI where:
-(i) the securities are issued by a bank as senior debt and are listed on a recognised exchange;
-(ii) all rated issues of the same seniority by the issuing bank have a long-term or short-term credit rating grade of at least three; and
-(iii) the ADI holding the security has no information suggesting that the security justifies a rating below this level;
-(e) senior securitisation exposures, as defined in APS 120, with an external credit rating grade of one;
+(i) the securities are issued by a bank as senior debt and are listed on a
+recognised exchange;
+(ii) all rated issues of the same seniority by the issuing bank have a long-
+term or short-term credit rating grade of at least three; and
+(iii) the ADI holding the security has no information suggesting that the
+security justifies a rating below this level;
+(e) senior securitisation exposures, as defined in APS 120, with an external
+credit rating grade of one;
 (f) units in a listed or unlisted trust where:
 (i) the unit price of the trust is publicly quoted on a daily basis;
-(ii) the trust is limited to investing in the instruments detailed in paragraphs 14(a) to 14(e) of this Attachment;22 and
-(iii) for unlisted trusts, the ADI can redeem its investment within three business days.
-15. Resecuritisation exposures, as defined in APS 120, are not eligible financial collateral.
+(ii) the trust is limited to investing in the instruments detailed in
+paragraphs 14(a) to 14(e) of this Attachment; and
+(iii) for unlisted trusts, the ADI can redeem its investment within three
+business days.
+15. Resecuritisation exposures, as defined in APS 120, are not eligible financial
+collateral.
 Risk weights under the simple approach
-16. Under the simple approach, the portion of an exposure that is secured by received collateral may be risk-weighted according to the risk weight of the received collateral. The risk weight on that portion is subject to a floor of 20 per cent, except under the conditions specified in paragraphs 18 to 20 of this Attachment. The unsecured portion of an exposure must be risk-weighted according to the risk weight applicable to the original counterparty.
-17. Where cash on deposit, certificates of deposit and bank bills issued by the ADI are held as received collateral at a third-party bank in a non-custodial arrangement, and are pledged or assigned to the ADI and the pledge or assignment is unconditional and irrevocable, the exposure amount covered by the received collateral may be assigned the risk weight of the third-party bank, determined in accordance with Attachment B to this Prudential Standard.
-18. A zero per cent risk weight may be applied to collateralised transactions where the exposure and the collateral are denominated in the same currency and either:
-(a) the collateral is cash on deposit as defined in paragraph 14(a) of this Attachment; or
-(b) the collateral is in the form of sovereign securities eligible for a zero per cent risk weight as detailed in Attachment B to this Prudential Standard, and its market value has been discounted by 20 per cent.
-19. SFTs that fulfil all of the following conditions may be risk-weighted at 10 per cent, or at zero per cent where the counterparty is a core market participant as defined in paragraph 20:
-(a) both the exposure and the collateral are cash, or a sovereign security qualifying for a zero per cent risk weight as set out in Attachment B to this Prudential Standard;
+16. Under the simple approach, the portion of an exposure that is secured by received
+collateral may be risk-weighted according to the risk weight of the received
+collateral. The risk weight on that portion is subject to a floor of 20 per cent,
+except under the conditions specified in paragraphs 18 to 20 of this Attachment.
+The unsecured portion of an exposure must be risk-weighted according to the risk
+weight applicable to the original counterparty.
+17. Where cash on deposit, certificates of deposit and bank bills issued by the ADI
+are held as received collateral at a third-party bank in a non-custodial
+arrangement, and are pledged or assigned to the ADI and the pledge or assignment
+is unconditional and irrevocable, the exposure amount covered by the received
+collateral may be assigned the risk weight of the third-party bank, determined in
+accordance with Attachment B to this Prudential Standard.
+18. A zero per cent risk weight may be applied to collateralised transactions where
+the exposure and the collateral are denominated in the same currency and either:
+(a) the collateral is cash on deposit as defined in paragraph 14(a) of this
+Attachment; or
+(b) the collateral is in the form of sovereign securities eligible for a zero per
+cent risk weight as detailed in Attachment B to this Prudential Standard,
+and its market value has been discounted by 20 per cent.
+19. SFTs that fulfil all of the following conditions may be risk-weighted at 10 per
+cent, or at zero per cent where the counterparty is a core market participant as
+defined in paragraph 20:
+(a) both the exposure and the collateral are cash, or a sovereign security
+qualifying for a zero per cent risk weight as set out in Attachment B to this
+Prudential Standard;
 (b) both the exposure and the collateral are denominated in the same currency;
-(c) either the transaction is overnight, or both the exposure and the collateral are marked-to-market daily and are subject to daily remargining;
-(d) following a counterparty's failure to remargin, the time between the last mark-to-market before the failure to remargin and the liquidation of the collateral is no more than four business days;
-(e) the transaction is settled across an established settlement system for that type of transaction;
+(c) either the transaction is overnight, or both the exposure and the collateral
+are marked-to-market daily and are subject to daily remargining;
+(d) following a counterparty's failure to remargin, the time between the last
+mark-to-market before the failure to remargin and the liquidation of the
+collateral is no more than four business days;
+(e) the transaction is settled across an established settlement system for that
+type of transaction;
 (f) the documentation for the transaction is standard market documentation;
-(g) the documentation for the transaction specifies that if the counterparty fails to satisfy an obligation to deliver cash, securities or a margin call, or otherwise defaults, the transaction is immediately terminable; and
-(h) upon any default event, regardless of whether the counterparty is insolvent or bankrupt, the ADI has an unequivocal, legally enforceable right to immediately seize and liquidate the collateral.
+(g) the documentation for the transaction specifies that if the counterparty fails
+to satisfy an obligation to deliver cash, securities or a margin call, or
+otherwise defaults, the transaction is immediately terminable; and
+(h) upon any default event, regardless of whether the counterparty is insolvent
+or bankrupt, the ADI has an unequivocal, legally enforceable right to
+immediately seize and liquidate the collateral.
 20. The following entities are core market participants:
 (a) the Australian Government and the Reserve Bank of Australia;
-(b) sovereigns that qualify for a zero per cent risk weight in accordance with Attachment B to this Prudential Standard;
+(b) sovereigns that qualify for a zero per cent risk weight in accordance with
+Attachment B to this Prudential Standard;
 (c) banks;
-(d) other financial institutions (including insurance companies) eligible for a 20 per cent risk weight as set out in Attachment B to this Prudential Standard; and
+(d) other financial institutions (including insurance companies) eligible for a
+20 per cent risk weight as set out in Attachment B to this Prudential
+Standard; and
 (e) qualifying central counterparties, as defined in APS 180.
 The comprehensive approach
-21. An ADI using the comprehensive approach may take into account the risk mitigating effects of any eligible collateral, in calculating the EAD for each counterparty.
+21. An ADI using the comprehensive approach may take into account the risk
+mitigating effects of any eligible collateral, in calculating the EAD for each
+counterparty.
 Eligible financial collateral under the comprehensive approach
 22. Under the comprehensive approach, eligible financial collateral is limited to:
 (a) collateral items listed in paragraph 14 of this Attachment;
-(b) equities (including convertible bonds) that are included in a main index or listed on a recognised exchange; and
-(c) units in trusts that meet the conditions of paragraph 14(f) of this Attachment and that invest in the items detailed in paragraphs 22(a) or 22(b) of this Attachment.
+(b) equities (including convertible bonds) that are included in a main index or
+listed on a recognised exchange; and
+(c) units in trusts that meet the conditions of paragraph 14(f) of this Attachment
+and that invest in the items detailed in paragraphs 22(a) or 22(b) of this
+Attachment.
 Calculation of Regulatory Capital for collateralised transactions
-23. For a collateralised transaction under the comprehensive approach, including SFTs, an ADI must adjust EAD as follows:
-E* = max{0, E' − Σ Ci × (1 − HiA − Hfx,iA)}
+23. For a collateralised transaction under the comprehensive approach, including
+SFTs, an ADI must adjust EAD as follows:
 where:
 E* is the adjusted EAD
-E' is where E is the EAD of the j-th item of exposure or posted collateral under the transaction, prior to haircuts or adjustment for received collateral. For OTC derivatives to which the ADI applies the adjusted CEM (refer to Attachment E to APS 180),
-20 Cash-funded credit-linked notes issued by the ADI against exposures in the banking book that fulfil the criteria for credit derivatives detailed in Attachment J to this Prudential Standard, may be treated as cash collateralised transactions.
-21 When debt securities that do not have an issue-specific rating are issued by a rated sovereign, ADIs may treat the sovereign issuer rating as the rating of the debt security.
-22 The use of derivative instruments by a trust to hedge investments listed in paragraphs 14(a) to 14(e) of this Attachment would not prevent units in the trust from being recognised as eligible collateral.",attachment,1-23,36,40
-APS-112,APS-112-ATT-G-CONT-P41,G,Attachment G – Collateral (Continued): Collateral Maturity Mismatch and Supervisory Haircuts,"This continuation of Attachment G defines collateral maturity mismatch conditions, the adjustment formula for mismatched collateral, and the supervisory haircuts in Table 23 for various collateral types including sovereign, other issuer, and securitisation exposures.","E' is the credit equivalent amount of the OTC derivative without
+E' is where E is the EAD of the j-th item of exposure
+or posted collateral under the transaction, prior to haircuts or
+adjustment for received collateral. For OTC derivatives to which the
+ADI applies the adjusted CEM (refer to Attachment E to APS 180),
+APS 112 – Attachment G - 40
+𝐸 ∗ = 𝑚 𝑎 𝑥 0 , 𝐸 ′ −
+𝑖
+𝐶
+𝑖
+× ( 1 − 𝐻
+𝑖
+𝐴 − 𝐻
+𝑓 𝑥 ,𝑖
+𝐴 )",attachment,1-23,36,40
+APS-112,APS-112-ATT-G-CONT1,G,Attachment G – Collateral (Continued): Collateral Maturity Mismatch and Supervisory Haircuts,"This continuation of Attachment G covers rules for collateral maturity mismatch recognition, the formula for adjusting collateral value when a maturity mismatch exists, and the supervisory haircuts table (Table 23) for various collateral types. It also specifies haircuts for currency risk and minimum holding periods for different transaction types.","E' is the credit equivalent amount of the OTC derivative without
 adjustment for the impact of collateral
 H is the haircut appropriate to the j-th item of exposure or posted
 j
@@ -743,7 +912,7 @@ i
 C is the current value of all cash borrowed and non-cash received
 j
 collateral",attachment,24-33,41,45
-APS-112,APS-112-ATT-H,H,Attachment H – Netting,"This attachment sets out the requirements for an ADI to reduce its exposure amount through close-out netting or netting by novation, including eligible transaction types, netting policy requirements, on-balance sheet netting conditions, and the criteria for an eligible bilateral netting agreement including legal enforceability requirements.","1. An ADI may reduce its exposure amount, for the purpose of calculating its
+APS-112,APS-112-ATT-H,H,Attachment H – Netting,"This attachment sets out the requirements for ADIs to reduce exposure amounts through close-out netting or netting by novation for Regulatory Capital purposes. It specifies eligible transaction types for netting, requirements for on-balance sheet netting, criteria for eligible bilateral netting agreements, and legal enforceability obligations.","1. An ADI may reduce its exposure amount, for the purpose of calculating its
 Regulatory Capital requirement, through the application of close-out netting or
 netting by novation, in accordance with the requirements set out in this
 Attachment.
@@ -768,7 +937,7 @@ with a single counterparty. This may include netting across different types
 of derivatives, but not across derivatives and SFTs.
 6. An ADI may only net internal transactions between the banking book and trading
 book if:
-(a) the netted transactions are marked-to-market daily, where applicable; and
+(a) the netted transactions are marked-to-market daily, where applicable;28 and
 (b) any collateralised instruments used in the transactions comply with the
 criteria for eligible collateral in the banking book as detailed in
 Attachment G to this Prudential Standard.
@@ -794,10 +963,10 @@ agreement, is a netting agreement with a counterparty which:
 (a) provides the non-defaulting party the right to terminate and close out, in a
 timely manner, all transactions under the netting agreement upon an event
 of default, including in the event of insolvency or bankruptcy of the
-counterparty;
+counterparty;29
 (b) provides for the netting of gains and losses on transactions (including the
 value of any collateral) terminated and closed out under it, so that only a
-single net amount is owed by one party to the other;
+single net amount is owed by one party to the other;30
 (c) allows for the prompt liquidation or set-off of collateral upon the event of
 default;
 (d) is legally enforceable in each relevant jurisdiction regardless of whether the
@@ -829,9 +998,9 @@ that a regulator or supervisor of a counterparty has given notice that it is not
 satisfied that netting is enforceable under the laws of the regulator's or
 supervisor's home country, it must not recognise the netting agreement for
 Regulatory Capital purposes regardless of any legal opinion obtained by the ADI.",attachment,1-11,46,48
-APS-112,APS-112-ATT-I,I,Attachment I – Guarantees,"This attachment sets out the requirements for recognising guarantees as eligible credit risk mitigation, including minimum requirements for guarantee eligibility, eligible guarantor types, treatment of indirect Australian Government guarantees, materiality thresholds, and proportional and tranched cover.","1. Where an ADI's exposure to a counterparty is covered by a guarantee from an
+APS-112,APS-112-ATT-I,I,Attachment I – Guarantees,"This attachment sets out the requirements for recognising guarantees as eligible credit risk mitigation (CRM), including minimum requirements for guarantee eligibility, eligible guarantor types, treatment of indirect Australian Government guarantees, and rules for materiality thresholds and proportional/tranched cover.","1. Where an ADI's exposure to a counterparty is covered by a guarantee from an
 eligible guarantor, an ADI may substitute the risk weight of the counterparty for
-the risk weight of the guarantor for the covered portion of the exposure. The
+the risk weight of the guarantor for the covered portion of the exposure.31 The
 uncovered portion of the exposure must be risk-weighted according to the risk
 weight applicable to the original counterparty.
 Minimum requirements
@@ -845,14 +1014,14 @@ of money due in respect of the credit protection contract. The guarantee
 must not contain any clauses that would allow the guarantor to unilaterally
 cancel the cover of the guarantee, or that would increase the effective cost
 of cover as a result of deteriorating credit quality in the guaranteed
-exposure;
+exposure;32
 (e) be unconditional. The guarantee must not include any clauses that are
 outside the direct control of the ADI, or that could prevent the guarantor
 from being obliged to pay out in a timely manner in the event that the
 underlying counterparty fails to make the payment(s) due;
 (f) on the default or non-payment of the counterparty, allow the ADI to pursue,
 in a timely manner, the guarantor for any monies outstanding under the
-documentation governing the transaction. The ADI must have the right to
+the documentation governing the transaction. The ADI must have the right to
 receive payment from the guarantor without first having to take legal action
 in order to pursue the counterparty for payment; and
 (g) cover all types of payments the underlying borrower is expected to make
@@ -896,18 +1065,14 @@ Proportional and tranched cover
 7. Where there is partial coverage of an exposure by a guarantee and the covered
 and uncovered portions are of equal seniority (i.e. the ADI and the guarantor share
 losses on a pro rata basis), capital relief will be afforded on a proportional basis.",attachment,1-7,49,50
-APS-112,APS-112-ATT-I-CURRENCY,I (Currency Mismatch),Attachment I – Guarantees: Currency Mismatch,"Where a guarantee is denominated in a different currency from the exposure, the protected amount must be reduced by applying a currency haircut. An ADI must apply an 8 per cent haircut based on a 10 business day holding period and daily marking-to-market, adjusted for actual revaluation frequency.","Currency mismatch
-9. A currency mismatch exists where a guarantee is denominated in a different currency from that in which the exposure is denominated. In this case, the amount of the exposure deemed to be protected (G ) must be reduced by the application of a haircut (H ) as follows:
-a
-fx
+APS-112,APS-112-ATT-I-CURR,I,Attachment I – Guarantees: Currency Mismatch and Maturity Mismatch,"This portion of Attachment I covers currency mismatch and maturity mismatch rules for guarantees used as CRM. It specifies haircut requirements for currency mismatches and adjustment formulas for maturity mismatches, including eligibility conditions for recognition.","Currency mismatch
+9. A currency mismatch exists where a guarantee is denominated in a different currency from that in which the exposure is denominated. In this case, the amount of the exposure deemed to be protected (G_a) must be reduced by the application of a haircut (H_fx) as follows:
+G_a = G × (1 − H_fx)
 where:
 G = nominal amount of the guarantee
-H = haircut appropriate for the currency mismatch between the
-fx
-guarantee and the underlying exposure.
+H_fx = haircut appropriate for the currency mismatch between the guarantee and the underlying exposure.
 10. Where there is a currency mismatch, an ADI must apply a haircut of 8 per cent (based on a 10 business day holding period and daily marking-to-market). The haircut must be adjusted depending on the actual frequency of revaluation of the currency mismatch, in accordance with paragraph 32 of Attachment G to this Prudential Standard.
-Ga = G × (1 − Hfx)",attachment,9-10,51,51
-APS-112,APS-112-ATT-I-MATURITY,I (Maturity Mismatch),Attachment I – Guarantees: Maturity Mismatch,"A maturity mismatch occurs when the residual maturity of a guarantee is less than that of the covered exposure. A guarantee with a maturity mismatch is only eligible CRM if its original maturity is at least 12 months and residual maturity is at least 3 months, and the protected amount must be adjusted using a prescribed formula.","Maturity mismatch
+Maturity mismatch
 11. A maturity mismatch exists where the residual maturity of a guarantee is less than the maturity of the exposure covered by the guarantee.
 12. Where there is a maturity mismatch, a guarantee may only be recognised as eligible CRM where the original maturity of the guarantee is greater than or equal to 12 months and the residual maturity is greater than or equal to 3 months.
 13. Where credit protection provided by a single guarantor to the same underlying exposure has different maturities, an ADI must divide the exposure into separate covered portions for risk-weighting purposes.
@@ -915,30 +1080,26 @@ APS-112,APS-112-ATT-I-MATURITY,I (Maturity Mismatch),Attachment I – Guarantees
 (a) the effective maturity of the underlying exposure must be calculated using the longest possible remaining time before the counterparty is scheduled to fulfil its obligation; and
 (b) for the guarantee, an ADI must take into account any clause or incentive within the documentation supporting the transaction that may reduce its maturity so that the shortest possible effective maturity is used.
 15. Where there is a maturity mismatch, an ADI must apply the following adjustment:
+P_a = P × (t − 0.25) / (T − 0.25)
 where:
-P = value of the guarantee adjusted for maturity mismatch
-a
-P = guarantee amount adjusted for any haircuts (in which case,
-P = G as determined in paragraph 9 of this Attachment)
-a
+P_a = value of the guarantee adjusted for maturity mismatch
+P = guarantee amount adjusted for any haircuts (in which case, P = G_a as determined in paragraph 9 of this Attachment)
 t = min (T, residual maturity of the guarantee) expressed in years
-T = min (5, residual maturity of the exposure) expressed in years.
-Pa = P × (t − 0.25) / (T − 0.25)",attachment,11-15,51,52
-APS-112,APS-112-ATT-J-PURCHASED,J (Purchased Credit Protection),Attachment J – Credit Derivatives: Purchased Credit Protection,"An ADI purchasing credit protection through an eligible credit derivative may substitute the risk weight of the protection seller for the covered portion of the exposure. Eligible credit derivatives are limited to single-name credit-default swaps and certain total-rate-of-return swaps, subject to specified conditions.","Attachment J – Credit derivatives
+T = min (5, residual maturity of the exposure) expressed in years.",attachment,9-15,51,52
+APS-112,APS-112-ATT-J,J,Attachment J – Credit Derivatives,"Attachment J sets out the requirements for credit derivatives used as CRM, covering purchased and sold credit protection, minimum eligibility requirements, eligible protection providers, materiality thresholds, proportional cover, currency and maturity mismatches, and capital treatment for credit-default swaps and basket credit derivatives.","Attachment J – Credit derivatives
 Purchased credit protection
-1. Where an ADI purchases credit protection through an eligible credit derivative, it may substitute the risk weight of the counterparty with the risk weight of the credit protection seller for the covered portion of the exposure.33 The uncovered portion of the exposure must be risk-weighted according to the risk weight applicable to the original counterparty.
+1. Where an ADI purchases credit protection through an eligible credit derivative, it may substitute the risk weight of the counterparty with the risk weight of the credit protection seller for the covered portion of the exposure. The uncovered portion of the exposure must be risk-weighted according to the risk weight applicable to the original counterparty.
 2. For the purposes of CRM, eligible credit derivatives are limited to:
 (a) single-name credit-default swaps; and
 (b) certain total-rate-of-return swaps.
 Where an ADI purchases credit protection through a total-rate-of-return swap and records the net payments received on the swap as net income, but does not record offsetting deterioration in the value of the asset that is protected (either through reductions in fair value or by an addition to reserves), the credit protection must not be recognised.
 3. Cash-funded credit linked notes issued by an ADI against exposures in the banking book that satisfy the minimum requirements for credit derivatives as detailed in this Attachment (with the exception of eligible credit protection providers set out in paragraph 12 of this Attachment) may be treated as cash-collateralised transactions under Attachment G to this Prudential Standard.
 4. Where an ADI buys credit protection through a credit derivative that forms part of a synthetic securitisation, the requirements detailed in APS 120 apply.
-33 Credit derivatives that provide partial coverage whereby the ADI and the credit protection seller share losses on a pro rata basis are eligible for the same recognition.",attachment,1-4,53,53
-APS-112,APS-112-ATT-J-MINREQ,J (Minimum Requirements),Attachment J – Credit Derivatives: Minimum Requirements,"To qualify as eligible CRM, a credit derivative must meet a range of structural requirements including being a direct claim, explicitly referenced, irrevocable, unconditional, and specifying minimum credit events. Where restructuring is excluded from the credit derivative contract, an ADI may only recognise 60 per cent of the lesser of the credit protection amount and the underlying exposure.","Minimum requirements
+Minimum requirements
 5. To be recognised as eligible CRM, a credit derivative must:
 (a) represent a direct claim on the protection seller;
 (b) be explicitly referenced to specific exposures or a pool of exposures, so that the extent of the cover is clearly defined and incontrovertible;
-(c) be irrevocable, except in the case of non-payment by a protection purchaser of money due in respect of the credit protection contract. The credit derivative contract must not include any clause that would allow the protection seller to unilaterally cancel the protection of the credit derivative, or that would increase the effective cost of cover as a result of deteriorating credit quality in the hedged exposure;34
+(c) be irrevocable, except in the case of non-payment by a protection purchaser of money due in respect of the credit protection contract. The credit derivative contract must not include any clause that would allow the protection seller to unilaterally cancel the protection of the credit derivative, or that would increase the effective cost of cover as a result of deteriorating credit quality in the hedged exposure;
 (d) be unconditional. The credit derivative contract must not include any clauses that are outside the direct control of the ADI, and the credit events specified in the contract must not prevent the protection seller from being obliged to pay out in a timely manner in the event that the borrower of the underlying exposure fails to make the due payment(s);
 (e) at a minimum, specify the following as credit events under the terms of the credit derivative contract:
 (i) the failure to pay an amount due under the terms of the underlying exposure that is in effect at the time of such failure;
@@ -956,30 +1117,25 @@ APS-112,APS-112-ATT-J-MINREQ,J (Minimum Requirements),Attachment J – Credit De
 11. Where there is a mismatch between the underlying obligation and the obligation used for the purposes of determining whether a credit event has occurred, an ADI may only recognise the credit derivative as eligible CRM if the following conditions are satisfied:
 (a) the obligation used to determine whether a credit event has occurred ranks pari passu with, or is junior to, the underlying obligation; and
 (b) the underlying obligation and reference obligation share the same obligor (i.e. the same legal entity) and legally enforceable cross-default or cross-acceleration clauses are in place.
-34 While the requirement for irrevocability does not require that the credit derivative and the exposure be maturity matched, the credit protection provider must not have the ability to change the agreed maturity ex post.",attachment,5-11,53,55
-APS-112,APS-112-ATT-J-ELIGPROV,J (Eligible Credit Protection Providers),Attachment J – Credit Derivatives: Eligible Credit Protection Providers,"An ADI may only recognise credit protection from sovereigns, banks, externally rated entities for non-securitisation exposures, and for securitisation exposures, entities with a credit rating grade of three or better that were rated two or better at the time protection was provided.","Eligible credit protection providers
+Eligible credit protection providers
 12. An ADI must only recognise credit protection provided by the following entities:
 (a) sovereigns;
 (b) banks;
 (c) other entities that are externally rated, where credit protection is provided to a non-securitisation exposure. This includes credit protection provided by parent, subsidiary and affiliate companies where they have a lower risk weight than the borrower; and
-(d) where credit protection is provided to a securitisation exposure, other entities with a credit rating grade of three or better and that were externally rated two or better at the time the credit protection was provided. This also includes credit protection provided by parent, subsidiary and affiliated companies where they have a lower risk weight than the borrower.",attachment,12,55,56
-APS-112,APS-112-ATT-J-MATTHRESH,J (Materiality Thresholds and Proportional Cover),Attachment J – Credit Derivatives: Materiality Thresholds and Proportional/Tranched Cover,"A credit derivative with a materiality threshold on payments is treated as a retained first loss position and must be deducted from Common Equity Tier 1 Capital, capped at the capital required for the full exposure. Partial coverage of equal seniority receives proportional capital relief, while partial coverage with seniority differences is treated as a synthetic securitisation under APS 120.","Materiality thresholds
+(d) where credit protection is provided to a securitisation exposure, other entities with a credit rating grade of three or better and that were externally rated two or better at the time the credit protection was provided. This also includes credit protection provided by parent, subsidiary and affiliated companies where they have a lower risk weight than the borrower.
+Materiality thresholds
 13. Where a credit derivative provides for a materiality threshold on payments below which no payment will be made in the event of loss, it is equivalent to a retained first loss position and must be deducted from Common Equity Tier 1 Capital in accordance with APS 111. This deduction will be capped at the amount of capital the ADI would be required to hold against the full value of the underlying exposure.
 Proportional and tranched cover
 14. Where there is partial coverage of an underlying exposure by a credit derivative and the protected and unprotected portions are of equal seniority (i.e. the ADI buying credit protection and the protection seller share losses on a pro rata basis), capital relief will be afforded on a proportional basis. This means that the protected portion of the underlying exposure will receive the capital treatment applicable to eligible credit derivatives with the remainder treated as unprotected.
-15. Where there is partial coverage of an underlying exposure by a credit derivative and there is a difference in seniority between the protected and unprotected portions of the underlying exposure, then the arrangement is considered to be a synthetic securitisation and is subject to the requirements set out in APS 120.",attachment,13-15,56,56
-APS-112,APS-112-ATT-J-CURRENCY,J (Currency Mismatch),Attachment J – Credit Derivatives: Currency Mismatch,"Where a credit derivative is denominated in a different currency from the underlying exposure, the protected amount must be reduced by a currency haircut. An ADI must apply an 8 per cent haircut based on a 10 business day holding period and daily marking-to-market, adjusted for actual revaluation frequency.","Currency mismatch
-16. A currency mismatch exists where an ADI has purchased credit protection using a credit derivative and the credit derivative is denominated in a different currency from that in which the underlying exposure is denominated. In this case the amount of the exposure deemed to be protected (G ) must be reduced by the application of a haircut (H ) as follows:
-a
-fx
+15. Where there is partial coverage of an underlying exposure by a credit derivative and there is a difference in seniority between the protected and unprotected portions of the underlying exposure, then the arrangement is considered to be a synthetic securitisation and is subject to the requirements set out in APS 120.
+Currency mismatch
+16. A currency mismatch exists where an ADI has purchased credit protection using a credit derivative and the credit derivative is denominated in a different currency from that in which the underlying exposure is denominated. In this case the amount of the exposure deemed to be protected (G_a) must be reduced by the application of a haircut (H_fx) as follows:
+G_a = G × (1 − H_fx)
 where:
 G = nominal amount of the credit derivative
-H = haircut appropriate for the currency mismatch between the
-fx
-credit derivative and the underlying exposure.
+H_fx = haircut appropriate for the currency mismatch between the credit derivative and the underlying exposure.
 17. Where there is a currency mismatch, an ADI must apply a haircut of 8 per cent (based on a 10 business day holding period and daily marking-to-market). The haircut must be adjusted depending on the actual frequency of revaluation of the currency mismatch, in accordance with paragraph 32 of Attachment G to this Prudential Standard.
-Ga = G × (1 − Hfx)",attachment,16-17,56,56
-APS-112,APS-112-ATT-J-MATURITY,J (Maturity Mismatch),Attachment J – Credit Derivatives: Maturity Mismatch,"A maturity mismatch in a credit derivative exists when its residual maturity is less than that of the underlying exposure. A credit derivative with a maturity mismatch is only eligible CRM if its original maturity is at least 12 months and residual maturity is at least 3 months, with the protected amount adjusted using a prescribed formula.","Maturity mismatch
+Maturity mismatch
 18. A maturity mismatch exists where the residual maturity of a credit derivative is less than the maturity of the underlying exposure.
 19. Where there is a maturity mismatch, a credit derivative may only be recognised as eligible CRM where the original maturity of the credit derivative is greater than or equal to 12 months and the residual maturity is greater than or equal to 3 months.
 20. Where credit protection provided by a single protection seller to the same underlying exposure has different maturities, an ADI must divide the exposure into separate covered portions for risk-weighting purposes.
@@ -987,25 +1143,22 @@ APS-112,APS-112-ATT-J-MATURITY,J (Maturity Mismatch),Attachment J – Credit Der
 (a) the effective maturity of the underlying exposure must be calculated using the longest possible remaining time before the counterparty is scheduled to fulfil its obligation; and
 (b) for the credit derivative, an ADI that purchases credit protection must take into account any clause or incentive within the credit derivative contract that may reduce its maturity so that the shortest possible effective maturity is used.
 22. Where there is a maturity mismatch, an ADI must apply the following adjustment:
+P_a = P × (t − 0.25) / (T − 0.25)
 where:
-P = value of the amount of credit protection adjusted for maturity mismatch
-a
-P = the amount of credit protection adjusted for any haircuts (in which case, P = G as determined in paragraph 16 of this Attachment)
-a
+P_a = value of the amount of credit protection adjusted for maturity mismatch
+P = the amount of credit protection adjusted for any haircuts (in which case, P = G_a as determined in paragraph 16 of this Attachment)
 t = min (T, residual maturity of the credit derivative) expressed in years
 T = min (5, residual maturity of the underlying exposure) expressed in years.
-Pa = P × (t − 0.25) / (T − 0.25)",attachment,18-22,57,57
-APS-112,APS-112-ATT-J-SOLD,J (Sold Credit Protection),Attachment J – Credit Derivatives: Sold Credit Protection,"An ADI selling credit protection must undertake a written capital treatment assessment prior to execution and notify APRA. For capital adequacy purposes, an ADI selling credit protection must assume 100 per cent of the credit risk is purchased, and must assume the longest possible effective maturity where an extension option exists.","Sold credit protection
+Sold credit protection
 23. An ADI that sells credit protection that is not detailed in paragraphs 29 and 30 of this Attachment must, prior to execution of the relevant credit derivative contract, undertake a written assessment of the appropriate Regulatory Capital treatment for the transaction. The ADI must notify APRA prior to execution and provide its written assessment to APRA upon request. The ADI must apply the treatment set out in its written assessment unless APRA determines an alternative methodology for calculating the Regulatory Capital treatment.
 24. Where an ADI uses total-rate-of-return swaps to hedge a banking book credit exposure in accordance with the requirements set out in this Attachment, those transactions must be included in the ADI's banking book. All other total-rate-of-return swaps must be included in an ADI's trading book.
-25. Any instruments that would give rise to a net short credit or equity position in the banking book must be included in an ADI's trading book.35
+25. Any instruments that would give rise to a net short credit or equity position in the banking book must be included in an ADI's trading book.
 26. An ADI that has sold credit protection using a credit derivative must, for capital adequacy purposes, assume that 100 per cent of the credit risk is purchased irrespective of the range of specified credit events.
 27. An ADI that sells credit protection using a credit derivative containing an embedded option to extend the term of the credit derivative must assume the longest possible effective maturity of the credit derivative. This is regardless of any contractual arrangements that may give either the protection buyer or the protection seller the incentive to reduce the contract term.
 28. When determining the amount of credit protection sold, an ADI must assume that any materiality thresholds included in the credit derivative contract do not reduce the acquired credit risk.
-35 An ADI will have a net short risk position for equity risk or credit risk in the banking book if the present value of the banking book increases when an equity price decreases or when a credit spread on an issuer or group of issuers of debt increases.",attachment,23-28,57,58
-APS-112,APS-112-ATT-J-CDS,J (Credit-Default Swaps and Basket Derivatives),Attachment J – Credit Derivatives: Credit-Default Swaps and First/Second-to-Default Basket Credit Derivatives,"For credit protection sold via a single-name credit-default swap, the risk weight of the reference entity applies to the maximum possible payable amount. For first-to-default basket derivatives, risk weights of all basket assets are aggregated up to 1250 per cent; for second-to-default, the asset with the lowest risk-weighted amount may be excluded from the aggregation.","Credit-default swaps
+Credit-default swaps
 29. Where credit protection is sold via a credit-default swap referenced to a single reference entity, the ADI acquires an exposure to the credit risk of that entity. The risk weight that must be applied to the exposure is the risk weight that would otherwise apply to the reference entity. The amount of the exposure is the maximum possible amount payable under the terms of the credit derivative contract if a credit event were to occur.
 First- and second-to-default basket credit derivatives
 30. An ADI which sells credit protection through a first-to-default or second-to-default credit derivative, must apply the following capital requirements to these exposures:
 (a) for first-to-default credit derivatives, the risk weights of the assets included in the basket must be aggregated up to a maximum of 1250 per cent and multiplied by the nominal amount of the protection provided by the credit derivative to obtain the risk-weighted asset amount; and
-(b) for second-to-default credit derivatives, the treatment is similar; however, in aggregating the risk weights, the asset with the lowest risk-weighted amount can be excluded from the calculation. This treatment applies respectively for nth-to-default credit derivatives, for which the n-assets with the lowest risk-weighted amounts can be excluded from the calculation.",attachment,29-30,58,59
+(b) for second-to-default credit derivatives, the treatment is similar; however, in aggregating the risk weights, the asset with the lowest risk-weighted amount can be excluded from the calculation. This treatment applies respectively for nth-to-default credit derivatives, for which the n-assets with the lowest risk-weighted amounts can be excluded from the calculation.",attachment,1-30,53,59
