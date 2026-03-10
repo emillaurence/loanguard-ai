@@ -241,13 +241,20 @@ loanguard-ai/
 ├── requirements.txt                # Python dependencies
 ├── .env.example                    # Environment variable template
 ├── notebooks/
-│   ├── 111_structured_data_loader.ipynb   # Load Layer 1 entity data
-│   ├── 211_extract_document_structure.ipynb
-│   ├── 212_merge_and_resolve_references.ipynb
-│   ├── 213_chunk_documents.ipynb
-│   ├── 214_ingest_neo4j.ipynb
-│   ├── 215_generate_embeddings.ipynb
-│   └── 216_validate_graph.ipynb
+│   ├── 111_structured_data_loader.ipynb        # Load Layer 1 entity data
+│   ├── 211_extract_document_structure.ipynb    # Extract sections/requirements/thresholds from PDFs
+│   ├── 212_merge_and_resolve_references.ipynb  # Merge CSVs; resolve cross-references
+│   ├── 213_chunk_documents.ipynb               # Chunk section text to ~300 tokens
+│   ├── 214_ingest_neo4j.ipynb                  # Load Layer 2 into Neo4j
+│   ├── 215_generate_embeddings.ipynb           # Generate embeddings; create SEMANTICALLY_SIMILAR edges
+│   ├── 216_validate_graph.ipynb                # Validate node counts, relationships, index health
+│   ├── 311_agent_setup.ipynb                   # Bootstrap shared setup for 31x series (run by %run)
+│   ├── 312_graph_tools.ipynb                   # Test all MCP tools against live Neo4j data
+│   ├── 313_compliance_agent.ipynb              # Demo ComplianceAgent assessing loan applications
+│   ├── 314_investigation_agent.ipynb           # Demo InvestigationAgent entity network exploration
+│   ├── 315_anomaly_detection.ipynb             # Run all 6 anomaly detection patterns
+│   ├── 316_orchestrator_and_chat.ipynb         # Demo full Orchestrator → agent pipeline
+│   └── 317_layer_3_assessment_cleanup.ipynb    # Reset Layer 3 (remove Assessment/Finding nodes)
 ├── src/
 │   ├── agent/
 │   │   ├── orchestrator.py         # Routing and synthesis; calls both specialist agents
