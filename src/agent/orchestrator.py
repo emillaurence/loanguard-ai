@@ -361,6 +361,7 @@ class Orchestrator:
         verdict = "INFORMATIONAL"
         confidence = 0.5
         cited_sections: list[dict] = []
+        cited_chunks: list[dict] = []
 
         # Resolve entity/regulation context for graph enrichment (needed by both agents)
         _ent_id   = (routing.get("entity_ids")   or [""])[0]
@@ -439,6 +440,26 @@ class Orchestrator:
                 f"FINDINGS (use these exactly — do not re-assess severity):\n{findings_lines}\n"
             )
 
+            # Walk each assessment back to its cited sections and chunks via trace_evidence.
+            # Deduplicate by ID so repeated section/chunk references collapse.
+            _seen_sec_ids: set[str] = set()
+            _seen_chk_ids: set[str] = set()
+            for _aid in (compliance_result.assessment_ids or []):
+                try:
+                    _ev = self.execute_tool("trace_evidence", {"assessment_id": _aid})
+                    for _sec in _ev.get("cited_sections") or []:
+                        _sid = _sec.get("section_id")
+                        if _sid and _sid not in _seen_sec_ids:
+                            _seen_sec_ids.add(_sid)
+                            cited_sections.append(_sec)
+                    for _chk in _ev.get("cited_chunks") or []:
+                        _cid = _chk.get("chunk_id")
+                        if _cid and _cid not in _seen_chk_ids:
+                            _seen_chk_ids.add(_cid)
+                            cited_chunks.append(_chk)
+                except Exception as _e:
+                    logger.warning("trace_evidence failed for %s: %s", _aid, _e)
+
         if investigation_result:
             context_parts.append(
                 f"Investigation agent result:\n"
@@ -514,7 +535,7 @@ class Orchestrator:
             cypher_used=all_cypher,
             evidence=[],
             cited_sections=cited_sections,
-            cited_chunks=[],
+            cited_chunks=cited_chunks,
             recommended_next_steps=steps[:5],
             assessment_id=compliance_result.assessment_id if compliance_result else None,
             assessment_ids=compliance_result.assessment_ids if compliance_result else [],
