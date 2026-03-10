@@ -1,6 +1,6 @@
 # LoanGuard AI
 
-**Intelligent loan compliance monitoring and risk investigation powered by Neo4j and Claude**
+**Intelligent loan compliance monitoring and risk investigation powered by Neo4j, Claude Model and OpenAI Embeddings**
 
 LoanGuard AI is an agentic AI system for Australian financial services compliance. It checks whether loan applications and borrowers comply with APRA prudential standards (APS-112, APG-223, APS-220) and surfaces financial crime risk signals — all via natural-language questions answered by a multi-agent AI pipeline backed by a three-layer Neo4j knowledge graph.
 
