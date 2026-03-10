@@ -128,7 +128,9 @@ The dashboard will be available at `http://localhost:8501`.
 
 ## MCP Tool Layer
 
-Six tools are available to agents, implemented as plain Python in `src/mcp/tools_impl.py` and also registered with the FastMCP server in `src/mcp/investigation_server.py`.
+Agents have access to two categories of tools:
+
+**FastMCP tools** (custom domain logic) — implemented as plain Python in `src/mcp/tools_impl.py` and registered with the FastMCP server in `src/mcp/investigation_server.py`:
 
 | Tool | Description |
 |---|---|
@@ -138,6 +140,14 @@ Six tools are available to agents, implemented as plain Python in `src/mcp/tools
 | `persist_assessment` | Idempotent MERGE to Layer 3. Creates `Assessment`, `Finding`, and `ReasoningStep` nodes linked to the entity and regulation. Returns the `assessment_id`. |
 | `trace_evidence` | Walks a stored `Assessment` back through its `ReasoningStep` nodes to retrieve all cited `Section` and `Chunk` nodes. Used by the Orchestrator to populate `cited_sections` and `cited_chunks`. |
 | `evaluate_thresholds` | Evaluates a list of `Threshold` nodes against an entity's stored property values. Uses `threshold_type` to determine whether each threshold results in PASS, BREACH, TRIGGER, or N/A, and filters out `informational` thresholds from verdict logic. |
+
+**Simulated Neo4j MCP tools** — defined with the same interface as the [official Neo4j MCP server](https://github.com/neo4j-contrib/mcp-neo4j) but dispatched locally via `Neo4jConnection` (no external MCP process):
+
+| Tool | Description |
+|---|---|
+| `read-neo4j-cypher` | Executes a read-only Cypher query directly against the graph. Used by the `ComplianceAgent` for ad-hoc entity lookups not covered by the FastMCP tools. Write keywords (`CREATE`, `MERGE`, `DELETE`, etc.) are blocked at the dispatcher level. |
+
+> The Neo4j MCP naming convention is used so agent prompts remain portable to environments where the real Neo4j MCP server is running.
 
 ---
 
