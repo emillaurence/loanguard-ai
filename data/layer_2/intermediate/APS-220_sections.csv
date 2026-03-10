@@ -1,7 +1,7 @@
 regulation_id,section_id,section_number,title,content_summary,text,section_type,paragraph_range,source_page_start,source_page_end
 APS-220,APS-220-S1,1,Authority,This Prudential Standard is made under section 11AF of the Banking Act 1959.,"1. This Prudential Standard is made under section 11AF of the Banking Act 1959
 (Banking Act).",core,1,3,3
-APS-220,APS-220-S2,2-6,Application,"This Prudential Standard applies to all ADIs except PPF providers, with foreign ADIs exempt from certain paragraphs. Obligations for foreign ADIs apply only to their Australian business, and group-level compliance is required on a Level 2 basis.","2. This Prudential Standard applies to all authorised deposit-taking institutions
+APS-220,APS-220-S2,2-6,Application,"This Prudential Standard applies to all ADIs except PPF providers, with foreign ADIs exempt from certain paragraphs. Obligations for foreign ADIs apply only to their Australian business. ADIs that are holding companies or subsidiaries of authorised NOHCs must ensure requirements are met on a Level 2 basis.","2. This Prudential Standard applies to all authorised deposit-taking institutions
 (ADIs) other than purchased payment facility providers (PPF providers),
 subject to paragraph 3.
 3. Foreign ADIs must comply with the provisions in this Prudential Standard with
@@ -24,7 +24,7 @@ APS-220,APS-220-S3,7,Scope,"This Prudential Standard applies to all ADI activiti
 risk, except exposures that have been securitised, transferred or originated into
 securitisation vehicles that meet APRA's operational requirements for regulatory
 capital relief in Prudential Standard APS 120 Securitisation (APS 120).",core,7,3,3
-APS-220,APS-220-S4,8-11,Interpretation,Defined terms appear in bold on first use; APRA powers must be exercised in writing; references to Acts and Standards are to current versions; references to borrowers include counterparties.,"8. Terms that are defined in Prudential Standard APS 001 Definitions (APS 001)
+APS-220,APS-220-S4,8-11,Interpretation,"Defined terms appear in bold on first use. APRA powers must be exercised in writing. References to Acts and Standards are to those in force from time to time, and references to a borrower include a counterparty.","8. Terms that are defined in Prudential Standard APS 001 Definitions (APS 001)
 appear in bold the first time they are used in this Prudential Standard.
 9. Where this Prudential Standard provides for APRA to exercise a power or
 discretion, this power or discretion is to be exercised in writing.
@@ -33,7 +33,7 @@ an Act, Regulations or Prudential Standard is a reference to the Act, Regulation
 or Prudential Standards as in force from time to time.
 11. In this Prudential Standard, a reference to a borrower is also a reference to a
 counterparty.",core,8-11,3,4
-APS-220,APS-220-S5,12,Definitions,"Defines key terms including non-performing (default), past-due, and restructured exposures, with detailed criteria for each classification including the 90-day past-due trigger for default.","12. The following definitions are used in this Prudential Standard in reference to an
+APS-220,APS-220-S5,12,Definitions,"This section defines key terms including non-performing, past-due, and restructured exposures. Non-performing includes exposures where the borrower is unlikely to pay in full or is 90 or more days past-due. Restructured exposures involve concessions granted to borrowers experiencing financial difficulty.","12. The following definitions are used in this Prudential Standard in reference to an
 exposure:
 (a) non-performing – an exposure that is in default. A default is considered to
 have occurred with regard to a particular borrower when either, or both, of
@@ -111,13 +111,13 @@ time;
 (K) refinancing an existing exposure with a new contract, even if
 the terms of the new contract are no more favourable for the
 borrower than those of the existing transaction.",core,12,4,6
-APS-220,APS-220-S6,13-14,"Adjustments, Exclusions and Previous Exercise of Discretion",APRA may adjust or exclude specific requirements for particular ADIs or NOHCs. ADIs must contact APRA if relying on a previous exemption or discretion exercised under a prior version of this Standard.,"13. APRA may adjust or exclude a specific requirement in this Prudential Standard
+APS-220,APS-220-S6,13-14,Adjustments and exclusions / Previous exercise of discretion,APRA may adjust or exclude specific requirements for one or more ADIs or authorised NOHCs. ADIs seeking to rely on previous APRA exemptions or discretions must contact APRA.,"13. APRA may adjust or exclude a specific requirement in this Prudential Standard
 in relation to one or more specified ADIs or authorised NOHCs.
 14. An ADI must contact APRA if it seeks to place reliance, for the purposes of
 complying with this Prudential Standard, on a previous exemption or other
 exercise of discretion by APRA under a previous version of this Prudential
 Standard.",core,13-14,6,6
-APS-220,APS-220-S7,15-16,Credit Risk Management Framework,"An ADI must implement a credit risk management framework appropriate to its size, business mix and complexity, including a credit risk appetite statement, management strategy, policies, a designated function, management information systems, and an independent review process. A stand-alone document is not required if these elements form part of the ADI's overall risk management framework under CPS 220.","15. An ADI must implement a credit risk management framework that is appropriate
+APS-220,APS-220-S7,15-16,Credit risk management framework,"ADIs must implement a credit risk management framework appropriate to their size, business mix and complexity, including a credit risk appetite statement, management strategy, policies, a designated function, management information systems, and an independent review process. A stand-alone credit risk appetite statement or strategy is not required if these form part of the overall CPS 220 documents.","15. An ADI must implement a credit risk management framework that is appropriate
 to its size, business mix and complexity. The credit risk management framework
 must, at a minimum, include:
 (a) a credit risk appetite statement;
@@ -136,14 +136,14 @@ reporting, and controlling or mitigating credit risk.
 management strategy document where they form part of the ADI's overall risk
 appetite statement or risk management strategy document required under
 Prudential Standard CPS 220 Risk Management (CPS 220).",core,15-16,6,7
-APS-220,APS-220-S8,17,Outsourcing,"An ADI may outsource aspects of credit risk management including origination and assessment, but must comply with CPS 231 for outsourced functions.","17. An ADI may outsource aspects of its credit risk management, including credit
+APS-220,APS-220-S8,17,Outsourcing,"ADIs may outsource aspects of credit risk management including origination and assessment, but must comply with CPS 231 for outsourced functions.","17. An ADI may outsource aspects of its credit risk management, including credit
 origination, credit assessment and approval, however, it must have regard to
 Prudential Standard CPS 231 Outsourcing (CPS 231) for outsourced functions.",core,17,7,7
-APS-220,APS-220-S9,18,Large Exposures and Associations with Related Entities,"For large exposures and related entity associations, ADIs must also comply with APS 221 and APS 222 respectively.","18. For large exposures and associations with related entities, an ADI must also have
+APS-220,APS-220-S9,18,Large exposures and associations with related entities,"For large exposures and related entity associations, ADIs must also comply with APS 221 and APS 222 respectively.","18. For large exposures and associations with related entities, an ADI must also have
 regard to Prudential Standard APS 221 Large Exposures (APS 221) and
 Prudential Standard APS 222 Associations with Related Entities (APS 222),
 respectively.",core,18,7,7
-APS-220,APS-220-S10,19,Credit Risk Appetite,"An ADI must maintain a well-documented credit risk appetite statement articulating its credit risk appetite, tolerance, the process for setting and monitoring tolerances, actions on breach, and the timing and process for review.","19. An ADI must maintain an appropriate and well-documented credit risk appetite
+APS-220,APS-220-S10,19,Credit risk appetite,"ADIs must maintain a well-documented credit risk appetite statement articulating the degree of credit risk they are prepared to accept, the maximum tolerance level, processes for setting and monitoring tolerances, and the timing and process for review.","19. An ADI must maintain an appropriate and well-documented credit risk appetite
 statement. The statement must, at a minimum, articulate the degree of credit risk
 that the ADI is prepared to accept (credit risk appetite), the maximum level of
 credit risk that the ADI is willing to operate within (credit risk tolerance), the
@@ -151,7 +151,7 @@ process for ensuring credit risk tolerances are set at an appropriate level, the
 process for monitoring compliance with credit risk tolerances and for taking
 appropriate action in the event it is breached, and the timing and process for
 review of the credit risk appetite and tolerances.",core,19,7,7
-APS-220,APS-220-S11,20-23,Credit Risk Management Strategy,"An ADI must maintain a well-documented credit risk management strategy reflecting its credit risk appetite, profile and market conditions, describing willingness to accept risk by exposure type, sector, geography, currency and maturity, and considering sustainability of earnings including cost of capital.","20. An ADI must maintain an appropriate and well-documented credit risk
+APS-220,APS-220-S11,20-23,Credit risk management strategy,"ADIs must maintain a well-documented credit risk management strategy that reflects their credit risk appetite, profile and market conditions, describes willingness to accept risk by exposure type and geography, and considers sustainability of earnings including risk/reward trade-offs.","20. An ADI must maintain an appropriate and well-documented credit risk
 management strategy that outlines the objectives guiding the ADI's credit
 origination, credit assessment and approval activities and adopts the necessary
 policies and processes for conducting such activities.
@@ -164,7 +164,8 @@ characteristics that the ADI would want to achieve in its credit portfolio.
 23. An ADI's credit risk management strategy must consider the sustainability of
 earnings from its credit risk activities including an acceptable risk/reward trade-
 off that would factor in cost of capital estimates.",core,20-23,7,8
-APS-220,APS-220-S12,24-28,The Role of the Board and Senior Management,"The Board must annually review and approve the credit risk appetite and strategy, challenge senior management on policy compliance, and ensure adequate capability and resources. Senior management must implement the Board-approved strategy, develop policies and processes, and ensure independent internal reviews of credit functions.","24. The Board of an ADI must review and approve, on at least an annual basis, the
+APS-220,APS-220-S12,24-28,The role of the Board and senior management,"The Board must review and approve the credit risk appetite and strategy at least annually, challenge senior management on policy compliance, and ensure adequate capability and resources. Senior management must implement the Board-approved strategy, develop policies and processes, and ensure independent internal reviews of credit functions.","Board responsibilities
+24. The Board of an ADI must review and approve, on at least an annual basis, the
 ADI's credit risk appetite and credit risk management strategy.
 25. The Board must regularly challenge, seek assurance and evidence from senior
 management that the credit risk policies, processes and practices are consistent
@@ -177,6 +178,7 @@ it is not.
 resources to appropriately manage the credit risk activities conducted by the ADI
 and that such activities operate within the credit risk management strategy, credit
 risk policies and credit risk appetite.
+Senior management responsibilities
 27. Senior management of an ADI must have responsibility for implementing the
 Board approved credit risk management strategy and for developing and
 implementing appropriate policies and processes for identifying, measuring,
@@ -203,7 +205,7 @@ Such reviews must be conducted independently from the business
 function. This may involve an ADI's independent risk management and
 compliance function or an independent internal audit function or qualified
 external party.",core,24-28,8,9
-APS-220,APS-220-S13,29-35,Credit Risk Policies and Processes,"ADIs must adopt prudent, well-documented policies covering the full credit life-cycle including origination, assessment, approval, monitoring and management. Policies must address target markets, portfolio mix, limits, approval authorities, overrides, and country and transfer risk for cross-border exposures.","29. An ADI must adopt and implement prudent and well-documented policies and
+APS-220,APS-220-S13,29-35,Credit risk policies and processes,"ADIs must adopt prudent, well-documented policies and processes covering the full credit life-cycle, including target markets, portfolio mix, limits, approval authorities, overrides, and early identification of problem exposures. Policies must address internal risk appetite limits for portfolio diversification and country/transfer risk for cross-border exposures.","29. An ADI must adopt and implement prudent and well-documented policies and
 processes to identify, measure, monitor, report and control or mitigate credit risk.
 The full credit life-cycle must be considered, including credit origination, initial
 and subsequent credit assessment and approval processes and the ongoing
@@ -248,7 +250,7 @@ contractual obligations. The monitoring of country risk factors must incorporate
 economic factors; and
 (b) the enforceability of agreements, including the timing and ability to realise
 collateral under the relevant legal framework.",core,29-35,9,10
-APS-220,APS-220-S14,36-38,Credit Origination,"ADIs must recognise and address risks from different origination channels, applying higher diligence for geographically distant decisions. Where third parties such as brokers are involved in origination without approval authority, ADIs must maintain sound oversight and verify the accuracy of borrower information.","36. An ADI must recognise and address the risks arising from different credit
+APS-220,APS-220-S14,36-38,Credit origination,"ADIs must recognise and address risks from different credit origination channels, applying higher diligence when decisions are made distant from the borrower or collateral. Where third parties such as brokers are involved in origination, ADIs must have sound oversight processes and verify the accuracy of borrower information provided.","36. An ADI must recognise and address the risks arising from different credit
 origination channels in its credit risk management framework. An ADI must
 exercise a higher level of diligence where credit assessment and approval
 decisions are made distant from the geographical location of a borrower or
@@ -263,7 +265,7 @@ prudent policies and processes to ensure that reasonable inquiries have been mad
 and reasonable steps have been taken to verify the accuracy and completeness of
 all relevant borrower information provided by the third party and the outcomes
 of these processes must be documented.",core,36-38,10,11
-APS-220,APS-220-S15,39-59,Credit Assessment and Approval Process,"ADIs must establish sound credit assessment criteria, undertake comprehensive borrower assessments primarily based on repayment capacity, and not place undue reliance on collateral or external ratings. Specific criteria apply for exposures to individuals and non-individuals, with requirements for collateral valuation independence, LVR limits, override policies, and third-party oversight.","39. An ADI must establish sound credit assessment and approval criteria. These
+APS-220,APS-220-S15,39-59,Credit assessment and approval process,"ADIs must establish sound credit assessment and approval criteria, undertaking comprehensive assessments of borrower repayment capacity with primary reliance on repayment capacity rather than collateral. Requirements cover exposures to individuals and non-individuals, collateral valuation, LVR limits, approval processes, override policies, and third-party credit assessment oversight.","39. An ADI must establish sound credit assessment and approval criteria. These
 criteria must set out the borrowers that are eligible for credit, the extent and nature
 of credit the ADI is willing to provide and the terms and conditions the exposures
 would be subject to.
@@ -279,6 +281,7 @@ obtain adequate information to undertake a comprehensive credit assessment of a
 borrower.
 43. An ADI must give due consideration to the integrity and reputation of the
 borrower as well as its legal capacity to assume liability.
+Exposures to individuals
 44. For exposures to individuals, an ADI's credit assessment must include
 consideration of the following criteria, where relevant:
 (a) the purpose and structure of the exposure and sources of repayment,
@@ -304,6 +307,7 @@ designed to limit the ADI's exposure to changes in the future risk profile
 of the borrower to an acceptable level to the ADI; and
 (f) where applicable, the adequacy and enforceability of collateral, guarantees
 and other risk mitigants, including under various scenarios.
+Exposures other than to individuals
 45. For exposures other than to individuals, in addition to paragraphs 44(a), 44(b),
 44(c), 44(e) and 44(f), an ADI's credit assessment must also include
 consideration of the following criteria, where relevant:
@@ -313,6 +317,7 @@ position within that sector;
 (c) the borrower's equity capital invested in the business; and
 (d) the availability and enforceability of risk mitigants other than collateral,
 such as hedging and insurance.
+Collateral and guarantees
 46. An ADI must have prudent credit risk policies covering the acceptability of
 various forms of collateral, appropriate processes for the valuation of such
 collateral (including the valuation of collateral prior to entering into an exposure
@@ -338,6 +343,7 @@ high LVR.
 relation to the credit quality of the guarantor and legal enforceability of the
 guarantee. For exposures to individuals in particular, an ADI must ensure a
 guarantor has a clear understanding of the risks involved.
+Credit approval and experienced credit judgement
 53. An ADI must have a clearly established process in place for:
 (a) approving new exposures (including prudent credit standards);
 (b) renewing and refinancing existing exposures; and
@@ -357,6 +363,7 @@ waivers or exceptions.
 57. Exposures originated as overrides, waivers or exceptions to, or otherwise not in
 compliance with, credit risk policies must be regularly reported to an ADI's
 relevant internal governance bodies and review functions.
+Third party credit assessment and approval
 58. Where an ADI uses a third party, such as a broker, to undertake any aspects of
 the credit assessment or approval, an ADI must implement appropriate oversight
 processes of the third party. An ADI must monitor and test the integrity of the
@@ -373,7 +380,7 @@ prospective and actual exposures;
 (b) timely access to and review of performance information on the exposures;
 and
 (c) a comprehensive understanding of all structural features of the transaction.",core,39-59,11,14
-APS-220,APS-220-S16,60-75,"Credit Administration, Measurement and Monitoring","ADIs must maintain appropriate systems for ongoing credit portfolio administration, monitoring individual exposures and portfolio composition, and conducting regular stress testing. Stress testing must be granular, include severe but plausible scenarios, inform limit-setting, and results must be communicated to the Board and senior management.","60. An ADI must have an appropriate system for the ongoing administration of its
+APS-220,APS-220-S16,60-75,"Credit administration, measurement and monitoring","ADIs must maintain appropriate systems for ongoing credit portfolio administration, monitoring individual exposures and overall portfolio quality, and conducting regular stress testing. Credit risk grading systems must be implemented where appropriate, and stress testing must include severe but plausible scenarios with results communicated to the Board.","60. An ADI must have an appropriate system for the ongoing administration of its
 credit portfolio.
 61. An ADI's credit administration system must have regard to:
 (a) the efficiency and effectiveness of credit administration operations,
@@ -432,16 +439,19 @@ communication of information on scenarios, key assumptions, results and capital
 impacts to the ADI's Board and senior management.
 75. Stress testing models must be appropriately validated and checked independently
 or by an appropriately qualified external party.",core,60-75,14,16
-APS-220,APS-220-S17,76-80,Controls over Credit Risk,"ADIs must establish independent, regular reviews of credit risk management processes with results communicated to the Board and senior management. ADIs must enforce internal controls, ensure timely reporting of overrides, and maintain effective workout programs with segregation from origination functions.","76. An ADI must establish a system of independent, regular reviews of the ADI's
+APS-220,APS-220-S17,76-80,Controls over credit risk,"ADIs must establish independent, regular reviews of credit risk management processes with results communicated to the Board and senior management. ADIs must enforce internal controls to manage overrides and exceptions, maintain systems for early remedial action on problem exposures, and have effective workout programs with segregation from origination functions.","Review of credit risk management processes
+76. An ADI must establish a system of independent, regular reviews of the ADI's
 credit risk management processes and practices (refer to paragraph 28(e) of this
 Prudential Standard) and the results of such reviews must be communicated
 directly to the Board and senior management.
+Internal controls and limits
 77. An ADI must ensure that the credit origination, credit assessment and approval
 function is properly managed and that credit exposures are within levels
 consistent with an ADI's limits. An ADI must establish and enforce internal
 controls and other practices to ensure that overrides, waivers or exceptions to
 policies, processes and limits are reported in a timely manner to the appropriate
 level of management for action.
+Systems for remedial action
 78. An ADI must have an appropriate system in place for early remedial action on
 problem exposures, managing problem exposures and similar workout situations.
 An ADI's collections systems must bring together a borrower's arrears profile
@@ -455,7 +465,7 @@ as much of an exposure as is reasonably achievable within the requirements
 established by law and also having regard to community expectation as to how
 borrowers are to be treated. An ADI must consider the risk to its reputation in
 such circumstances.",core,76-80,16,17
-APS-220,APS-220-S18,81-96,Classification of Exposures and Provisions,"ADIs must classify exposures as performing or non-performing, with mandatory classification at 30, 60 and 90 days past-due, and maintain adequate documentation and provisioning. Non-performing exposures must be measured as the whole exposure amount; collateral must not influence past-due status or non-performing categorisation. Reclassification back to performing requires no exposure 90+ days past-due, a continuous repayment period of at least 90 days (or 6 months for restructured exposures), and the borrower's situation having improved.","81. An ADI must have prudent policies and processes for classifying its credit risk
+APS-220,APS-220-S18,81-96,Classification of exposures and provisions,"ADIs must classify credit risk exposures as performing or non-performing, with classification also required at 30, 60 and 90 days past-due. Non-performing exposures must be measured as the whole exposure amount, collateral must not influence past-due status, and reclassification back to performing requires no exposure 90+ days past-due, a continuous repayment period of at least 90 days (or 6 months for restructured exposures), and improvement in the borrower's situation.","81. An ADI must have prudent policies and processes for classifying its credit risk
 exposures for prudential reporting purposes and for establishing appropriate and
 robust provisioning levels. An ADI's system for classification and provisioning
 must take into account on- and off-balance sheet exposures.
@@ -483,6 +493,7 @@ up in relation to credit exposures and take into account any observed
 concentration in the risk mitigation strategies adopted and the potential effect on
 the efficacy of the mitigant in reducing loss. An ADI must consider the adequacy
 of provisions in light of this assessment.
+Non-performing exposures
 88. For the purposes of this Prudential Standard, non-performing exposures must be
 measured as the whole amount of the exposure including where non-performance
 relates to only a part of the exposure, for example, unpaid interest. For off-balance
@@ -495,6 +506,7 @@ including the counting of past-due days and the determination of the exposure as
 non-performing. An exposure must be classified as non-performing where it
 meets the definition of non-performing even if the collateral value exceeds the
 amount of the past-due exposure.
+Off-balance sheet exposures
 91. An ADI must classify off-balance sheet exposures as non-performing where the
 ADI has cause to believe that it is unlikely to recoup, in a timely manner, the full
 amounts it may be required to advance.
@@ -513,6 +525,7 @@ ons applied in calculating such exposures must reflect the nature of the individ
 facility involved. Derivative transaction exposures must be revalued regularly so
 as to maintain reasonably current assessments of the extent of credit risk attaching
 to these transactions.
+Reclassification of non-performing exposures to performing
 94. An ADI may reclassify an exposure from non-performing to performing when all
 of the following criteria are met:
 (a) the borrower does not have any exposure 90 days or more past-due;
@@ -539,7 +552,7 @@ for non-performing exposures (refer to paragraphs 94(a) to 94(d)).
 96. The reclassification of a non-performing exposure as performing must be made
 on the same level (such as a borrower or transaction approach) as when the
 exposure was originally categorised as non-performing.",core,81-96,17,19
-APS-220,APS-220-S19,97-102,Restructured Exposures,"Restructuring must be supported by a current credit evaluation and approved by appropriate management; it must not be used to obscure loan quality or avoid provisions. Restructured non-performing exposures remain non-performing until exit criteria are met, including a probation period of at least six months of timely repayments and resolution of the borrower's financial difficulty.","97. Any restructuring of an exposure must be supported by a current, well-
+APS-220,APS-220-S19,97-102,Restructured exposures,"Restructuring must be supported by a current credit evaluation and approved by appropriate management. Restructured non-performing exposures remain non-performing until exit criteria are met, including a probation period of at least six months of timely repayments and resolution of the borrower's financial difficulty.","97. Any restructuring of an exposure must be supported by a current, well-
 documented credit evaluation of the borrower's financial condition and prospects
 for repayment under the modified terms. Renegotiation of an exposure must not
 be used to obscure the poor quality of a loan's or other financial instrument's
@@ -572,6 +585,7 @@ bad season). The ADI must, however, be reasonably confident that the borrower
 is able to fully perform with no loss of principal and the originally contracted
 amount of interest or other payments due, and the ADI must not maintain any
 provisions assessed against the exposure on an individual basis.
+Criteria for exit from the restructured exposures category
 102. An ADI must classify a restructured exposure as such until it meets both of the
 following exit criteria:
 (a) when all payments, as per the revised contractual terms, have been made
@@ -579,7 +593,7 @@ in a timely manner over a continuous repayment period of not less than
 six months (probation period). The starting date of the probation period
 must be the scheduled start of payments under the revised terms; and
 (b) the borrower has resolved its financial difficulty.",core,97-102,19,20
-APS-220,APS-220-S20,103-107,Credit Risk and Accounting for Expected Credit Losses,"ADIs must adopt sound methodologies for assessing and measuring credit losses on all exposures, with provisions adequate and consistent with Australian Accounting Standards. Models used for expected credit loss measurement must be validated, and experienced credit judgement must be applied including consideration of forward-looking macroeconomic information.","103. An ADI must adopt, document and adhere to sound methodologies that address
+APS-220,APS-220-S20,103-107,Credit risk and accounting for expected credit losses,"ADIs must adopt sound methodologies for assessing and measuring credit losses on all exposures, with provisions adequate and consistent with Australian Accounting Standards. ADIs must validate models used for expected credit loss assessment and apply experienced credit judgement including forward-looking macroeconomic information.","103. An ADI must adopt, document and adhere to sound methodologies that address
 policies, processes and controls for assessing and measuring credit losses on all
 exposures. The measurement of provisions must build on robust methodologies
 and result in the appropriate and timely recognition of expected credit losses in
@@ -595,7 +609,7 @@ credit losses.
 107. An ADI must have an appropriate credit risk assessment and measurement
 process that provides it with a sound basis for common systems, tools and data to
 assess credit risk and to account for expected credit losses.",core,103-107,20,20
-APS-220,APS-220-S21,108-109,Prescribed Provisioning,APRA may permit or require an ADI to use the prescribed provisioning approach in Attachment B where a simple approach is acceptable or the ADI's own practices are inadequate. Prescribed provisions are minimum provisions; any excess provisions established under Australian Accounting Standards must continue to be included as specific or general provisions for regulatory capital and APRA reporting purposes.,"108. Where APRA considers that a simple overall approach to determining provisions
+APS-220,APS-220-S21,108-109,Prescribed provisioning,"APRA may permit or require an ADI to implement the prescribed provisioning approach in Attachment B where a simple approach is acceptable or the ADI's own practices are inadequate. Prescribed provisions are minimum provisions, and any excess provisions established under Australian Accounting Standards must continue to be included as specific or general provisions for regulatory purposes.","108. Where APRA considers that a simple overall approach to determining provisions
 is acceptable for regulatory purposes, or APRA judges an ADI's own practices
 for identifying provisions to be inadequate in view of its credit risk profile, APRA
 may permit, or require, an ADI to implement the prescribed provisioning
@@ -605,7 +619,7 @@ ADI establishes provisions under Australian Accounting Standards in excess of
 those prescribed, the ADI must continue for regulatory capital and APRA
 reporting purposes, to include any excess provisions as part of its specific
 provisions or general provisions as appropriate.",core,108-109,20,21
-APS-220,APS-220-S22,110-111,Supervisory Limits,"APRA may set limits on particular exposures or categories of exposures where an ADI is taking excessive credit risk relative to its capacity to manage or absorb it. APRA may also set system-wide limits on types of lending, including growth rates or portfolio shares, where there is excessive growth in higher risk lending.","110. Where APRA considers that an ADI is taking excessive credit risk relative to its
+APS-220,APS-220-S22,110-111,Supervisory limits,"APRA may set limits on particular exposures or categories of exposures where an ADI is taking excessive credit risk relative to its capacity to manage or absorb that risk. APRA may also set system-wide limits on particular types of lending, including growth rates or portfolio shares, where there is excessive growth in higher risk lending.","110. Where APRA considers that an ADI is taking excessive credit risk relative to its
 financial or operational capacity to manage or absorb that risk, APRA may set
 limits on particular exposures or categories of exposures that may be held by that
 ADI, including but not limited to limits on growth or limits on the share of the
@@ -619,19 +633,19 @@ considering whether there is an excessive level or growth in higher risk lending
 or credit activity, APRA will have regard to, among other factors, any easing of
 credit standards and practices and the proportion of an ADI's higher risk lending,
 including whether this lending is high leverage, high LVR or interest-only.",core,110-111,21,21
-APS-220,APS-220-S23,112,Adequacy of Credit Risk Management and Provisions,"Where APRA considers an ADI's credit risk management deficient or not meeting this Standard's requirements, APRA may require amendments to policies and practices, increased provisions or write-offs, or increased capital adequacy.","112. Where APRA considers an ADI's policies, processes and practices across its
+APS-220,APS-220-S23,112,Adequacy of credit risk management and provisions,"Where APRA considers an ADI's credit risk management deficient or not meeting the Standard's requirements, APRA may require amendments to policies and practices, increased provisions or write-offs, or increased capital adequacy.","112. Where APRA considers an ADI's policies, processes and practices across its
 credit risk activities do not meet the requirements of this Prudential Standard or
 otherwise considers its credit risk management deficient, APRA may require the
 ADI to amend credit risk management policies, processes, and practices, or adopt
 appropriate credit risk management policies, processes and practices, or increase
 the levels of provisions or write-offs reported, or otherwise increase its capital
 adequacy.",core,112,21,21
-APS-220,APS-220-S24,113,Special Purpose Engagements,"APRA may require an ADI to appoint an independent party to review and report on all or part of the ADI's credit risk management, including provisioning practices, at the ADI's expense and on terms set by APRA.","113. APRA may require an ADI to appoint an independent party to review and provide
+APS-220,APS-220-S24,113,Special purpose engagements,"APRA may require an ADI to appoint an independent party to review and report on all or part of the ADI's credit risk management, including provisioning practices, at the ADI's expense.","113. APRA may require an ADI to appoint an independent party to review and provide
 a report to APRA on all or a particular aspect of the ADI's credit risk
 management, including provisioning practices. APRA may, however, request
 such a report without prior consultation with an ADI. APRA may set the terms of
 the review and at the ADI's expense.",core,113,21,21
-APS-220,APS-220-ATT-A,A,Attachment A – Collateral Valuation,"Attachment A sets out requirements for the valuation of all forms of collateral and security, including independence of valuations, use of internal appraisers and external valuers, alternative valuation methods, property-specific valuation assumptions, and ongoing monitoring of security values. Valuations must reflect fair values, be conducted by suitably qualified persons, and be subject to regular independent review.","Attachment A – Collateral valuation
+APS-220,APS-220-ATT-A,A,Attachment A – Collateral valuation,"This Attachment sets out requirements for the valuation of all forms of collateral, including security identification, documentation, independence of valuations, use of internal appraisers and external valuers, alternative valuation methods, and specific requirements for property and non-real estate assets. Valuations must reflect fair values, be conducted independently, and be regularly reviewed.","Attachment A – Collateral valuation
 1. Collateral can include guarantees, insurance arrangements and, importantly,
 security held over various forms of assets. This Attachment applies to all forms
 of collateral, including all types of assets taken as security. An ADI must apply
@@ -772,7 +786,7 @@ supplied.
 21. In determining the fair value of security not in the form of real property, an ADI
 must also have regard to considerations such as market liquidity, legal costs,
 impediments to realisation and prior charges.",attachment,A1-A21,22,25
-APS-220,APS-220-ATT-B,B,Attachment B – Prescribed Provisioning,"Attachment B sets out the prescribed provisioning framework applicable where APRA permits or requires its use, defining four categories of past-due exposures with minimum provision percentages based on days past-due or period of irregularity. Prescribed provisions are treated as specific provisions for capital and APRA reporting purposes and are deducted from Common Equity Tier 1 Capital.","Attachment B – Prescribed provisioning
+APS-220,APS-220-ATT-B,B,Attachment B – Prescribed provisioning,"This Attachment sets out the prescribed provisioning framework for ADIs, defining four categories of past-due exposures with minimum provision percentages based on the term of payments past-due or period of irregularity. Prescribed provisions are minimum specific provisions for capital and APRA reporting purposes, and ADIs may seek APRA agreement to report lower provisions if they can demonstrate their estimates are prudent and comprehensive.","Attachment B – Prescribed provisioning
 1. Where an ADI undertakes prescribed provisioning, the level of prescribed
 provisions must be reported to APRA notwithstanding the level of any provisions
 which an ADI may have actually raised, or the form in which such provisions
