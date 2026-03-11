@@ -377,11 +377,19 @@ def _get_orchestrator():
 
 # ── Response rendering ────────────────────────────────────────────────────────
 
-def _verdict_badge(verdict: str, confidence: float) -> None:
+def _verdict_badge(verdict: str, confidence: float, routing: dict | None = None) -> None:
     colour = VERDICT_COLOURS.get(verdict, "#6c757d")
     icon   = VERDICT_ICONS.get(verdict, "ℹ")
     label  = VERDICT_LABELS.get(verdict, verdict)
     expl   = VERDICT_EXPLANATIONS.get(verdict, "")
+
+    if verdict == "INFORMATIONAL" and routing is not None:
+        investigation_only = (
+            routing.get("needs_investigation_agent")
+            and not routing.get("needs_compliance_agent")
+        )
+        if investigation_only:
+            expl = "Graph investigation complete. Entity connections, transaction patterns, and risk signals have been analysed."
 
     if verdict == "INFORMATIONAL":
         right_html = ""
@@ -1765,7 +1773,7 @@ def _render_error(error_str: str) -> None:
 
 def render_response(resp, elapsed_s: float | None = None) -> None:
     """Render an InvestigationResponse in the Streamlit UI."""
-    _verdict_badge(resp.verdict, resp.confidence)
+    _verdict_badge(resp.verdict, resp.confidence, routing=resp.routing)
 
     with st.expander("Routing", expanded=False):
         _render_routing(resp.routing, chart_key=f"routing_graph_{resp.session_id}")
