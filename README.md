@@ -2,6 +2,8 @@
 
 **Intelligent loan compliance monitoring and risk investigation powered by Neo4j, Claude Model and OpenAI Embeddings**
 
+![LoanGuard AI dashboard — compliance verdict for LOAN-0002](docs/assets/dashboard-screenshot.png)
+
 LoanGuard AI is an agentic AI system for Australian financial services compliance. It checks whether loan applications and borrowers comply with APRA prudential standards (APS-112, APG-223, APS-220) and surfaces financial crime risk signals — all via natural-language questions answered by a multi-agent AI pipeline backed by a three-layer Neo4j knowledge graph.
 
 The system is designed for compliance officers and risk analysts who need explainable, evidence-backed verdicts rather than black-box scores. Every compliance decision is persisted to the graph with full reasoning chains, cited regulatory sections, and semantic evidence — enabling complete audit trails and interactive evidence tracing in the Streamlit dashboard.
@@ -279,6 +281,17 @@ loanguard-ai/
 │       ├── config.py               # load_document_config() for document_config.yaml
 │       ├── pdf_utils.py            # PDF text extraction utilities
 │       └── utils.py                # Claude streaming utilities (call_claude_stream_json)
+├── docs/
+│   ├── assets/                     # Images and static files
+│   ├── README.md                   # Documentation index and navigation
+│   ├── getting-started.md          # Setup walkthrough from clone to running app
+│   ├── architecture.md             # End-to-end technical architecture
+│   ├── data-model.md               # Neo4j graph schema reference
+│   ├── compliance.md               # APRA threshold and verdict logic
+│   ├── agents.md                   # Orchestrator, ComplianceAgent, InvestigationAgent
+│   ├── tools.md                    # MCP tools reference
+│   ├── notebooks.md                # Notebooks reference and running order
+│   └── development.md              # Developer guide: extending and contributing
 ├── data/
 │   ├── layer_1/                    # Financial entity CSVs (entities/ and links/)
 │   ├── layer_2/                    # APRA regulatory documents and processed data
