@@ -18,9 +18,9 @@ LoanGuard AI organises all knowledge across three graph layers and routes every 
 
 | Layer | Description | Key Nodes |
 |---|---|---|
-| **1 — Entity** | Financial entities: borrowers, loans, accounts, transactions, collateral, officers | `Borrower`, `LoanApplication`, `BankAccount`, `Transaction`, `Collateral`, `Officer`, `Jurisdiction`, `Industry` |
-| **2 — Regulatory** | APRA prudential standards parsed from source PDFs, chunked and embedded for semantic search | `Regulation`, `Section`, `Requirement`, `Threshold`, `Chunk` |
-| **3 — Assessment** | Runtime compliance results written by agents during query processing | `Assessment`, `Finding`, `ReasoningStep` |
+| **1 - Entity** | Financial entities: borrowers, loans, accounts, transactions, collateral, officers | `Borrower`, `LoanApplication`, `BankAccount`, `Transaction`, `Collateral`, `Officer`, `Jurisdiction`, `Industry` |
+| **2 - Regulatory** | APRA prudential standards parsed from source PDFs, chunked and embedded for semantic search | `Regulation`, `Section`, `Requirement`, `Threshold`, `Chunk` |
+| **3 - Assessment** | Runtime compliance results written by agents during query processing | `Assessment`, `Finding`, `ReasoningStep` |
 
 The `Jurisdiction` node bridges Layers 1 and 2. Borrowers link to jurisdictions via `RESIDES_IN` or `REGISTERED_IN`; regulations declare which jurisdictions they govern via `APPLIES_TO_JURISDICTION`. All APRA regulations point to `JUR-AU-FED`.
 
