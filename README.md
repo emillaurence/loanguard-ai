@@ -1,6 +1,6 @@
 # LoanGuard AI
 
-**Intelligent loan compliance monitoring and risk investigation powered by Neo4j, Claude Model and OpenAI Embeddings**
+**Intelligent loan compliance monitoring and risk investigation powered by Neo4j, Claude, and OpenAI Embeddings**
 
 ![LoanGuard AI dashboard — compliance verdict for LOAN-0002](docs/assets/dashboard-screenshot.png)
 
@@ -36,7 +36,7 @@ User question
 
 - All Claude calls use `temperature=0` and model `claude-sonnet-4-6`
 - `ComplianceAgent` uses prompt caching (`cache_control: ephemeral`) on its system prompt
-- Tool results are truncated to 3,000 characters to prevent context bloat; message history is windowed to the last 4 message pairs
+- Tool results are truncated to 3,000 characters to prevent context bloat; message history is windowed to the last 4 pairs (`ComplianceAgent`) or 6 pairs (`InvestigationAgent`)
 - Rate limit errors retry with exponential backoff, reading the `retry-after` response header first
 
 ---
@@ -232,6 +232,22 @@ To run a single test file:
 ```bash
 pytest tests/test_agent.py -v
 ```
+
+---
+
+## Documentation
+
+In-depth reference documentation is in `docs/`:
+
+| File | Contents |
+|---|---|
+| `docs/architecture.md` | End-to-end technical architecture |
+| `docs/data-model.md` | Neo4j graph schema reference |
+| `docs/compliance.md` | APRA threshold types and verdict logic |
+| `docs/agents.md` | Orchestrator, ComplianceAgent, InvestigationAgent |
+| `docs/tools.md` | MCP tools reference |
+| `docs/notebooks.md` | Notebooks reference and running order |
+| `docs/development.md` | Developer guide: adding documents, anomaly patterns, and MCP tools |
 
 ---
 
