@@ -15,6 +15,8 @@ from __future__ import annotations
 
 import json
 import logging
+import re
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any, TYPE_CHECKING
 
 import anthropic
@@ -74,6 +76,10 @@ Each threshold returned by traverse_compliance_path includes a `threshold_type` 
 
 For any compliance question:
 1. Call traverse_compliance_path to get the applicable regulatory framework and thresholds.
+   This tool returns the COMPLETE L1→L2 regulatory path including entity details.
+   Do NOT follow up with read-neo4j-cypher for the same entity — all data you need
+   is in the traverse result.
+   Do NOT call detect_graph_anomalies — anomaly detection is handled separately.
 2. From the threshold list, exclude:
    - Thresholds with threshold_type='informational' (ADI-level, not entity-level)
    - Conditional thresholds that are N/A for this entity (see rules above)
@@ -142,7 +148,6 @@ class ComplianceAgent:
         Returns:
             ComplianceResult with verdict, cited IDs, and assessment_id.
         """
-        messages: list[dict] = [{"role": "user", "content": question}]
         iterations = 0
         cypher_used: list[str] = []
         final_text = ""
@@ -154,6 +159,46 @@ class ComplianceAgent:
         seen_chunk_scores: dict[str, float] = {}  # chunk_id → similarity_score
 
         logger.info("ComplianceAgent: %s", question)
+
+        # Pre-run traverse_compliance_path to eliminate the first Claude round-trip.
+        # The compliance agent ALWAYS calls traverse first — injecting the result
+        # upfront saves one full API call (~4-6s) by skipping iter-1 entirely.
+        _PREFIX_TO_TYPE = {
+            "LOAN": "LoanApplication", "BRW": "Borrower",
+            "ACC": "BankAccount",      "TXN": "Transaction",
+        }
+        _entity_match = re.search(r"(BRW|LOAN|ACC|TXN)-\d+", question, re.IGNORECASE)
+        pre_entity_id   = _entity_match.group(0).upper() if _entity_match else ""
+        pre_entity_type = _PREFIX_TO_TYPE.get(pre_entity_id.split("-")[0], "")
+        _reg_match      = re.search(r"\b(APG-223|APS-112|APS-220)\b", question, re.IGNORECASE)
+        pre_regulation_id = _reg_match.group(1).upper() if _reg_match else ""
+
+        messages: list[dict] = [{"role": "user", "content": question}]
+
+        if pre_entity_id and pre_entity_type:
+            traverse_result = self.execute_tool(
+                "traverse_compliance_path",
+                {"entity_id": pre_entity_id, "entity_type": pre_entity_type,
+                 "regulation_id": pre_regulation_id},
+            )
+            traverse_content = truncate_tool_result(json.dumps(traverse_result, default=str))
+            traverse_content = guard_tool_result(traverse_content, "traverse_compliance_path")
+            self._extract_evidence_ids(
+                "traverse_compliance_path", traverse_result,
+                seen_section_ids, seen_chunk_ids, seen_chunk_scores,
+            )
+            messages += [
+                {"role": "assistant", "content": [
+                    {"type": "tool_use", "id": "pre_traverse_0",
+                     "name": "traverse_compliance_path",
+                     "input": {"entity_id": pre_entity_id, "entity_type": pre_entity_type,
+                               "regulation_id": pre_regulation_id}},
+                ]},
+                {"role": "user", "content": [
+                    {"type": "tool_result", "tool_use_id": "pre_traverse_0",
+                     "content": traverse_content},
+                ]},
+            ]
 
         while iterations < COMPLIANCE_MAX_ITERATIONS:
             iterations += 1
@@ -175,47 +220,56 @@ class ComplianceAgent:
 
             if response.stop_reason == "tool_use":
                 messages.append({"role": "assistant", "content": self._blocks_to_dicts(response.content)})
+                tool_blocks = [b for b in response.content if b.type == "tool_use"]
+
+                # Build resolved tool inputs before dispatch (persist_assessment needs score injection)
+                resolved: list[tuple[Any, dict]] = []  # (block, tool_input)
+                import copy
+                for block in tool_blocks:
+                    tool_input = block.input
+                    if block.name == "persist_assessment" and seen_chunk_scores:
+                        tool_input = copy.deepcopy(dict(block.input))
+                        for step in tool_input.get("reasoning_steps") or []:
+                            scores = {
+                                cid: seen_chunk_scores[cid]
+                                for cid in (step.get("chunk_ids") or [])
+                                if cid in seen_chunk_scores
+                            }
+                            if scores:
+                                step["chunk_scores"] = scores
+                    if block.name == "read-neo4j-cypher" and block.input.get("query"):
+                        cypher_used.append(block.input["query"])
+                    resolved.append((block, tool_input))
+
+                # Execute all tool calls for this iteration in parallel
+                results_map: dict[str, dict] = {}
+                with ThreadPoolExecutor(max_workers=max(1, len(resolved))) as ex:
+                    future_to_id = {
+                        ex.submit(self.execute_tool, blk.name, inp): blk.id
+                        for blk, inp in resolved
+                    }
+                    for future in as_completed(future_to_id):
+                        results_map[future_to_id[future]] = future.result()
+
                 tool_results = []
-                for block in response.content:
-                    if block.type == "tool_use":
-                        logger.info("Tool: %s(%s)", block.name, list(block.input.keys()))
-                        # Track Cypher for transparency panel
-                        if block.name == "read-neo4j-cypher" and block.input.get("query"):
-                            cypher_used.append(block.input["query"])
-                        # Inject chunk_scores into persist_assessment so scores are
-                        # persisted on CITES_CHUNK relationships for trace_evidence to recover.
-                        tool_input = block.input
-                        if block.name == "persist_assessment" and seen_chunk_scores:
-                            import copy
-                            tool_input = copy.deepcopy(dict(block.input))
-                            for step in tool_input.get("reasoning_steps") or []:
-                                scores = {
-                                    cid: seen_chunk_scores[cid]
-                                    for cid in (step.get("chunk_ids") or [])
-                                    if cid in seen_chunk_scores
-                                }
-                                if scores:
-                                    step["chunk_scores"] = scores
-                        result = self.execute_tool(block.name, tool_input)
-                        # Accumulate assessment_ids and persisted findings from Layer 3.
-                        # persist_assessment may be called once per regulation, so we
-                        # extend rather than overwrite to capture findings from all regulations.
-                        if block.name == "persist_assessment" and isinstance(result, dict):
-                            aid = result.get("assessment_id")
-                            if aid:
-                                assessment_id = aid  # keep last for backward compat
-                                if aid not in assessment_ids:
-                                    assessment_ids.append(aid)
-                            persisted_findings.extend(result.get("findings", []))
-                        # Accumulate section/chunk IDs and scores for the evidence tracker
-                        self._extract_evidence_ids(block.name, result, seen_section_ids, seen_chunk_ids, seen_chunk_scores)
-                        content = truncate_tool_result(json.dumps(result, default=str))
-                        content = guard_tool_result(content, block.name)
-                        tool_results.append({
-                            "type": "tool_result",
-                            "tool_use_id": block.id,
-                            "content": content,
-                        })
+                for block, _ in resolved:
+                    result = results_map[block.id]
+                    logger.info("Tool: %s(%s)", block.name, list(block.input.keys()))
+                    if block.name == "persist_assessment" and isinstance(result, dict):
+                        aid = result.get("assessment_id")
+                        if aid:
+                            assessment_id = aid
+                            if aid not in assessment_ids:
+                                assessment_ids.append(aid)
+                        persisted_findings.extend(result.get("findings", []))
+                    self._extract_evidence_ids(block.name, result, seen_section_ids, seen_chunk_ids, seen_chunk_scores)
+                    content = truncate_tool_result(json.dumps(result, default=str))
+                    content = guard_tool_result(content, block.name)
+                    tool_results.append({
+                        "type": "tool_result",
+                        "tool_use_id": block.id,
+                        "content": content,
+                    })
                 # Append evidence tracker to the last tool_result content so IDs survive
                 # history truncation. Must not add a separate text block — the API requires
                 # the user message following tool_use to contain only tool_result blocks.

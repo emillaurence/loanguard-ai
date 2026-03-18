@@ -56,16 +56,6 @@ _FINDINGS_QUERY = (
     "LIMIT 200"
 )
 
-_ASSESSMENT_META_QUERY = (
-    "MATCH (a:Assessment) "
-    "WHERE a.assessment_id IN $ids "
-    "RETURN a.assessment_id AS assessment_id, "
-    "       a.regulation_id AS regulation_id, "
-    "       a.verdict AS verdict, "
-    "       a.confidence AS confidence "
-    "LIMIT 50"
-)
-
 # ---------------------------------------------------------------------------
 # Routing prompt
 # ---------------------------------------------------------------------------
@@ -279,22 +269,16 @@ class Orchestrator:
           NON_COMPLIANT > REQUIRES_REVIEW > ANOMALY_DETECTED > COMPLIANT > INFORMATIONAL
         """
         try:
-            # Fetch findings across all assessments
+            # Single query fetches findings AND assessment-level verdict/confidence
             findings_result = self.execute_tool(
                 "read-neo4j-cypher",
                 {"query": _FINDINGS_QUERY, "params": {"ids": assessment_ids}},
             )
 
-            # Fetch per-assessment verdicts/confidence for aggregation
-            meta_result = self.execute_tool(
-                "read-neo4j-cypher",
-                {"query": _ASSESSMENT_META_QUERY, "params": {"ids": assessment_ids}},
-            )
-
             rows = findings_result.get("rows", [])
-            meta_rows = meta_result.get("rows", [])
 
             findings: list[dict] = []
+            seen_assessments: dict[str, dict] = {}
             for row in rows:
                 findings.append({
                     "finding_type":  row.get("finding_type", "information"),
@@ -304,11 +288,17 @@ class Orchestrator:
                     "regulation_id": row.get("regulation_id", ""),
                     "assessment_id": row.get("assessment_id", ""),
                 })
+                aid = row.get("assessment_id")
+                if aid and aid not in seen_assessments:
+                    seen_assessments[aid] = {
+                        "verdict": row.get("verdict"),
+                        "confidence": row.get("confidence"),
+                    }
 
             # Aggregate verdict (worst-case) and confidence (average)
             best_verdict = "INFORMATIONAL"
             confidences: list[float] = []
-            for m in meta_rows:
+            for m in seen_assessments.values():
                 v = (m.get("verdict") or "INFORMATIONAL").upper()
                 if VERDICT_PRIORITY.get(v, 0) > VERDICT_PRIORITY.get(best_verdict, 0):
                     best_verdict = v

@@ -23,6 +23,8 @@ from src.graph.queries import (
     merge_assessment,
     merge_finding,
     merge_reasoning_step,
+    batch_merge_findings,
+    batch_merge_reasoning_steps,
 )
 from src.mcp.schema import ANOMALY_REGISTRY
 
@@ -30,7 +32,7 @@ logger = logging.getLogger(__name__)
 
 
 def _get_conn() -> Neo4jConnection:
-    """Open a fresh Neo4j connection per tool call (stateless)."""
+    """Open a fresh Neo4j connection (fallback for standalone/notebook use)."""
     conn = Neo4jConnection()
     conn.connect()
     return conn
@@ -44,18 +46,20 @@ def traverse_compliance_path(
     entity_id: str,
     entity_type: str,
     regulation_id: str = "",
+    conn: Neo4jConnection | None = None,
 ) -> dict:
     """Cross-layer L1→L2 compliance traversal via the Jurisdiction bridge."""
-    conn = _get_conn()
+    _conn = conn or _get_conn()
     try:
         return get_compliance_path(
-            conn,
+            _conn,
             entity_id=entity_id,
             entity_type=entity_type,
             regulation_id=regulation_id or None,
         )
     finally:
-        conn.close()
+        if conn is None:
+            _conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -66,6 +70,7 @@ def retrieve_regulatory_chunks(
     query_text: str,
     regulation_id: str = "",
     top_k: int = 5,
+    conn: Neo4jConnection | None = None,
 ) -> dict:
     """Semantic similarity search over regulatory Chunk nodes."""
     from openai import OpenAI
@@ -80,10 +85,10 @@ def retrieve_regulatory_chunks(
     )
     embedding = response.data[0].embedding
 
-    conn = _get_conn()
+    _conn = conn or _get_conn()
     try:
         rows = vector_search_chunks(
-            conn,
+            _conn,
             embedding=embedding,
             top_k=top_k,
             regulation_id=regulation_id or None,
@@ -103,7 +108,8 @@ def retrieve_regulatory_chunks(
             ],
         }
     finally:
-        conn.close()
+        if conn is None:
+            _conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -113,6 +119,7 @@ def retrieve_regulatory_chunks(
 def detect_graph_anomalies(
     pattern_names: list[str],
     entity_id: str = "",
+    conn: Neo4jConnection | None = None,
 ) -> dict:
     """Run one or more named anomaly detection patterns and return combined results."""
     valid = set(ANOMALY_REGISTRY.keys())
@@ -123,7 +130,7 @@ def detect_graph_anomalies(
             "valid_patterns": list(valid),
         }
 
-    conn = _get_conn()
+    _conn = conn or _get_conn()
     results: list[dict] = []
     try:
         for pattern_name in pattern_names:
@@ -138,7 +145,7 @@ def detect_graph_anomalies(
                 params["eid"] = entity_id
 
             try:
-                rows = conn.run_query(cypher, params)
+                rows = _conn.run_query(cypher, params)
             except Exception as e:
                 logger.error("Anomaly pattern %s failed: %s", pattern_name, e)
                 rows = []
@@ -153,7 +160,8 @@ def detect_graph_anomalies(
                 "entity_ids":    entity_ids,
             })
     finally:
-        conn.close()
+        if conn is None:
+            _conn.close()
 
     total = sum(r["finding_count"] for r in results)
     return {"patterns_run": len(results), "total_findings": total, "results": results}
@@ -172,6 +180,7 @@ def persist_assessment(
     findings: list,
     reasoning_steps: list,
     agent: str = "compliance_agent",
+    conn: Neo4jConnection | None = None,
 ) -> dict:
     """Persist a compliance Assessment with Findings and ReasoningSteps to Layer 3."""
     valid_verdicts = {
@@ -186,10 +195,10 @@ def persist_assessment(
     assessment_id = f"ASSESS-{entity_id}-{regulation_id}-{now_local.strftime('%Y-%m-%d-%H%M%S')}"
     created_at = datetime.now(timezone.utc).isoformat()
 
-    conn = _get_conn()
+    _conn = conn or _get_conn()
     try:
         merge_assessment(
-            conn,
+            _conn,
             assessment_id=assessment_id,
             entity_id=entity_id,
             entity_type=entity_type,
@@ -200,20 +209,18 @@ def persist_assessment(
             created_at=created_at,
         )
 
+        # Build finding rows for batch insert
+        finding_rows: list[dict] = []
         persisted_findings: list[dict] = []
         for i, f in enumerate(findings or []):
             fid = f"FIND-{assessment_id}-{i:03d}"
-            merge_finding(
-                conn,
-                finding_id=fid,
-                assessment_id=assessment_id,
-                finding_type=f.get("finding_type", "information"),
-                severity=f.get("severity", "INFO"),
-                description=f.get("description", ""),
-                pattern_name=f.get("pattern_name"),
-                related_entity_id=f.get("related_entity_id"),
-                related_entity_type=f.get("related_entity_type"),
-            )
+            finding_rows.append({
+                "finding_id": fid,
+                "finding_type": f.get("finding_type", "information"),
+                "severity": f.get("severity", "INFO"),
+                "description": f.get("description", ""),
+                "pattern_name": f.get("pattern_name"),
+            })
             persisted_findings.append({
                 "finding_id": fid,
                 "finding_type": f.get("finding_type", "information"),
@@ -221,22 +228,24 @@ def persist_assessment(
                 "description": f.get("description", ""),
                 "pattern_name": f.get("pattern_name"),
             })
+        batch_merge_findings(_conn, assessment_id, finding_rows)
 
+        # Build step rows for batch insert
+        step_rows: list[dict] = []
         step_ids: list[str] = []
         for i, s in enumerate(reasoning_steps or []):
             sid = f"STEP-{assessment_id}-{i:03d}"
-            merge_reasoning_step(
-                conn,
-                step_id=sid,
-                assessment_id=assessment_id,
-                step_number=i + 1,
-                description=s.get("description", ""),
-                cypher_used=s.get("cypher_used"),
-                section_ids=s.get("section_ids", []),
-                chunk_ids=s.get("chunk_ids", []),
-                chunk_scores=s.get("chunk_scores"),
-            )
+            step_rows.append({
+                "step_id": sid,
+                "step_number": i + 1,
+                "description": s.get("description", ""),
+                "cypher_used": s.get("cypher_used"),
+                "section_ids": s.get("section_ids", []),
+                "chunk_ids": s.get("chunk_ids", []),
+                "chunk_scores": s.get("chunk_scores"),
+            })
             step_ids.append(sid)
+        batch_merge_reasoning_steps(_conn, assessment_id, step_rows)
 
         return {
             "assessment_id": assessment_id,
@@ -244,18 +253,19 @@ def persist_assessment(
             "step_ids": step_ids,
         }
     finally:
-        conn.close()
+        if conn is None:
+            _conn.close()
 
 
 # ---------------------------------------------------------------------------
 # Tool 5
 # ---------------------------------------------------------------------------
 
-def trace_evidence(assessment_id: str) -> dict:
+def trace_evidence(assessment_id: str, conn: Neo4jConnection | None = None) -> dict:
     """Walk a stored Assessment back to all cited regulatory nodes."""
-    conn = _get_conn()
+    _conn = conn or _get_conn()
     try:
-        evidence = get_assessment_with_evidence(conn, assessment_id)
+        evidence = get_assessment_with_evidence(_conn, assessment_id)
 
         step_section_ids: list[str] = []
         step_chunk_ids: list[str] = []
@@ -272,7 +282,7 @@ def trace_evidence(assessment_id: str) -> dict:
 
         cited_sections: list[dict] = []
         if step_section_ids:
-            cited_sections = conn.run_query(
+            cited_sections = _conn.run_query(
                 """
                 MATCH (s:Section)
                 WHERE s.section_id IN $ids
@@ -286,7 +296,7 @@ def trace_evidence(assessment_id: str) -> dict:
 
         cited_chunks: list[dict] = []
         if step_chunk_ids:
-            rows = conn.run_query(
+            rows = _conn.run_query(
                 """
                 MATCH (c:Chunk)
                 WHERE c.chunk_id IN $ids
@@ -310,7 +320,8 @@ def trace_evidence(assessment_id: str) -> dict:
         evidence["cited_chunks"] = cited_chunks
         return evidence
     finally:
-        conn.close()
+        if conn is None:
+            _conn.close()
 
 
 # ---------------------------------------------------------------------------
@@ -341,6 +352,7 @@ def evaluate_thresholds(
     entity_id: str,
     entity_type: str,
     thresholds: list[dict],
+    conn: Neo4jConnection | None = None,
 ) -> dict:
     """
     Evaluate a list of Threshold dicts against the entity's actual values.
@@ -349,11 +361,12 @@ def evaluate_thresholds(
     Returns a structured pass/fail result for each threshold so the compliance
     agent can form a verdict from deterministic data rather than re-doing the maths.
     """
-    conn = _get_conn()
+    _conn = conn or _get_conn()
     try:
-        entity_values = get_entity_compliance_values(conn, entity_id, entity_type)
+        entity_values = get_entity_compliance_values(_conn, entity_id, entity_type)
     finally:
-        conn.close()
+        if conn is None:
+            _conn.close()
 
     evaluation: list[dict] = []
     for t in thresholds:

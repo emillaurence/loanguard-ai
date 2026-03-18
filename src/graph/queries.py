@@ -427,10 +427,15 @@ def get_assessment_with_evidence(
     """
     Walk an Assessment back to all cited sections and chunks.
     Returns the full reasoning chain for display in the evidence panel.
+
+    Uses two queries: one for assessment + findings, one for reasoning steps
+    with citation edges (kept separate to avoid cross-product explosion).
     """
-    assessment = conn.run_query(
+    # Query 1: assessment metadata + findings in one shot
+    assess_findings = conn.run_query(
         """
         MATCH (a:Assessment {assessment_id: $id})
+        OPTIONAL MATCH (a)-[:HAS_FINDING]->(f:Finding)
         RETURN a.assessment_id  AS assessment_id,
                a.entity_id      AS entity_id,
                a.entity_type    AS entity_type,
@@ -438,24 +443,41 @@ def get_assessment_with_evidence(
                a.verdict        AS verdict,
                a.confidence     AS confidence,
                a.agent          AS agent,
-               a.created_at     AS created_at
-        """,
-        {"id": assessment_id},
-    )
-
-    findings = conn.run_query(
-        """
-        MATCH (a:Assessment {assessment_id: $id})-[:HAS_FINDING]->(f:Finding)
-        RETURN f.finding_id    AS finding_id,
-               f.finding_type AS finding_type,
-               f.severity     AS severity,
-               f.description  AS description,
-               f.pattern_name AS pattern_name
+               a.created_at     AS created_at,
+               f.finding_id     AS finding_id,
+               f.finding_type   AS finding_type,
+               f.severity       AS severity,
+               f.description    AS f_description,
+               f.pattern_name   AS pattern_name
         ORDER BY f.severity
         """,
         {"id": assessment_id},
     )
 
+    assessment: dict = {}
+    findings: list[dict] = []
+    for row in assess_findings:
+        if not assessment and row.get("assessment_id"):
+            assessment = {
+                "assessment_id": row["assessment_id"],
+                "entity_id": row.get("entity_id"),
+                "entity_type": row.get("entity_type"),
+                "regulation_id": row.get("regulation_id"),
+                "verdict": row.get("verdict"),
+                "confidence": row.get("confidence"),
+                "agent": row.get("agent"),
+                "created_at": row.get("created_at"),
+            }
+        if row.get("finding_id"):
+            findings.append({
+                "finding_id": row["finding_id"],
+                "finding_type": row.get("finding_type"),
+                "severity": row.get("severity"),
+                "description": row.get("f_description"),
+                "pattern_name": row.get("pattern_name"),
+            })
+
+    # Query 2: reasoning steps with citation edges
     steps = conn.run_query(
         """
         MATCH (a:Assessment {assessment_id: $id})-[:HAS_STEP]->(rs:ReasoningStep)
@@ -474,7 +496,7 @@ def get_assessment_with_evidence(
     )
 
     return {
-        "assessment": assessment[0] if assessment else {},
+        "assessment": assessment,
         "findings": findings,
         "reasoning_steps": steps,
     }
@@ -611,6 +633,90 @@ def merge_reasoning_step(
             SET r.similarity_score = $score
             """,
             {"sid": step_id, "cid": chunk_id, "score": scores.get(chunk_id)},
+        )
+
+
+# ---------------------------------------------------------------------------
+# Layer 3 — Batch write helpers (reduce per-item round-trips)
+# ---------------------------------------------------------------------------
+
+def batch_merge_findings(
+    conn: "Neo4jConnection",
+    assessment_id: str,
+    findings: list[dict],
+) -> None:
+    """Create or update multiple Finding nodes in a single round-trip."""
+    if not findings:
+        return
+    conn.run_query(
+        """
+        UNWIND $rows AS row
+        MERGE (f:Finding {finding_id: row.finding_id})
+        SET f.finding_type = row.finding_type,
+            f.severity     = row.severity,
+            f.description  = row.description,
+            f.pattern_name = row.pattern_name
+        WITH f, row
+        MATCH (a:Assessment {assessment_id: $aid})
+        MERGE (a)-[:HAS_FINDING]->(f)
+        """,
+        {"aid": assessment_id, "rows": findings},
+    )
+
+
+def batch_merge_reasoning_steps(
+    conn: "Neo4jConnection",
+    assessment_id: str,
+    steps: list[dict],
+) -> None:
+    """Create multiple ReasoningStep nodes and their citation edges in batched queries."""
+    if not steps:
+        return
+    # 1. Create steps and link to assessment
+    conn.run_query(
+        """
+        UNWIND $rows AS row
+        MERGE (rs:ReasoningStep {step_id: row.step_id})
+        SET rs.step_number = row.step_number,
+            rs.description = row.description,
+            rs.cypher_used = row.cypher_used
+        WITH rs, row
+        MATCH (a:Assessment {assessment_id: $aid})
+        MERGE (a)-[:HAS_STEP]->(rs)
+        """,
+        {"aid": assessment_id, "rows": steps},
+    )
+    # 2. Batch section citations
+    section_edges = [
+        {"step_id": s["step_id"], "sec_id": sid}
+        for s in steps for sid in (s.get("section_ids") or [])
+    ]
+    if section_edges:
+        conn.run_query(
+            """
+            UNWIND $edges AS e
+            MATCH (rs:ReasoningStep {step_id: e.step_id})
+            MATCH (s:Section {section_id: e.sec_id})
+            MERGE (rs)-[:CITES_SECTION]->(s)
+            """,
+            {"edges": section_edges},
+        )
+    # 3. Batch chunk citations with scores
+    chunk_edges = [
+        {"step_id": s["step_id"], "cid": cid,
+         "score": (s.get("chunk_scores") or {}).get(cid)}
+        for s in steps for cid in (s.get("chunk_ids") or [])
+    ]
+    if chunk_edges:
+        conn.run_query(
+            """
+            UNWIND $edges AS e
+            MATCH (rs:ReasoningStep {step_id: e.step_id})
+            MATCH (c:Chunk {chunk_id: e.cid})
+            MERGE (rs)-[r:CITES_CHUNK]->(c)
+            SET r.similarity_score = e.score
+            """,
+            {"edges": chunk_edges},
         )
 
 

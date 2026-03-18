@@ -17,6 +17,7 @@ from __future__ import annotations
 import json
 import logging
 import re
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any
 
 import anthropic
@@ -28,7 +29,7 @@ from src.agent.config import (
     CACHE_CONTROL_EPHEMERAL, TEMPERATURE,
 )
 from src.agent.utils import call_claude_with_retry, extract_text, trim_message_history, truncate_tool_result
-from src.mcp.schema import ANOMALY_REGISTRY, GRAPH_SCHEMA_HINT, PATTERN_HINTS, InvestigationResult
+from src.mcp.schema import ANOMALY_REGISTRY, ENTITY_TO_PATTERNS, GRAPH_SCHEMA_HINT, PATTERN_HINTS, InvestigationResult
 
 logger = logging.getLogger(__name__)
 
@@ -82,6 +83,8 @@ Step 1 — ONE comprehensive first query (counts as 1 tool call):
 
 Step 2 — Anomaly detection is pre-run and results are already in your context above.
   Do NOT call detect_graph_anomalies again unless you need a pattern not already run.
+  Do NOT call traverse_compliance_path or evaluate_thresholds — these are the
+  ComplianceAgent's responsibility. Focus on graph traversal and risk signal detection.
 
 Step 3 — Targeted follow-up queries only if step 1–2 reveal risk signals
   (max 3 additional tool calls). Examples:
@@ -151,14 +154,15 @@ class InvestigationAgent:
             InvestigationResult with connections, risk signals, and cypher used.
         """
         # Pre-execute anomaly detection so results are guaranteed in context.
-        # Extract entity ID from question; run all registry patterns scoped to it.
-        all_patterns = list(ANOMALY_REGISTRY.keys())
+        # Select only patterns applicable to the entity type (e.g. LOAN → high_lvr_loans only).
         entity_match = re.search(r"(BRW|ACC|LOAN|TXN)-\d+", question, re.IGNORECASE)
         pre_entity_id = entity_match.group(0).upper() if entity_match else ""
+        prefix = pre_entity_id.split("-")[0] if pre_entity_id else ""
+        relevant_patterns = ENTITY_TO_PATTERNS.get(prefix, list(ANOMALY_REGISTRY.keys()))
 
         anomaly_result = self.execute_tool(
             "detect_graph_anomalies",
-            {"pattern_names": all_patterns, "entity_id": pre_entity_id},
+            {"pattern_names": relevant_patterns, "entity_id": pre_entity_id},
         )
         # Capture structured pattern hits (finding_count > 0) for the result object.
         pre_anomaly_patterns: list[dict] = [
@@ -173,7 +177,7 @@ class InvestigationAgent:
             {"role": "assistant", "content": [
                 {"type": "tool_use", "id": "pre_anomaly_0",
                  "name": "detect_graph_anomalies",
-                 "input": {"pattern_names": all_patterns, "entity_id": pre_entity_id}},
+                 "input": {"pattern_names": relevant_patterns, "entity_id": pre_entity_id}},
             ]},
             {"role": "user", "content": [
                 {"type": "tool_result", "tool_use_id": "pre_anomaly_0",
@@ -206,20 +210,32 @@ class InvestigationAgent:
 
             if response.stop_reason == "tool_use":
                 messages.append({"role": "assistant", "content": response.content})
+                tool_blocks = [b for b in response.content if b.type == "tool_use"]
+                for block in tool_blocks:
+                    if block.name == "read-neo4j-cypher" and block.input.get("query"):
+                        cypher_used.append(block.input["query"])
+
+                # Execute all tool calls for this iteration in parallel
+                results_map: dict[str, dict] = {}
+                with ThreadPoolExecutor(max_workers=max(1, len(tool_blocks))) as ex:
+                    future_to_id = {
+                        ex.submit(self.execute_tool, blk.name, blk.input): blk.id
+                        for blk in tool_blocks
+                    }
+                    for future in as_completed(future_to_id):
+                        results_map[future_to_id[future]] = future.result()
+
                 tool_results = []
-                for block in response.content:
-                    if block.type == "tool_use":
-                        logger.info("Tool: %s(%s)", block.name, list(block.input.keys()))
-                        if block.name == "read-neo4j-cypher" and block.input.get("query"):
-                            cypher_used.append(block.input["query"])
-                        result = self.execute_tool(block.name, block.input)
-                        content = truncate_tool_result(json.dumps(result, default=str))
-                        content = guard_tool_result(content, block.name)
-                        tool_results.append({
-                            "type": "tool_result",
-                            "tool_use_id": block.id,
-                            "content": content,
-                        })
+                for block in tool_blocks:
+                    result = results_map[block.id]
+                    logger.info("Tool: %s(%s)", block.name, list(block.input.keys()))
+                    content = truncate_tool_result(json.dumps(result, default=str))
+                    content = guard_tool_result(content, block.name)
+                    tool_results.append({
+                        "type": "tool_result",
+                        "tool_use_id": block.id,
+                        "content": content,
+                    })
                 messages.append({"role": "user", "content": tool_results})
 
                 messages = trim_message_history(messages, INVESTIGATION_MAX_HISTORY_PAIRS)
