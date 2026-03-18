@@ -146,7 +146,7 @@ class TestComplianceAgentRun:
         )
         mock_anthropic_client.messages.create.return_value = tool_response
 
-        with patch("src.agent.compliance_agent.MAX_ITERATIONS", 3):
+        with patch("src.agent.compliance_agent.COMPLIANCE_MAX_ITERATIONS", 3):
             agent = ComplianceAgent(tools=[], execute_tool_fn=mock_execute_tool)
             result = agent.run("Loop me forever.")
 

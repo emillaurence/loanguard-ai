@@ -2,14 +2,14 @@
 Orchestrator — routes user questions to specialist agents and synthesises responses.
 
 Flow:
-  1. route(question) → routing plan (intent classification via Claude)
-  2. Dispatch to ComplianceAgent and/or InvestigationAgent in parallel (future)
-  3. AnswerSynthesisAgent merges outputs → InvestigationResponse
+  1. route(question) → routing plan (intent classification via Claude, MODEL_FAST)
+  2. Dispatch to ComplianceAgent and/or InvestigationAgent — parallel when both needed
+  3. Synthesis merges outputs → InvestigationResponse (MODEL_MAIN)
 
 The orchestrator holds references to both MCP tool lists and the shared
 execute_tool dispatcher, injecting them into each specialist agent.
 
-Model: claude-sonnet-4-6  temperature=0
+Model: MODEL_FAST for routing, MODEL_MAIN for synthesis  (see src/agent/config.py)
 """
 
 from __future__ import annotations
@@ -18,15 +18,53 @@ import json
 import logging
 import re
 import uuid
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any
 
 from src.agent.compliance_agent import ComplianceAgent
-from src.agent.config import MODEL, make_anthropic_client
+from src.agent.config import (
+    MODEL, MODEL_FAST, make_anthropic_client,
+    ROUTING_MAX_TOKENS, SYNTHESIS_MAX_TOKENS,
+    CACHE_CONTROL_EPHEMERAL, TEMPERATURE,
+)
 from src.agent.investigation_agent import InvestigationAgent
+from src.agent.utils import call_claude_with_retry
 from src.document.utils import strip_fences
 from src.mcp.schema import GRAPH_SCHEMA_HINT, InvestigationResponse, SEV_ORDER, THRESHOLD_TO_PATTERN, VERDICT_PRIORITY
 
 logger = logging.getLogger(__name__)
+
+# ---------------------------------------------------------------------------
+# Layer 3 Cypher queries (dispatched via execute_tool, kept here for visibility)
+# ---------------------------------------------------------------------------
+
+_FINDINGS_QUERY = (
+    "MATCH (a:Assessment)-[:HAS_FINDING]->(f:Finding) "
+    "WHERE a.assessment_id IN $ids "
+    "RETURN a.assessment_id AS assessment_id, "
+    "       a.regulation_id AS regulation_id, "
+    "       a.verdict AS verdict, "
+    "       a.confidence AS confidence, "
+    "       f.finding_id AS finding_id, "
+    "       f.finding_type AS finding_type, "
+    "       f.severity AS severity, "
+    "       f.description AS description, "
+    "       f.pattern_name AS pattern_name "
+    "ORDER BY "
+    "  CASE f.severity WHEN 'HIGH' THEN 0 WHEN 'MEDIUM' THEN 1 "
+    "  WHEN 'LOW' THEN 2 ELSE 3 END "
+    "LIMIT 200"
+)
+
+_ASSESSMENT_META_QUERY = (
+    "MATCH (a:Assessment) "
+    "WHERE a.assessment_id IN $ids "
+    "RETURN a.assessment_id AS assessment_id, "
+    "       a.regulation_id AS regulation_id, "
+    "       a.verdict AS verdict, "
+    "       a.confidence AS confidence "
+    "LIMIT 50"
+)
 
 # ---------------------------------------------------------------------------
 # Routing prompt
@@ -169,19 +207,37 @@ class Orchestrator:
         needs_compliance   = routing.get("needs_compliance_agent", False)
         needs_investigation = routing.get("needs_investigation_agent", False)
 
-        if needs_compliance:
-            try:
-                compliance_result = self._compliance_agent.run(question)
-                logger.info("[%s] Compliance verdict: %s", session_id, compliance_result.verdict)
-            except Exception as e:
-                logger.error("[%s] ComplianceAgent failed: %s", session_id, e)
-
-        if needs_investigation:
-            try:
-                investigation_result = self._investigation_agent.run(question)
-                logger.info("[%s] Investigation complete", session_id)
-            except Exception as e:
-                logger.error("[%s] InvestigationAgent failed: %s", session_id, e)
+        if needs_compliance and needs_investigation:
+            with ThreadPoolExecutor(max_workers=2) as executor:
+                futures = {
+                    executor.submit(self._compliance_agent.run, question): "compliance",
+                    executor.submit(self._investigation_agent.run, question): "investigation",
+                }
+                for future in as_completed(futures):
+                    label = futures[future]
+                    try:
+                        result = future.result()
+                        if label == "compliance":
+                            compliance_result = result
+                            logger.info("[%s] Compliance verdict: %s", session_id, result.verdict)
+                        else:
+                            investigation_result = result
+                            logger.info("[%s] Investigation complete", session_id)
+                    except Exception as e:
+                        logger.error("[%s] %s agent failed: %s", session_id, label, e)
+        else:
+            if needs_compliance:
+                try:
+                    compliance_result = self._compliance_agent.run(question)
+                    logger.info("[%s] Compliance verdict: %s", session_id, compliance_result.verdict)
+                except Exception as e:
+                    logger.error("[%s] ComplianceAgent failed: %s", session_id, e)
+            if needs_investigation:
+                try:
+                    investigation_result = self._investigation_agent.run(question)
+                    logger.info("[%s] Investigation complete", session_id)
+                except Exception as e:
+                    logger.error("[%s] InvestigationAgent failed: %s", session_id, e)
 
         # Step 3: Synthesise
         response = self._synthesise(
@@ -226,43 +282,13 @@ class Orchestrator:
             # Fetch findings across all assessments
             findings_result = self.execute_tool(
                 "read-neo4j-cypher",
-                {
-                    "query": (
-                        "MATCH (a:Assessment)-[:HAS_FINDING]->(f:Finding) "
-                        "WHERE a.assessment_id IN $ids "
-                        "RETURN a.assessment_id AS assessment_id, "
-                        "       a.regulation_id AS regulation_id, "
-                        "       a.verdict AS verdict, "
-                        "       a.confidence AS confidence, "
-                        "       f.finding_id AS finding_id, "
-                        "       f.finding_type AS finding_type, "
-                        "       f.severity AS severity, "
-                        "       f.description AS description, "
-                        "       f.pattern_name AS pattern_name "
-                        "ORDER BY "
-                        "  CASE f.severity WHEN 'HIGH' THEN 0 WHEN 'MEDIUM' THEN 1 "
-                        "  WHEN 'LOW' THEN 2 ELSE 3 END "
-                        "LIMIT 200"
-                    ),
-                    "params": {"ids": assessment_ids},
-                },
+                {"query": _FINDINGS_QUERY, "params": {"ids": assessment_ids}},
             )
 
             # Fetch per-assessment verdicts/confidence for aggregation
             meta_result = self.execute_tool(
                 "read-neo4j-cypher",
-                {
-                    "query": (
-                        "MATCH (a:Assessment) "
-                        "WHERE a.assessment_id IN $ids "
-                        "RETURN a.assessment_id AS assessment_id, "
-                        "       a.regulation_id AS regulation_id, "
-                        "       a.verdict AS verdict, "
-                        "       a.confidence AS confidence "
-                        "LIMIT 50"
-                    ),
-                    "params": {"ids": assessment_ids},
-                },
+                {"query": _ASSESSMENT_META_QUERY, "params": {"ids": assessment_ids}},
             )
 
             rows = findings_result.get("rows", [])
@@ -302,13 +328,15 @@ class Orchestrator:
 
     def _route(self, question: str) -> dict:
         """Classify question intent using a single Claude call."""
-        resp = self.client.messages.create(
-            model=self.model,
-            max_tokens=512,
+        resp = call_claude_with_retry(
+            self.client,
+            label="routing",
+            model=MODEL_FAST,
+            max_tokens=ROUTING_MAX_TOKENS,
             system=[{"type": "text", "text": ROUTING_SYSTEM,
-                     "cache_control": {"type": "ephemeral"}}],
+                     "cache_control": CACHE_CONTROL_EPHEMERAL}],
             messages=[{"role": "user", "content": question}],
-            temperature=0,
+            temperature=TEMPERATURE,
         )
         text = strip_fences(resp.content[0].text)
         try:
@@ -514,13 +542,15 @@ class Orchestrator:
             )
 
         # Final synthesis via Claude
-        synthesis_response = self.client.messages.create(
+        synthesis_response = call_claude_with_retry(
+            self.client,
+            label="synthesis",
             model=self.model,
-            max_tokens=2048,
+            max_tokens=SYNTHESIS_MAX_TOKENS,
             system=[{"type": "text", "text": SYNTHESIS_SYSTEM,
-                     "cache_control": {"type": "ephemeral"}}],
+                     "cache_control": CACHE_CONTROL_EPHEMERAL}],
             messages=[{"role": "user", "content": "\n".join(context_parts)}],
-            temperature=0,
+            temperature=TEMPERATURE,
         )
         answer = synthesis_response.content[0].text.strip()
 

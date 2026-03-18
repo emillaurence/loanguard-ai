@@ -8,7 +8,7 @@ Uses two MCP tools:
 Claude generates all Cypher itself (text-to-Cypher is native, not a separate tool).
 Persists findings to Layer 3 via persist_assessment (FastMCP).
 
-Model: claude-sonnet-4-6  temperature=0
+Model: MODEL_MAIN  temperature=TEMPERATURE  (see src/agent/config.py)
 """
 
 from __future__ import annotations
@@ -20,18 +20,18 @@ from typing import Any, TYPE_CHECKING
 import anthropic
 
 from src.agent._security import guard_tool_result
-from src.agent.config import MODEL, MAX_TOKENS, TOOL_RESULT_CHAR_LIMIT, make_anthropic_client
-from src.agent.utils import call_claude_with_retry, extract_text, trim_message_history
+from src.agent.config import (
+    MODEL, MAX_TOKENS, make_anthropic_client,
+    COMPLIANCE_MAX_ITERATIONS, COMPLIANCE_MAX_HISTORY_PAIRS,
+    CACHE_CONTROL_EPHEMERAL, TEMPERATURE,
+)
+from src.agent.utils import call_claude_with_retry, extract_text, extract_field, trim_message_history, truncate_tool_result
 from src.mcp.schema import GRAPH_SCHEMA_HINT, ComplianceResult
 
 if TYPE_CHECKING:
     from src.graph.connection import Neo4jConnection
 
 logger = logging.getLogger(__name__)
-
-MAX_ITERATIONS = 8
-MAX_HISTORY_PAIRS = 4
-_TOOL_RESULT_CHAR_LIMIT = TOOL_RESULT_CHAR_LIMIT
 
 SYSTEM_PROMPT = f"""You are a financial services compliance officer with expert knowledge
 of APRA prudential standards (APS-112, APG-223, APS-220).
@@ -155,17 +155,18 @@ class ComplianceAgent:
 
         logger.info("ComplianceAgent: %s", question)
 
-        while iterations < MAX_ITERATIONS:
+        while iterations < COMPLIANCE_MAX_ITERATIONS:
             iterations += 1
             response = call_claude_with_retry(
                 self.client,
+                label="compliance",
                 model=self.model,
                 max_tokens=self.max_tokens,
                 system=[{"type": "text", "text": SYSTEM_PROMPT,
-                         "cache_control": {"type": "ephemeral"}}],
+                         "cache_control": CACHE_CONTROL_EPHEMERAL}],
                 tools=self.tools,
                 messages=messages,
-                temperature=0,
+                temperature=TEMPERATURE,
             )
 
             if response.stop_reason == "end_turn":
@@ -208,9 +209,7 @@ class ComplianceAgent:
                             persisted_findings.extend(result.get("findings", []))
                         # Accumulate section/chunk IDs and scores for the evidence tracker
                         self._extract_evidence_ids(block.name, result, seen_section_ids, seen_chunk_ids, seen_chunk_scores)
-                        content = json.dumps(result, default=str)
-                        if len(content) > _TOOL_RESULT_CHAR_LIMIT:
-                            content = content[:_TOOL_RESULT_CHAR_LIMIT] + "… [truncated — use a more specific query]"
+                        content = truncate_tool_result(json.dumps(result, default=str))
                         content = guard_tool_result(content, block.name)
                         tool_results.append({
                             "type": "tool_result",
@@ -233,7 +232,7 @@ class ComplianceAgent:
                     )
                 messages.append({"role": "user", "content": tool_results})
 
-                messages = trim_message_history(messages, MAX_HISTORY_PAIRS)
+                messages = trim_message_history(messages, COMPLIANCE_MAX_HISTORY_PAIRS)
 
                 continue
 
@@ -304,15 +303,11 @@ class ComplianceAgent:
         """Extract structured fields from Claude's final text response."""
         import re
 
-        def _find(pattern: str, default: str = "") -> str:
-            m = re.search(pattern, text, re.IGNORECASE)
-            return m.group(1).strip() if m else default
-
         # Patterns tolerate markdown bold (`**VALUE**`) around values
-        verdict = _find(r"VERDICT:\s*\*{0,2}\s*(\w+)", "INFORMATIONAL")
-        confidence_str = _find(r"CONFIDENCE:\s*\*{0,2}\s*([\d.]+)", "0.5")
-        reqs_str = _find(r"REQUIREMENTS CHECKED:\s*\*{0,2}\s*(.+)", "")
-        thresh_str = _find(r"THRESHOLDS BREACHED:\s*\*{0,2}\s*(.+)", "")
+        verdict = extract_field(text, r"VERDICT:\s*\*{0,2}\s*(\w+)", "INFORMATIONAL")
+        confidence_str = extract_field(text, r"CONFIDENCE:\s*\*{0,2}\s*([\d.]+)", "0.5")
+        reqs_str = extract_field(text, r"REQUIREMENTS CHECKED:\s*\*{0,2}\s*(.+)", "")
+        thresh_str = extract_field(text, r"THRESHOLDS BREACHED:\s*\*{0,2}\s*(.+)", "")
         steps_raw = re.findall(r"^\d+\.\s+(.+)$", text, re.MULTILINE)
 
         confidence = float(confidence_str) if confidence_str else 0.5

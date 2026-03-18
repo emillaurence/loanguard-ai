@@ -9,7 +9,7 @@ Uses:
 Claude generates all graph traversal Cypher itself using GRAPH_SCHEMA_HINT.
 No separate text_to_cypher tool needed — Claude IS the text-to-Cypher engine.
 
-Model: claude-sonnet-4-6  temperature=0
+Model: MODEL_MAIN  temperature=TEMPERATURE  (see src/agent/config.py)
 """
 
 from __future__ import annotations
@@ -22,18 +22,15 @@ from typing import Any
 import anthropic
 
 from src.agent._security import guard_tool_result
-from src.agent.config import MODEL, MAX_TOKENS, TOOL_RESULT_CHAR_LIMIT, make_anthropic_client
-from src.agent.utils import call_claude_with_retry, extract_text, trim_message_history
+from src.agent.config import (
+    MODEL, MAX_TOKENS, make_anthropic_client,
+    INVESTIGATION_MAX_ITERATIONS, INVESTIGATION_MAX_HISTORY_PAIRS,
+    CACHE_CONTROL_EPHEMERAL, TEMPERATURE,
+)
+from src.agent.utils import call_claude_with_retry, extract_text, trim_message_history, truncate_tool_result
 from src.mcp.schema import ANOMALY_REGISTRY, GRAPH_SCHEMA_HINT, PATTERN_HINTS, InvestigationResult
 
 logger = logging.getLogger(__name__)
-
-MAX_ITERATIONS = 14
-# Keep at most this many tool-result round-trips in the message history.
-# Each pair = one {"role":"assistant","content":[tool_use]} + one {"role":"user","content":[tool_result]}.
-# Older pairs are dropped to prevent input token growth across iterations.
-MAX_HISTORY_PAIRS = 6
-_TOOL_RESULT_CHAR_LIMIT = TOOL_RESULT_CHAR_LIMIT
 
 SYSTEM_PROMPT = f"""You are a financial crimes investigator with expertise in
 graph-based entity network analysis and AML/CTF investigations.
@@ -168,9 +165,7 @@ class InvestigationAgent:
             r for r in (anomaly_result.get("results") or [])
             if r.get("finding_count", 0) > 0
         ]
-        anomaly_content = json.dumps(anomaly_result, default=str)
-        if len(anomaly_content) > _TOOL_RESULT_CHAR_LIMIT:
-            anomaly_content = anomaly_content[:_TOOL_RESULT_CHAR_LIMIT] + "… [truncated]"
+        anomaly_content = truncate_tool_result(json.dumps(anomaly_result, default=str))
         anomaly_content = guard_tool_result(anomaly_content, "detect_graph_anomalies")
 
         messages: list[dict] = [
@@ -191,17 +186,18 @@ class InvestigationAgent:
 
         logger.info("InvestigationAgent: %s", question)
 
-        while iterations < MAX_ITERATIONS:
+        while iterations < INVESTIGATION_MAX_ITERATIONS:
             iterations += 1
             response = call_claude_with_retry(
                 self.client,
+                label="investigation",
                 model=self.model,
                 max_tokens=self.max_tokens,
                 system=[{"type": "text", "text": SYSTEM_PROMPT,
-                         "cache_control": {"type": "ephemeral"}}],
+                         "cache_control": CACHE_CONTROL_EPHEMERAL}],
                 tools=self.tools,
                 messages=messages,
-                temperature=0,
+                temperature=TEMPERATURE,
             )
 
             if response.stop_reason == "end_turn":
@@ -217,9 +213,7 @@ class InvestigationAgent:
                         if block.name == "read-neo4j-cypher" and block.input.get("query"):
                             cypher_used.append(block.input["query"])
                         result = self.execute_tool(block.name, block.input)
-                        content = json.dumps(result, default=str)
-                        if len(content) > _TOOL_RESULT_CHAR_LIMIT:
-                            content = content[:_TOOL_RESULT_CHAR_LIMIT] + "… [truncated — use a more specific query]"
+                        content = truncate_tool_result(json.dumps(result, default=str))
                         content = guard_tool_result(content, block.name)
                         tool_results.append({
                             "type": "tool_result",
@@ -228,7 +222,7 @@ class InvestigationAgent:
                         })
                 messages.append({"role": "user", "content": tool_results})
 
-                messages = trim_message_history(messages, MAX_HISTORY_PAIRS)
+                messages = trim_message_history(messages, INVESTIGATION_MAX_HISTORY_PAIRS)
 
                 continue
 
@@ -260,9 +254,10 @@ class InvestigationAgent:
             id_match = re.search(r"\b((?:BRW|LOAN|ACC|JUR)-\d+)\b", text)
             entity_id = id_match.group(1) if id_match else ""
 
-        # Risk signals: strip trailing ** markdown artifacts from each line
+        # Risk signals: strip all markdown decorators (* and `) so the
+        # orchestrator's pattern=name: regex matches reliably.
         raw_signals = re.findall(r"\[(?:HIGH|MEDIUM|LOW)\][^\n]+", text, re.IGNORECASE)
-        risk_signals = [re.sub(r"\*+$", "", s).rstrip() for s in raw_signals]
+        risk_signals = [re.sub(r"[*`]", "", s).strip() for s in raw_signals]
 
         # Connections: try section parse; fall back to CONNECTIONS: line only
         connections_text = _section("CONNECTIONS")

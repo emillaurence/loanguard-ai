@@ -612,3 +612,45 @@ def merge_reasoning_step(
             """,
             {"sid": step_id, "cid": chunk_id, "score": scores.get(chunk_id)},
         )
+
+
+# ---------------------------------------------------------------------------
+# Layer 3 — Assessment result queries (used by orchestrator synthesis)
+# ---------------------------------------------------------------------------
+
+def get_assessment_findings(conn: "Neo4jConnection", assessment_ids: list[str]) -> list[dict]:
+    """Return all Finding rows for the given assessment IDs, ordered by severity."""
+    result = conn.run_query(
+        "MATCH (a:Assessment)-[:HAS_FINDING]->(f:Finding) "
+        "WHERE a.assessment_id IN $ids "
+        "RETURN a.assessment_id AS assessment_id, "
+        "       a.regulation_id AS regulation_id, "
+        "       a.verdict AS verdict, "
+        "       a.confidence AS confidence, "
+        "       f.finding_id AS finding_id, "
+        "       f.finding_type AS finding_type, "
+        "       f.severity AS severity, "
+        "       f.description AS description, "
+        "       f.pattern_name AS pattern_name "
+        "ORDER BY "
+        "  CASE f.severity WHEN 'HIGH' THEN 0 WHEN 'MEDIUM' THEN 1 "
+        "  WHEN 'LOW' THEN 2 ELSE 3 END "
+        "LIMIT 200",
+        {"ids": assessment_ids},
+    )
+    return result if isinstance(result, list) else []
+
+
+def get_assessment_meta(conn: "Neo4jConnection", assessment_ids: list[str]) -> list[dict]:
+    """Return verdict and confidence for each assessment ID (used for aggregation)."""
+    result = conn.run_query(
+        "MATCH (a:Assessment) "
+        "WHERE a.assessment_id IN $ids "
+        "RETURN a.assessment_id AS assessment_id, "
+        "       a.regulation_id AS regulation_id, "
+        "       a.verdict AS verdict, "
+        "       a.confidence AS confidence "
+        "LIMIT 50",
+        {"ids": assessment_ids},
+    )
+    return result if isinstance(result, list) else []

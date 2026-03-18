@@ -73,9 +73,10 @@ def retrieve_regulatory_chunks(
     top_k = min(int(top_k), 20)
     oai = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+    from src.agent.config import EMBEDDING_MODEL
     response = oai.embeddings.create(
         input=[query_text],
-        model="text-embedding-3-small",
+        model=EMBEDDING_MODEL,
     )
     embedding = response.data[0].embedding
 
