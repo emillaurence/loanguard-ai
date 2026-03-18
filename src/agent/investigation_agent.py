@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 from typing import Any
 
 import anthropic
@@ -23,7 +24,7 @@ import anthropic
 from src.agent._security import guard_tool_result
 from src.agent.config import MODEL, MAX_TOKENS, TOOL_RESULT_CHAR_LIMIT, make_anthropic_client
 from src.agent.utils import call_claude_with_retry, extract_text, trim_message_history
-from src.mcp.schema import GRAPH_SCHEMA_HINT, PATTERN_HINTS, InvestigationResult
+from src.mcp.schema import ANOMALY_REGISTRY, GRAPH_SCHEMA_HINT, PATTERN_HINTS, InvestigationResult
 
 logger = logging.getLogger(__name__)
 
@@ -82,10 +83,8 @@ Step 1 — ONE comprehensive first query (counts as 1 tool call):
            collect(DISTINCT sub) AS subsidiaries
     LIMIT 1
 
-Step 2 — ONE anomaly call (counts as 1 tool call):
-  Call detect_graph_anomalies with ALL relevant pattern names in one call:
-  For a Borrower: ["transaction_structuring", "high_risk_industry",
-    "layered_ownership", "high_risk_jurisdiction", "guarantor_concentration"]
+Step 2 — Anomaly detection is pre-run and results are already in your context above.
+  Do NOT call detect_graph_anomalies again unless you need a pattern not already run.
 
 Step 3 — Targeted follow-up queries only if step 1–2 reveal risk signals
   (max 3 additional tool calls). Examples:
@@ -105,7 +104,15 @@ data and continue your investigation.
 Structure your final answer as:
 
 ENTITY: <entity_id> (<entity_type>)
-RISK SIGNALS: <numbered list — each starts with [HIGH], [MEDIUM], or [LOW]>
+RISK SIGNALS: <numbered list>
+  Format each item as: [SEVERITY] pattern=<name_or_none>: <description>
+  Set pattern= to a registry name when the signal directly relates to one of:
+    transaction_structuring, high_lvr_loans, high_risk_industry,
+    layered_ownership, high_risk_jurisdiction, guarantor_concentration
+  Use pattern=none for insights not tied to a specific registry pattern.
+  Examples:
+    1. [HIGH] pattern=layered_ownership: 3-hop OWNS chain detected for BRW-0582
+    2. [MEDIUM] pattern=none: Sole director concentrates control at every layer
 CONNECTIONS: <describe key relationship chains>
 ANOMALIES FOUND: <list pattern names and finding counts, or 'none'>
 RECOMMENDED NEXT STEPS: <numbered list>
@@ -146,7 +153,38 @@ class InvestigationAgent:
         Returns:
             InvestigationResult with connections, risk signals, and cypher used.
         """
-        messages: list[dict] = [{"role": "user", "content": question}]
+        # Pre-execute anomaly detection so results are guaranteed in context.
+        # Extract entity ID from question; run all registry patterns scoped to it.
+        all_patterns = list(ANOMALY_REGISTRY.keys())
+        entity_match = re.search(r"(BRW|ACC|LOAN|TXN)-\d+", question, re.IGNORECASE)
+        pre_entity_id = entity_match.group(0).upper() if entity_match else ""
+
+        anomaly_result = self.execute_tool(
+            "detect_graph_anomalies",
+            {"pattern_names": all_patterns, "entity_id": pre_entity_id},
+        )
+        # Capture structured pattern hits (finding_count > 0) for the result object.
+        pre_anomaly_patterns: list[dict] = [
+            r for r in (anomaly_result.get("results") or [])
+            if r.get("finding_count", 0) > 0
+        ]
+        anomaly_content = json.dumps(anomaly_result, default=str)
+        if len(anomaly_content) > _TOOL_RESULT_CHAR_LIMIT:
+            anomaly_content = anomaly_content[:_TOOL_RESULT_CHAR_LIMIT] + "… [truncated]"
+        anomaly_content = guard_tool_result(anomaly_content, "detect_graph_anomalies")
+
+        messages: list[dict] = [
+            {"role": "user", "content": question},
+            {"role": "assistant", "content": [
+                {"type": "tool_use", "id": "pre_anomaly_0",
+                 "name": "detect_graph_anomalies",
+                 "input": {"pattern_names": all_patterns, "entity_id": pre_entity_id}},
+            ]},
+            {"role": "user", "content": [
+                {"type": "tool_result", "tool_use_id": "pre_anomaly_0",
+                 "content": anomaly_content},
+            ]},
+        ]
         iterations = 0
         cypher_used: list[str] = []
         final_text = ""
@@ -197,12 +235,14 @@ class InvestigationAgent:
             logger.warning("Unexpected stop_reason: %s", response.stop_reason)
             break
 
-        return self._parse_result(final_text, cypher_used)
+        return self._parse_result(final_text, cypher_used, pre_anomaly_patterns)
 
     @staticmethod
-    def _parse_result(text: str, cypher_used: list[str]) -> InvestigationResult:
-        import re
-
+    def _parse_result(
+        text: str,
+        cypher_used: list[str],
+        anomaly_patterns: list[dict] | None = None,
+    ) -> InvestigationResult:
         def _clean(s: str) -> str:
             """Strip markdown bold/italic markers and surrounding whitespace."""
             return s.strip().strip("*").strip()
@@ -242,4 +282,5 @@ class InvestigationAgent:
             risk_signals=risk_signals,
             path_summaries=[],
             cypher_used=cypher_used,
+            anomaly_patterns=anomaly_patterns or [],
         )

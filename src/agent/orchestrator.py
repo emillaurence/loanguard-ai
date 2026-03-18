@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import uuid
 from typing import Any
 
@@ -23,7 +24,7 @@ from src.agent.compliance_agent import ComplianceAgent
 from src.agent.config import MODEL, make_anthropic_client
 from src.agent.investigation_agent import InvestigationAgent
 from src.document.utils import strip_fences
-from src.mcp.schema import GRAPH_SCHEMA_HINT, InvestigationResponse, SEV_ORDER, VERDICT_PRIORITY
+from src.mcp.schema import GRAPH_SCHEMA_HINT, InvestigationResponse, SEV_ORDER, THRESHOLD_TO_PATTERN, VERDICT_PRIORITY
 
 logger = logging.getLogger(__name__)
 
@@ -456,11 +457,24 @@ class Orchestrator:
             _inv_ent_type = investigation_result.entity_type or _ent_type
             for signal in investigation_result.risk_signals:
                 severity = "HIGH" if "[HIGH]" in signal else "MEDIUM" if "[MEDIUM]" in signal else "LOW"
+                pat_m = re.search(r"pattern=([a-z_]+):", signal, re.IGNORECASE)
+                pattern_name = pat_m.group(1) if pat_m and pat_m.group(1).lower() != "none" else None
+                description = re.sub(r"pattern=[a-z_]+:\s*", "", signal, flags=re.IGNORECASE).strip()
                 all_findings.append({
                     "finding_type":  "risk_signal",
                     "severity":      severity,
-                    "description":   signal,
-                    "pattern_name":  None,
+                    "description":   description,
+                    "pattern_name":  pattern_name,
+                    "entity_id":     _inv_ent_id,
+                    "entity_type":   _inv_ent_type,
+                    "regulation_id": _reg_id,
+                })
+            for pat in investigation_result.anomaly_patterns:
+                all_findings.append({
+                    "finding_type":  "anomaly_pattern",
+                    "severity":      pat.get("severity", "MEDIUM"),
+                    "description":   pat.get("description", ""),
+                    "pattern_name":  pat.get("pattern_name"),
                     "entity_id":     _inv_ent_id,
                     "entity_type":   _inv_ent_type,
                     "regulation_id": _reg_id,
@@ -475,6 +489,20 @@ class Orchestrator:
             context_parts.append(
                 f"FINDINGS from investigation (use these exactly):\n{inv_findings_lines}\n"
             )
+
+        # Enrich findings that have a threshold link but no pattern_name yet.
+        # Covers compliance_breach (has threshold_id field), Neo4j-fetched findings,
+        # and risk_signal findings where the description text cites a threshold ID.
+        _threshold_re = re.compile(r"\b((?:APG|APS)-\d+-THR-\d+)\b")
+        for _f in all_findings:
+            if _f.get("pattern_name"):
+                continue
+            _tid = _f.get("threshold_id") or ""
+            if not _tid:
+                _m = _threshold_re.search(_f.get("description", ""))
+                _tid = _m.group(1) if _m else ""
+            if _tid:
+                _f["pattern_name"] = THRESHOLD_TO_PATTERN.get(_tid)
 
         if not compliance_result and not investigation_result:
             return InvestigationResponse(
@@ -497,7 +525,6 @@ class Orchestrator:
         answer = synthesis_response.content[0].text.strip()
 
         # Split answer from recommended next steps at the delimiter
-        import re
         _STEPS_DELIMITER = "RECOMMENDED NEXT STEPS:"
         if _STEPS_DELIMITER in answer:
             _answer_part, _steps_part = answer.split(_STEPS_DELIMITER, 1)

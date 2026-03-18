@@ -25,25 +25,27 @@ load_dotenv(ROOT / ".env")
 # ── Logging — console + project-root log file (gitignored) ───────────────────
 _LOG_FILE = ROOT / "loanguard.log"
 
-# Explicitly truncate before opening. Using mode="a" (append) after the
-# explicit truncate avoids null-byte padding caused by multiple Streamlit
-# process handles seeking to different positions in the same file.
-_LOG_FILE.write_bytes(b"")
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-    handlers=[
-        logging.StreamHandler(),
-        logging.FileHandler(_LOG_FILE, mode="a", encoding="utf-8"),
-    ],
-)
-logging.getLogger("httpx").setLevel(logging.WARNING)
-logging.getLogger("openai").setLevel(logging.WARNING)
-# Suppress neo4j's GqlStatusObject notification warnings — their repr contains
-# non-printable characters that corrupt the log file with binary content.
-logging.getLogger("neo4j.notifications").setLevel(logging.ERROR)
-logging.getLogger(__name__).info("Log file: %s", _LOG_FILE)
+# Configure logging once per process. Streamlit reruns the script on every
+# interaction, so guard with `not logging.root.handlers` to avoid truncating
+# the log file and adding duplicate handlers on each rerun.
+# Using mode="a" after the explicit truncate avoids null-byte padding caused
+# by multiple Streamlit process handles seeking to different positions.
+if not logging.root.handlers:
+    _LOG_FILE.write_bytes(b"")
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+        handlers=[
+            logging.StreamHandler(),
+            logging.FileHandler(_LOG_FILE, mode="a", encoding="utf-8"),
+        ],
+    )
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    logging.getLogger("openai").setLevel(logging.WARNING)
+    # Suppress neo4j's GqlStatusObject notification warnings — their repr contains
+    # non-printable characters that corrupt the log file with binary content.
+    logging.getLogger("neo4j.notifications").setLevel(logging.ERROR)
+    logging.getLogger(__name__).info("Log file: %s", _LOG_FILE)
 
 # ── Tool definitions ─────────────────────────────────────────────────────────
 from src.mcp.tool_defs import FASTMCP_TOOL_DEFS, NEO4J_MCP_TOOLS, TOOLS  # noqa: E402

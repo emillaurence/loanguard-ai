@@ -123,6 +123,8 @@ EXPECTED_PATTERNS = {
     "layered_ownership",
     "high_risk_jurisdiction",
     "guarantor_concentration",
+    "director_concentration",
+    "cross_border_opacity",
 }
 
 VALID_SEVERITIES = {"HIGH", "MEDIUM", "LOW"}
@@ -186,6 +188,38 @@ class TestAnomalyRegistry:
             cypher_upper = pattern.cypher.upper()
             assert "LIMIT" in cypher_upper or "ORDER" in cypher_upper, (
                 f"'{name}' cypher has no LIMIT or ORDER BY"
+            )
+
+    def test_all_entries_have_entity_scoping_fields(self):
+        # Either all three scoping fields are set, or all three are empty (global-only pattern).
+        for name, pattern in ANOMALY_REGISTRY.items():
+            fields = (pattern.entity_label, pattern.entity_node_alias, pattern.entity_id_field)
+            all_set   = all(f.strip() for f in fields)
+            all_empty = not any(f.strip() for f in fields)
+            assert all_set or all_empty, (
+                f"'{name}' has partial entity scoping fields — set all three or leave all empty"
+            )
+
+    def test_entity_scoping_spot_checks(self):
+        ts = ANOMALY_REGISTRY["transaction_structuring"]
+        assert ts.entity_label == "BankAccount"
+        assert ts.entity_node_alias == "target"
+        assert ts.entity_id_field == "account_id"
+
+        lo = ANOMALY_REGISTRY["layered_ownership"]
+        assert lo.entity_label == "Borrower"
+        assert lo.entity_node_alias == "owner"
+        assert lo.entity_id_field == "borrower_id"
+
+    def test_entity_node_alias_present_in_cypher(self):
+        # The alias must appear in the Cypher so the generic filter can inject it.
+        # Global-only patterns (empty alias) are skipped.
+        for name, pattern in ANOMALY_REGISTRY.items():
+            if not pattern.entity_node_alias:
+                continue  # global-only pattern — no node injection
+            needle = f"({pattern.entity_node_alias}:{pattern.entity_label})"
+            assert needle in pattern.cypher, (
+                f"'{name}' cypher missing expected node pattern '{needle}'"
             )
 
 

@@ -235,6 +235,11 @@ class AnomalyPattern:
     id_key: str
     params: dict[str, Any] = field(default_factory=dict)
     threshold_id: str = ""
+    # Entity-scoping metadata — used by tools_impl to filter Cypher by entity_id.
+    # Set all three or leave all three empty (patterns without scoping support).
+    entity_label: str = ""       # Neo4j label of the filterable node, e.g. "Borrower"
+    entity_node_alias: str = ""  # Cypher variable for that node, e.g. "b"
+    entity_id_field: str = ""    # Property key to filter on, e.g. "borrower_id"
 
 
 # ---------------------------------------------------------------------------
@@ -253,6 +258,9 @@ ANOMALY_REGISTRY: dict[str, AnomalyPattern] = {
         ),
         severity=Severity.HIGH,
         id_key="target_account",
+        entity_label="BankAccount",
+        entity_node_alias="target",
+        entity_id_field="account_id",
         cypher="""
 MATCH (t:Transaction)-[:TO_ACCOUNT]->(target:BankAccount)
 WHERE t.flagged_suspicious = true
@@ -286,6 +294,9 @@ LIMIT 20
         severity=Severity.HIGH,
         id_key="loan_id",
         threshold_id="APG-223-THR-008",
+        entity_label="LoanApplication",
+        entity_node_alias="l",
+        entity_id_field="loan_id",
         cypher="""
 MATCH (l:LoanApplication)
 WHERE l.lvr >= 90
@@ -312,6 +323,9 @@ ORDER BY l.lvr DESC
         ),
         severity=Severity.MEDIUM,
         id_key="borrower_id",
+        entity_label="Borrower",
+        entity_node_alias="b",
+        entity_id_field="borrower_id",
         cypher="""
 MATCH (b:Borrower)-[:BELONGS_TO_INDUSTRY]->(i:Industry)
 WHERE i.aml_sensitivity = 'high'
@@ -339,6 +353,9 @@ ORDER BY i.aml_sensitivity DESC, b.borrower_id
         ),
         severity=Severity.MEDIUM,
         id_key="ultimate_owner_id",
+        entity_label="Borrower",
+        entity_node_alias="owner",
+        entity_id_field="borrower_id",
         cypher="""
 MATCH path = (owner:Borrower)-[:OWNS*2..]->(subsidiary:Borrower)
 WITH owner,
@@ -371,6 +388,9 @@ LIMIT 30
         ),
         severity=Severity.HIGH,
         id_key="borrower_id",
+        entity_label="Borrower",
+        entity_node_alias="b",
+        entity_id_field="borrower_id",
         cypher="""
 MATCH (b:Borrower)-[r:RESIDES_IN|REGISTERED_IN]->(j:Jurisdiction)
 WHERE j.aml_risk_rating = 'high'
@@ -398,6 +418,9 @@ ORDER BY j.jurisdiction_id, b.borrower_id
         ),
         severity=Severity.MEDIUM,
         id_key="borrower_id",
+        entity_label="Borrower",
+        entity_node_alias="b",
+        entity_id_field="borrower_id",
         cypher="""
 MATCH (b:Borrower)<-[:GUARANTEED_BY]-(l:LoanApplication)
 WITH b,
@@ -417,6 +440,68 @@ ORDER BY guarantor_degree DESC, total_guaranteed_aud DESC
 LIMIT 20
 """,
     ),
+
+    "director_concentration": AnomalyPattern(
+        description=(
+            "A single officer holds directorship of 2 or more borrowers. "
+            "Concentrated directorship across related entities can mask true "
+            "control and aggregate credit exposure."
+        ),
+        severity=Severity.MEDIUM,
+        id_key="officer_id",
+        # entity fields intentionally empty — global-only pattern, no entity_id scoping
+        cypher="""
+MATCH (off:Officer)-[:DIRECTOR_OF]->(b:Borrower)
+WITH off,
+     count(b)                              AS entity_count,
+     collect(b.borrower_id)[0..10]         AS borrower_ids,
+     collect(b.name)[0..10]                AS entity_names
+WHERE entity_count >= 2
+RETURN off.officer_id   AS officer_id,
+       off.name         AS officer_name,
+       entity_count,
+       borrower_ids,
+       entity_names
+ORDER BY entity_count DESC
+LIMIT 20
+""",
+    ),
+
+    "cross_border_opacity": AnomalyPattern(
+        description=(
+            "Borrowers registered in non-Australian jurisdictions with medium or high "
+            "AML risk rating. Cross-border structures introduce opacity into beneficial "
+            "ownership and complicate AML/CTF due diligence."
+        ),
+        severity=Severity.MEDIUM,
+        id_key="foreign_borrower_id",
+        entity_label="Borrower",
+        entity_node_alias="root",
+        entity_id_field="borrower_id",
+        cypher="""
+MATCH (root:Borrower)-[:OWNS*0..]->(b:Borrower)-[:REGISTERED_IN]->(j:Jurisdiction)
+WHERE j.jurisdiction_id <> 'JUR-AU-FED'
+  AND j.aml_risk_rating IN ['medium', 'high']
+WITH DISTINCT root, b, j
+RETURN root.borrower_id  AS root_borrower_id,
+       b.borrower_id     AS foreign_borrower_id,
+       b.name            AS foreign_borrower_name,
+       j.jurisdiction_id AS jurisdiction_id,
+       j.name            AS jurisdiction_name,
+       j.country         AS country,
+       j.aml_risk_rating AS aml_risk_rating
+ORDER BY j.aml_risk_rating DESC, root.borrower_id
+LIMIT 30
+""",
+    ),
+}
+
+# Reverse lookup: threshold_id → registry pattern name.
+# Built from ANOMALY_REGISTRY so it stays in sync automatically.
+THRESHOLD_TO_PATTERN: dict[str, str] = {
+    pat.threshold_id: name
+    for name, pat in ANOMALY_REGISTRY.items()
+    if pat.threshold_id
 }
 
 # Auto-generated from registry — single source of truth for agent system prompts.
@@ -481,6 +566,8 @@ class InvestigationResult:
     risk_signals: list[str] = field(default_factory=list)
     path_summaries: list[str] = field(default_factory=list)
     cypher_used: list[str] = field(default_factory=list)
+    # Structured findings from pre-run detect_graph_anomalies (patterns with hits > 0).
+    anomaly_patterns: list[dict] = field(default_factory=list)
 
     def to_dict(self) -> dict:
         return self.__dict__.copy()

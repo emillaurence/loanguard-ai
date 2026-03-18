@@ -215,3 +215,68 @@ class TestParseResult:
         assert result.confidence == 0.5
         assert result.requirement_ids == []
         assert result.threshold_breaches == []
+
+
+# ---------------------------------------------------------------------------
+# InvestigationAgent._parse_result
+# ---------------------------------------------------------------------------
+
+from src.agent.investigation_agent import InvestigationAgent
+
+
+class TestInvestigationParseResult:
+    def test_signal_with_pattern_tag_preserved_in_string(self):
+        text = (
+            "ENTITY: BRW-0582 (Borrower)\n"
+            "RISK SIGNALS:\n"
+            "1. [HIGH] pattern=layered_ownership: 3-hop OWNS chain detected\n"
+            "CONNECTIONS: BRW-0582 owns BRW-0581 owns BRW-0580\n"
+            "ANOMALIES FOUND: layered_ownership (1)\n"
+            "RECOMMENDED NEXT STEPS:\n1. Review chain\n"
+        )
+        result = InvestigationAgent._parse_result(text, [])
+        assert len(result.risk_signals) == 1
+        # The tag is preserved in the string — orchestrator strips it
+        assert "pattern=layered_ownership" in result.risk_signals[0]
+        assert "[HIGH]" in result.risk_signals[0]
+
+    def test_signal_with_pattern_none_tag(self):
+        text = (
+            "ENTITY: BRW-0001 (Borrower)\n"
+            "RISK SIGNALS:\n"
+            "1. [MEDIUM] pattern=none: Sole director controls all layers\n"
+            "CONNECTIONS: none\nANOMALIES FOUND: none\nRECOMMENDED NEXT STEPS:\n1. Check\n"
+        )
+        result = InvestigationAgent._parse_result(text, [])
+        assert len(result.risk_signals) == 1
+        assert "pattern=none" in result.risk_signals[0]
+
+    def test_signal_without_pattern_tag_preserved(self):
+        # Legacy/fallback: signals without pattern= tag still captured
+        text = (
+            "ENTITY: BRW-0001 (Borrower)\n"
+            "RISK SIGNALS:\n"
+            "1. [LOW] No directors recorded for this entity\n"
+            "CONNECTIONS: none\nANOMALIES FOUND: none\nRECOMMENDED NEXT STEPS:\n1. Verify\n"
+        )
+        result = InvestigationAgent._parse_result(text, [])
+        assert len(result.risk_signals) == 1
+        assert "[LOW]" in result.risk_signals[0]
+        assert "No directors" in result.risk_signals[0]
+
+    def test_max_iterations_fallback_produces_info_signal(self):
+        result = InvestigationAgent._parse_result("", ["MATCH (n) RETURN n", "MATCH (b) RETURN b"])
+        assert len(result.risk_signals) == 1
+        assert "[INFO]" in result.risk_signals[0]
+        assert "max iterations" in result.risk_signals[0]
+
+    def test_entity_id_extracted(self):
+        text = "ENTITY: BRW-0582 (Borrower)\nRISK SIGNALS:\nCONNECTIONS: none\nANOMALIES FOUND: none\nRECOMMENDED NEXT STEPS:\n"
+        result = InvestigationAgent._parse_result(text, [])
+        assert result.entity_id == "BRW-0582"
+
+    def test_anomaly_patterns_passed_through(self):
+        patterns = [{"pattern_name": "layered_ownership", "severity": "MEDIUM",
+                     "description": "Multi-hop chain", "finding_count": 1}]
+        result = InvestigationAgent._parse_result("ENTITY: BRW-0582 (Borrower)\nRISK SIGNALS:\nCONNECTIONS:\nANOMALIES FOUND:\nRECOMMENDED NEXT STEPS:\n", [], patterns)
+        assert result.anomaly_patterns == patterns

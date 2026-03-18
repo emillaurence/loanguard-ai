@@ -130,22 +130,11 @@ def detect_graph_anomalies(
             cypher = spec.cypher
             params: dict = {}
 
-            if entity_id:
-                if pattern_name == "high_lvr_loans":
-                    cypher = cypher.replace(
-                        "MATCH (l:LoanApplication)",
-                        "MATCH (l:LoanApplication {loan_id: $eid})",
-                    )
-                    params["eid"] = entity_id
-                elif pattern_name in (
-                    "high_risk_industry", "guarantor_concentration",
-                    "high_risk_jurisdiction", "layered_ownership",
-                ):
-                    cypher = cypher.replace(
-                        "MATCH (b:Borrower)",
-                        "MATCH (b:Borrower {borrower_id: $eid})",
-                    )
-                    params["eid"] = entity_id
+            if entity_id and spec.entity_label and spec.entity_id_field:
+                old = f"({spec.entity_node_alias}:{spec.entity_label})"
+                new = f"({spec.entity_node_alias}:{spec.entity_label} {{{spec.entity_id_field}: $eid}})"
+                cypher = cypher.replace(old, new, 1)
+                params["eid"] = entity_id
 
             try:
                 rows = conn.run_query(cypher, params)
