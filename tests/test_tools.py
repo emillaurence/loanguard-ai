@@ -5,7 +5,7 @@ Neo4jConnection is fully mocked — no database credentials required.
 """
 
 import pytest
-from unittest.mock import MagicMock, patch, call
+from unittest.mock import MagicMock, patch
 
 
 # ---------------------------------------------------------------------------

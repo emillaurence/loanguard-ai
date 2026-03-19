@@ -76,12 +76,34 @@ Classify the user's question and return ONLY a JSON object (no markdown fences):
 Rules:
 - intents may have multiple values if the question spans topics.
 - entity_ids: extract any IDs mentioned (e.g. LOAN-0002, BRW-0001).
+- regulations: list only regulation IDs explicitly named in the question; use []
+  when the user says "all", "any", "every regulation", or names no specific one.
 - run_anomaly_check=true when question mentions suspicious, anomaly, fraud,
   unusual, structuring, circular, or asks to 'find' patterns.
 - needs_compliance_agent=true for compliance, regulation, threshold questions.
 - needs_investigation_agent=true for investigation, connections, network,
   suspicious, review, or exploration questions.
 - If unclear, set both needs_* to true.
+
+Examples of correct output (raw JSON, no fences, no explanation):
+
+Question: "Is LOAN-0001 compliant with APG-223?"
+{"intents":["compliance"],"entity_ids":["LOAN-0001"],"entity_types":["LoanApplication"],"regulations":["APG-223"],"run_anomaly_check":false,"needs_compliance_agent":true,"needs_investigation_agent":false}
+
+Question: "Is LOAN-0002 compliant with all regulations?"
+{"intents":["compliance"],"entity_ids":["LOAN-0002"],"entity_types":["LoanApplication"],"regulations":[],"run_anomaly_check":false,"needs_compliance_agent":true,"needs_investigation_agent":false}
+
+Question: "Show connections around BRW-0055."
+{"intents":["exploration"],"entity_ids":["BRW-0055"],"entity_types":["Borrower"],"regulations":[],"run_anomaly_check":false,"needs_compliance_agent":false,"needs_investigation_agent":true}
+
+Question: "Why might LOAN-0013 require review? Check for suspicious patterns."
+{"intents":["compliance","investigation","anomaly"],"entity_ids":["LOAN-0013"],"entity_types":["LoanApplication"],"regulations":[],"run_anomaly_check":true,"needs_compliance_agent":true,"needs_investigation_agent":true}
+
+Question: "Is ACC-0042 showing any unusual transaction activity?"
+{"intents":["anomaly","investigation"],"entity_ids":["ACC-0042"],"entity_types":["BankAccount"],"regulations":[],"run_anomaly_check":true,"needs_compliance_agent":false,"needs_investigation_agent":true}
+
+Question: "Check BRW-0010 against APS-112 and show its ownership structure."
+{"intents":["compliance","exploration"],"entity_ids":["BRW-0010"],"entity_types":["Borrower"],"regulations":["APS-112"],"run_anomaly_check":false,"needs_compliance_agent":true,"needs_investigation_agent":true}
 """
 
 # ---------------------------------------------------------------------------
@@ -144,6 +166,81 @@ only — no qualifiers.
 
 Be concise. Use plain language.
 """
+# Pad SYNTHESIS_SYSTEM past the 1024-token Anthropic cache threshold.
+# Uses a targeted domain stub instead of the full GRAPH_SCHEMA_HINT to avoid
+# including Cypher traversal patterns that are irrelevant to synthesis.
+_SYNTHESIS_CONTEXT_PAD = """
+## Reference: Entity types
+
+| Prefix | Type | Description |
+|--------|------|-------------|
+| BRW    | Borrower | Individual or corporate borrower; holds BankAccounts, submits LoanApplications |
+| LOAN   | LoanApplication | A loan with LVR, loan_amount, interest_rate, loan_term_years, income fields |
+| ACC    | BankAccount | Transaction account linked to a Borrower |
+| TXN    | Transaction | Individual debit/credit transaction on a BankAccount |
+
+Supporting nodes: Collateral (property securing a loan), Officer (director of a Borrower),
+Jurisdiction (geographic/legal area), Industry (sector classification).
+
+## Reference: Verdict codes (worst-case precedence order)
+
+| Verdict | Meaning |
+|---------|---------|
+| NON_COMPLIANT | One or more regulatory thresholds definitively breached |
+| REQUIRES_REVIEW | Monitoring threshold triggered, or material threshold status unknown; senior management review needed |
+| ANOMALY_DETECTED | Graph pattern anomaly detected (e.g. structuring, layered ownership) |
+| COMPLIANT | All applicable thresholds evaluated and passed |
+| INFORMATIONAL | ADI-level metric only; no per-entity pass/fail verdict |
+
+## Reference: Regulations
+
+APG-223 — APRA Prudential Practice Guide: residential mortgage serviceability.
+  Covers: serviceability buffer (>= 3pp above loan rate), LVR limits, income haircutting
+  rules for non-salary and rental income, and senior management review triggers for LVR >= 90%.
+
+APS-112 — APRA Prudential Standard: capital adequacy — securitisation exposures and LMI.
+  Covers: risk weights, LMI loss coverage (>= 40% of loan loss for capital relief),
+  commercial property haircuts (>= 40% on assessed value), credit risk mitigation.
+
+APS-220 — APRA Prudential Standard: credit risk management.
+  Covers: borrower concentration limits, credit provisioning, stress testing requirements,
+  portfolio-level risk appetite, and credit approval frameworks.
+
+## Reference: Key threshold IDs
+
+| ID | Regulation | Condition | Severity |
+|----|-----------|-----------|---------|
+| APG-223-THR-003 | APG-223 | serviceability_buffer >= 3.0pp above loan rate | HIGH |
+| APG-223-THR-006 | APG-223 | non_salary_income_haircut >= 20% (skip if salary) | MEDIUM |
+| APG-223-THR-008 | APG-223 | LVR >= 90% triggers senior management review | HIGH |
+| APS-112-THR-031 | APS-112 | commercial_property_haircut >= 40% of assessed value | HIGH |
+| APS-112-THR-032 | APS-112 | LMI coverage >= 40% of loan loss for capital relief | HIGH |
+
+## Reference: Severity and finding types
+
+Severity levels: HIGH, MEDIUM, LOW, INFO.
+Finding types: compliance_breach, risk_signal, anomaly_pattern, information.
+
+## Reference: Anomaly patterns
+
+transaction_structuring — Multiple transactions just below reporting thresholds
+high_lvr_loans — LoanApplications with LVR above the high-risk threshold
+high_risk_industry — Borrower operates in a sector flagged as elevated-risk
+layered_ownership — Multi-hop ownership chains that obscure beneficial ownership
+high_risk_jurisdiction — Entity linked to a jurisdiction with elevated AML/CTF risk
+guarantor_concentration — Single guarantor backing an excessive number of loans
+cross_border_opacity — Complex cross-border transaction or ownership structures
+director_concentration — One director connected to an unusually large number of entities
+
+When writing next steps, cite regulations by bare ID only (e.g. APG-223, not "APG 223" or
+"APRA Prudential Practice Guide 223"). Do NOT invent regulation IDs or threshold IDs that
+are not present in the context provided to you.
+"""
+SYNTHESIS_SYSTEM = SYNTHESIS_SYSTEM + _SYNTHESIS_CONTEXT_PAD
+# Diagnostic: log token estimate at import time so we can confirm the cache
+# checkpoint threshold (≥1024 tokens required for cache_control to fire).
+logger.debug("SYNTHESIS_SYSTEM token estimate: ~%d", len(SYNTHESIS_SYSTEM) // 4)
+logger.debug("ROUTING_SYSTEM token estimate: ~%d", len(ROUTING_SYSTEM) // 4)
 
 
 # ---------------------------------------------------------------------------
@@ -169,11 +266,14 @@ class Orchestrator:
         self.execute_tool = execute_tool_fn
         self.model = model
         self.client = make_anthropic_client()
-        self._compliance_agent = ComplianceAgent(tools, execute_tool_fn, model)
-        self._investigation_agent = InvestigationAgent(tools, execute_tool_fn, model)
         self._graph_regulation_ids: list[str] = self._fetch_regulation_ids()
+        self._compliance_agent = ComplianceAgent(
+            tools, execute_tool_fn, model,
+            regulation_ids=self._graph_regulation_ids,
+        )
+        self._investigation_agent = InvestigationAgent(tools, execute_tool_fn, model)
 
-    def run(self, question: str) -> InvestigationResponse:
+    def run(self, question: str, stream_callback=None) -> InvestigationResponse:
         """
         Route a user question through the multi-agent pipeline.
 
@@ -197,10 +297,14 @@ class Orchestrator:
         needs_compliance   = routing.get("needs_compliance_agent", False)
         needs_investigation = routing.get("needs_investigation_agent", False)
 
+        _named_regs = routing.get("regulations") or None  # None → check all
+
         if needs_compliance and needs_investigation:
             with ThreadPoolExecutor(max_workers=2) as executor:
                 futures = {
-                    executor.submit(self._compliance_agent.run, question): "compliance",
+                    executor.submit(
+                        self._compliance_agent.run, question, _named_regs
+                    ): "compliance",
                     executor.submit(self._investigation_agent.run, question): "investigation",
                 }
                 for future in as_completed(futures):
@@ -218,7 +322,7 @@ class Orchestrator:
         else:
             if needs_compliance:
                 try:
-                    compliance_result = self._compliance_agent.run(question)
+                    compliance_result = self._compliance_agent.run(question, _named_regs)
                     logger.info("[%s] Compliance verdict: %s", session_id, compliance_result.verdict)
                 except Exception as e:
                     logger.error("[%s] ComplianceAgent failed: %s", session_id, e)
@@ -236,6 +340,7 @@ class Orchestrator:
             routing=routing,
             compliance_result=compliance_result,
             investigation_result=investigation_result,
+            stream_callback=stream_callback,
         )
         return response
 
@@ -350,6 +455,7 @@ class Orchestrator:
         routing: dict,
         compliance_result: Any | None,
         investigation_result: Any | None,
+        stream_callback=None,
     ) -> InvestigationResponse:
         """Merge specialist outputs into a single InvestigationResponse."""
 
@@ -374,6 +480,21 @@ class Orchestrator:
         if compliance_result:
             for cypher in compliance_result.cypher_used:
                 all_cypher.append({"tool": "read-neo4j-cypher", "cypher": cypher})
+
+            # Orchestrator-level queries are not tracked in compliance_result.cypher_used
+            # (the compliance agent no longer calls read-neo4j-cypher directly after P1+P3).
+            # Add them here so the "Cypher used" expander always shows these in the UI.
+            if compliance_result.assessment_ids:
+                all_cypher.append({"tool": "read-neo4j-cypher", "cypher": _FINDINGS_QUERY})
+                # Back-fill regulations discovered by ComplianceAgent into routing
+                discovered = [
+                    m.group()
+                    for _aid in compliance_result.assessment_ids
+                    for m in [re.search(r"(APS|APG)-\d+", _aid)]
+                    if m
+                ]
+                existing = set(routing.get("regulations") or [])
+                routing["regulations"] = list(existing | set(discovered))
 
             # Preferred: fetch all findings from Neo4j using the persisted assessment IDs.
             # This captures findings from every persist_assessment call (one per regulation).
@@ -420,7 +541,7 @@ class Orchestrator:
                         "pattern_name":  None,
                         "entity_id":     _ent_id,
                         "entity_type":   _ent_type,
-                        "regulation_id": _reg_id,
+                        "regulation_id": tid.split("-THR-")[0] if "-THR-" in tid else _reg_id,
                         "threshold_id":  tid,
                     })
 
@@ -449,6 +570,8 @@ class Orchestrator:
             for _aid in (compliance_result.assessment_ids or []):
                 try:
                     _ev = self.execute_tool("trace_evidence", {"assessment_id": _aid})
+                    for _q in (_ev.get("_queries_used") or []):
+                        all_cypher.append({"tool": "read-neo4j-cypher", "cypher": _q})
                     for _sec in _ev.get("cited_sections") or []:
                         _sid = _sec.get("section_id")
                         if _sid and _sid not in _seen_sec_ids:
@@ -469,8 +592,10 @@ class Orchestrator:
                 f"  Risk signals: {investigation_result.risk_signals}\n"
                 f"  Connections: {investigation_result.connections}\n"
             )
-            for i, cypher in enumerate(investigation_result.cypher_used):
-                all_cypher.append({"tool": "read-neo4j-cypher", "cypher": cypher})
+            # Prepend investigation Cypher so it appears before compliance bookkeeping queries
+            inv_cypher = [{"tool": "read-neo4j-cypher", "cypher": c}
+                          for c in investigation_result.cypher_used]
+            all_cypher = inv_cypher + all_cypher
             _inv_ent_id   = investigation_result.entity_id or _ent_id
             _inv_ent_type = investigation_result.entity_type or _ent_type
             for signal in investigation_result.risk_signals:
@@ -531,18 +656,45 @@ class Orchestrator:
                 routing=routing,
             )
 
-        # Final synthesis via Claude
-        synthesis_response = call_claude_with_retry(
-            self.client,
-            label="synthesis",
-            model=self.model,
-            max_tokens=SYNTHESIS_MAX_TOKENS,
-            system=[{"type": "text", "text": SYNTHESIS_SYSTEM,
-                     "cache_control": CACHE_CONTROL_EPHEMERAL}],
-            messages=[{"role": "user", "content": "\n".join(context_parts)}],
-            temperature=TEMPERATURE,
-        )
-        answer = synthesis_response.content[0].text.strip()
+        # Final synthesis via Claude (streaming when a callback is provided)
+        if stream_callback is not None:
+            import time as _time
+            _t0 = _time.perf_counter()
+            answer_parts: list[str] = []
+            with self.client.messages.stream(
+                model=MODEL_FAST,
+                max_tokens=SYNTHESIS_MAX_TOKENS,
+                system=[{"type": "text", "text": SYNTHESIS_SYSTEM,
+                         "cache_control": CACHE_CONTROL_EPHEMERAL}],
+                messages=[{"role": "user", "content": "\n".join(context_parts)}],
+                temperature=TEMPERATURE,
+            ) as stream:
+                for chunk in stream.text_stream:
+                    answer_parts.append(chunk)
+                    stream_callback(chunk)
+                _final_msg = stream.get_final_message()
+            answer = "".join(answer_parts).strip()
+            _elapsed = _time.perf_counter() - _t0
+            _u = _final_msg.usage
+            _cached  = getattr(_u, "cache_read_input_tokens",     0) or 0
+            _created = getattr(_u, "cache_creation_input_tokens", 0) or 0
+            logger.info(
+                "%s synthesis (streaming) %.2fs | in=%d out=%d cached=%d created=%d",
+                _final_msg.model, _elapsed,
+                _u.input_tokens, _u.output_tokens, _cached, _created,
+            )
+        else:
+            synthesis_response = call_claude_with_retry(
+                self.client,
+                label="synthesis",
+                model=MODEL_FAST,
+                max_tokens=SYNTHESIS_MAX_TOKENS,
+                system=[{"type": "text", "text": SYNTHESIS_SYSTEM,
+                         "cache_control": CACHE_CONTROL_EPHEMERAL}],
+                messages=[{"role": "user", "content": "\n".join(context_parts)}],
+                temperature=TEMPERATURE,
+            )
+            answer = synthesis_response.content[0].text.strip()
 
         # Split answer from recommended next steps at the delimiter
         _STEPS_DELIMITER = "RECOMMENDED NEXT STEPS:"

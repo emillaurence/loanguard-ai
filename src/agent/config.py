@@ -42,6 +42,9 @@ CACHE_CONTROL_EPHEMERAL: dict = {"type": "ephemeral"}
 # ---------------------------------------------------------------------------
 # Maximum characters serialised per tool result before truncation.
 TOOL_RESULT_CHAR_LIMIT = 3000
+# Raised limit for pre-run injected results (traverse, anomaly) so their content
+# exceeds the 1024-token Anthropic minimum required for cache checkpoints to fire.
+PRE_RUN_RESULT_CHAR_LIMIT = 4096
 
 # ---------------------------------------------------------------------------
 # Retry backoff
@@ -56,7 +59,7 @@ EMBEDDING_MODEL = "text-embedding-3-small"
 # ---------------------------------------------------------------------------
 # Agent loop limits
 # ---------------------------------------------------------------------------
-COMPLIANCE_MAX_ITERATIONS = 8
+COMPLIANCE_MAX_ITERATIONS = 14
 COMPLIANCE_MAX_HISTORY_PAIRS = 4
 
 INVESTIGATION_MAX_ITERATIONS = 14
@@ -72,4 +75,7 @@ WRITE_KEYWORDS: frozenset[str] = frozenset({"MERGE", "CREATE", "DELETE", "SET", 
 
 def make_anthropic_client() -> anthropic.Anthropic:
     """Return a configured Anthropic client using ANTHROPIC_API_KEY from the environment."""
-    return anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+    return anthropic.Anthropic(
+        api_key=os.getenv("ANTHROPIC_API_KEY"),
+        default_headers={"anthropic-beta": "prompt-caching-2024-07-31"},
+    )

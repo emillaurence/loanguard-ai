@@ -432,8 +432,7 @@ def get_assessment_with_evidence(
     with citation edges (kept separate to avoid cross-product explosion).
     """
     # Query 1: assessment metadata + findings in one shot
-    assess_findings = conn.run_query(
-        """
+    _Q1 = """
         MATCH (a:Assessment {assessment_id: $id})
         OPTIONAL MATCH (a)-[:HAS_FINDING]->(f:Finding)
         RETURN a.assessment_id  AS assessment_id,
@@ -450,9 +449,8 @@ def get_assessment_with_evidence(
                f.description    AS f_description,
                f.pattern_name   AS pattern_name
         ORDER BY f.severity
-        """,
-        {"id": assessment_id},
-    )
+        """
+    assess_findings = conn.run_query(_Q1, {"id": assessment_id})
 
     assessment: dict = {}
     findings: list[dict] = []
@@ -478,8 +476,7 @@ def get_assessment_with_evidence(
             })
 
     # Query 2: reasoning steps with citation edges
-    steps = conn.run_query(
-        """
+    _Q2 = """
         MATCH (a:Assessment {assessment_id: $id})-[:HAS_STEP]->(rs:ReasoningStep)
         OPTIONAL MATCH (rs)-[:CITES_SECTION]->(s:Section)
         OPTIONAL MATCH (rs)-[rc:CITES_CHUNK]->(c:Chunk)
@@ -491,14 +488,14 @@ def get_assessment_with_evidence(
                collect(DISTINCT {chunk_id: c.chunk_id, score: rc.similarity_score})
                    AS cited_chunk_scores
         ORDER BY rs.step_number
-        """,
-        {"id": assessment_id},
-    )
+        """
+    steps = conn.run_query(_Q2, {"id": assessment_id})
 
     return {
         "assessment": assessment,
         "findings": findings,
         "reasoning_steps": steps,
+        "_queries_used": [_Q1.strip(), _Q2.strip()],
     }
 
 
@@ -719,44 +716,3 @@ def batch_merge_reasoning_steps(
             {"edges": chunk_edges},
         )
 
-
-# ---------------------------------------------------------------------------
-# Layer 3 — Assessment result queries (used by orchestrator synthesis)
-# ---------------------------------------------------------------------------
-
-def get_assessment_findings(conn: "Neo4jConnection", assessment_ids: list[str]) -> list[dict]:
-    """Return all Finding rows for the given assessment IDs, ordered by severity."""
-    result = conn.run_query(
-        "MATCH (a:Assessment)-[:HAS_FINDING]->(f:Finding) "
-        "WHERE a.assessment_id IN $ids "
-        "RETURN a.assessment_id AS assessment_id, "
-        "       a.regulation_id AS regulation_id, "
-        "       a.verdict AS verdict, "
-        "       a.confidence AS confidence, "
-        "       f.finding_id AS finding_id, "
-        "       f.finding_type AS finding_type, "
-        "       f.severity AS severity, "
-        "       f.description AS description, "
-        "       f.pattern_name AS pattern_name "
-        "ORDER BY "
-        "  CASE f.severity WHEN 'HIGH' THEN 0 WHEN 'MEDIUM' THEN 1 "
-        "  WHEN 'LOW' THEN 2 ELSE 3 END "
-        "LIMIT 200",
-        {"ids": assessment_ids},
-    )
-    return result if isinstance(result, list) else []
-
-
-def get_assessment_meta(conn: "Neo4jConnection", assessment_ids: list[str]) -> list[dict]:
-    """Return verdict and confidence for each assessment ID (used for aggregation)."""
-    result = conn.run_query(
-        "MATCH (a:Assessment) "
-        "WHERE a.assessment_id IN $ids "
-        "RETURN a.assessment_id AS assessment_id, "
-        "       a.regulation_id AS regulation_id, "
-        "       a.verdict AS verdict, "
-        "       a.confidence AS confidence "
-        "LIMIT 50",
-        {"ids": assessment_ids},
-    )
-    return result if isinstance(result, list) else []

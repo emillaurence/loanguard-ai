@@ -140,7 +140,12 @@ def detect_graph_anomalies(
 
             if entity_id and spec.entity_label and spec.entity_id_field:
                 old = f"({spec.entity_node_alias}:{spec.entity_label})"
-                new = f"({spec.entity_node_alias}:{spec.entity_label} {{{spec.entity_id_field}: $eid}})"
+                if entity_id.upper().startswith("LOAN-") and spec.entity_label == "Borrower":
+                    # Traverse from LoanApplication to its submitted Borrower
+                    new = (f"(:LoanApplication {{loan_id: $eid}})"
+                           f"-[:SUBMITTED_BY]->({spec.entity_node_alias}:{spec.entity_label})")
+                else:
+                    new = f"({spec.entity_node_alias}:{spec.entity_label} {{{spec.entity_id_field}: $eid}})"
                 cypher = cypher.replace(old, new, 1)
                 params["eid"] = entity_id
 
@@ -280,31 +285,34 @@ def trace_evidence(assessment_id: str, conn: Neo4jConnection | None = None) -> d
                 if cid and score is not None:
                     chunk_score_map[cid] = score
 
+        _queries_used: list[str] = list(evidence.get("_queries_used") or [])
+
+        _Q_SECTIONS = """MATCH (s:Section)
+WHERE s.section_id IN $ids
+RETURN s.section_id       AS section_id,
+       s.title            AS title,
+       s.content_summary  AS content_summary,
+       s.regulation_id    AS regulation_id"""
+
+        _Q_CHUNKS = """MATCH (c:Chunk)
+WHERE c.chunk_id IN $ids
+RETURN c.chunk_id    AS chunk_id,
+       c.section_id  AS section_id,
+       c.text        AS text_excerpt,
+       c.chunk_index AS chunk_index"""
+
         cited_sections: list[dict] = []
         if step_section_ids:
             cited_sections = _conn.run_query(
-                """
-                MATCH (s:Section)
-                WHERE s.section_id IN $ids
-                RETURN s.section_id       AS section_id,
-                       s.title            AS title,
-                       s.content_summary  AS content_summary,
-                       s.regulation_id    AS regulation_id
-                """,
+                _Q_SECTIONS,
                 {"ids": list(set(step_section_ids))},
             )
+            _queries_used.append(_Q_SECTIONS)
 
         cited_chunks: list[dict] = []
         if step_chunk_ids:
             rows = _conn.run_query(
-                """
-                MATCH (c:Chunk)
-                WHERE c.chunk_id IN $ids
-                RETURN c.chunk_id    AS chunk_id,
-                       c.section_id  AS section_id,
-                       c.text        AS text_excerpt,
-                       c.chunk_index AS chunk_index
-                """,
+                _Q_CHUNKS,
                 {"ids": list(set(step_chunk_ids))},
             )
             cited_chunks = [
@@ -315,9 +323,11 @@ def trace_evidence(assessment_id: str, conn: Neo4jConnection | None = None) -> d
                 }
                 for r in rows
             ]
+            _queries_used.append(_Q_CHUNKS)
 
         evidence["cited_sections"] = cited_sections
         evidence["cited_chunks"] = cited_chunks
+        evidence["_queries_used"] = _queries_used
         return evidence
     finally:
         if conn is None:

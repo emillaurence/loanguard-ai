@@ -510,7 +510,7 @@ ENTITY_TO_PATTERNS: dict[str, list[str]] = {
     "BRW": [n for n, p in ANOMALY_REGISTRY.items()
             if p.entity_label in ("Borrower", "") or not p.entity_label],
     "LOAN": [n for n, p in ANOMALY_REGISTRY.items()
-             if p.entity_label in ("LoanApplication", "") or not p.entity_label],
+             if p.entity_label in ("LoanApplication", "Borrower", "") or not p.entity_label],
     "ACC": [n for n, p in ANOMALY_REGISTRY.items()
             if p.entity_label in ("BankAccount", "") or not p.entity_label],
 }

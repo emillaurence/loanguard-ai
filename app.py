@@ -237,6 +237,11 @@ def _inject_css() -> None:
   margin-bottom: 3px;
 }
 
+/* ── Expanders — suppress Streamlit's default red primary-colour border ── */
+details, details[open] {
+  border-color: var(--border) !important;
+}
+
 /* ── Section label ──────────────────────────────────── */
 .section-label {
   font-size: 11px;
@@ -1782,7 +1787,7 @@ def render_response(resp, elapsed_s: float | None = None) -> None:
 
     if resp.cypher_used:
         with st.expander(f"Cypher used ({len(resp.cypher_used)} queries)", expanded=False):
-            for i, c in enumerate(resp.cypher_used, 1):
+            for c in resp.cypher_used:
                 q = c.get("cypher", c) if isinstance(c, dict) else c
                 st.code(q, language="cypher")
 
@@ -1921,10 +1926,18 @@ auto_submit = st.session_state.pop("auto_submit", False)
 submit_question = question if ask else (st.session_state.get("question_input", "") if auto_submit else "")
 if submit_question.strip():
     st.session_state.history.append({"role": "user", "content": submit_question.strip()})
+    _stream_container = st.empty()
+    _streamed_chunks: list[str] = []
+
+    def _stream_cb(chunk: str) -> None:
+        _streamed_chunks.append(chunk)
+        _stream_container.markdown("".join(_streamed_chunks))
+
     with st.spinner("Thinking…"):
         _start = time.time()
         try:
-            resp = orchestrator.run(submit_question.strip())
+            resp = orchestrator.run(submit_question.strip(), stream_callback=_stream_cb)
+            _stream_container.empty()  # clear partial text — full answer renders in chat history
             _elapsed = round(time.time() - _start, 1)
             logging.getLogger(__name__).info(
                 "Question completed in %.1fs: %s", _elapsed, submit_question.strip()[:80]

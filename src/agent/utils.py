@@ -13,6 +13,13 @@ from src.agent.config import MAX_RETRY_SECONDS, TOOL_RESULT_CHAR_LIMIT
 
 logger = logging.getLogger(__name__)
 
+ENTITY_ID_RE = re.compile(r"(BRW|LOAN|ACC|TXN)-\d+", re.IGNORECASE)
+
+
+def clean_markdown(s: str) -> str:
+    """Strip markdown bold/italic markers and surrounding whitespace."""
+    return s.strip().strip("*").strip()
+
 
 def call_claude_with_retry(
     client: anthropic.Anthropic, *, label: str = "", **kwargs: Any
@@ -31,12 +38,13 @@ def call_claude_with_retry(
             response = client.messages.create(**kwargs)
             elapsed = time.perf_counter() - t0
             usage = response.usage
-            cached = getattr(usage, "cache_read_input_tokens", 0) or 0
+            cached  = getattr(usage, "cache_read_input_tokens",    0) or 0
+            created = getattr(usage, "cache_creation_input_tokens", 0) or 0
             tag = label or response.stop_reason or ""
             logger.info(
-                "%s %s %.2fs | in=%d out=%d cached=%d",
+                "%s %s %.2fs | in=%d out=%d cached=%d created=%d",
                 response.model, tag, elapsed,
-                usage.input_tokens, usage.output_tokens, cached,
+                usage.input_tokens, usage.output_tokens, cached, created,
             )
             return response
         except anthropic.RateLimitError as e:
@@ -57,10 +65,10 @@ def call_claude_with_retry(
                 raise
 
 
-def truncate_tool_result(content: str) -> str:
-    """Truncate a tool result string to TOOL_RESULT_CHAR_LIMIT characters."""
-    if len(content) > TOOL_RESULT_CHAR_LIMIT:
-        return content[:TOOL_RESULT_CHAR_LIMIT] + "… [truncated]"
+def truncate_tool_result(content: str, limit: int = TOOL_RESULT_CHAR_LIMIT) -> str:
+    """Truncate a tool result string to `limit` characters (default TOOL_RESULT_CHAR_LIMIT)."""
+    if len(content) > limit:
+        return content[:limit] + "… [truncated]"
     return content
 
 
@@ -78,16 +86,22 @@ def extract_text(response: anthropic.types.Message) -> str:
     return ""
 
 
-def trim_message_history(messages: list[dict], max_pairs: int) -> list[dict]:
+def trim_message_history(
+    messages: list[dict], max_pairs: int, anchor_count: int = 1
+) -> list[dict]:
     """Trim message history to at most max_pairs tool-use/tool-result round-trips.
 
-    Always preserves messages[0] (the initial user question).
+    Always preserves messages[:anchor_count] (default: the initial user question).
+    When anchor_count > 1 (e.g. pre-run traverse results injected before the loop),
+    those messages are anchored and the sliding window applies only to the tail.
     Drops orphaned tool_result blocks that lost their assistant/tool_use pair.
     """
-    max_msgs = 1 + max_pairs * 2
-    if len(messages) <= max_msgs:
-        return messages
-    tail = messages[-(max_pairs * 2):]
-    if tail[0].get("role") == "user":
-        tail = tail[1:]
-    return [messages[0]] + tail
+    anchor = messages[:anchor_count]
+    tail = messages[anchor_count:]
+    max_tail_msgs = max_pairs * 2
+    if len(tail) <= max_tail_msgs:
+        return anchor + tail
+    trimmed = tail[-(max_tail_msgs):]
+    if trimmed[0].get("role") == "user":
+        trimmed = trimmed[1:]
+    return anchor + trimmed
