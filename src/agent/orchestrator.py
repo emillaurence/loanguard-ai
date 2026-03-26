@@ -17,6 +17,7 @@ from __future__ import annotations
 import json
 import logging
 import uuid
+from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
 from src.agent.compliance_agent import ComplianceAgent
@@ -168,19 +169,24 @@ class Orchestrator:
         needs_compliance   = routing.get("needs_compliance_agent", False)
         needs_investigation = routing.get("needs_investigation_agent", False)
 
-        if needs_compliance:
-            try:
-                compliance_result = self._compliance_agent.run(question)
-                logger.info("[%s] Compliance verdict: %s", session_id, compliance_result.verdict)
-            except Exception as e:
-                logger.error("[%s] ComplianceAgent failed: %s", session_id, e)
+        futures: dict = {}
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            if needs_compliance:
+                futures["compliance"] = executor.submit(self._compliance_agent.run, question)
+            if needs_investigation:
+                futures["investigation"] = executor.submit(self._investigation_agent.run, question)
 
-        if needs_investigation:
+        for name, future in futures.items():
             try:
-                investigation_result = self._investigation_agent.run(question)
-                logger.info("[%s] Investigation complete", session_id)
+                result = future.result()
+                if name == "compliance":
+                    compliance_result = result
+                    logger.info("[%s] Compliance verdict: %s", session_id, compliance_result.verdict)
+                else:
+                    investigation_result = result
+                    logger.info("[%s] Investigation complete", session_id)
             except Exception as e:
-                logger.error("[%s] InvestigationAgent failed: %s", session_id, e)
+                logger.error("[%s] %s agent failed: %s", session_id, name, e)
 
         # Step 3: Synthesise
         response = self._synthesise(
