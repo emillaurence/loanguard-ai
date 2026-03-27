@@ -16,7 +16,7 @@ import json
 import logging
 from typing import Any, TYPE_CHECKING
 
-from src.agent.config import MODEL, make_anthropic_client
+from src.agent.config import MODEL_FAST, ROUTING_MAX_TOKENS, TEMPERATURE, make_anthropic_client
 
 if TYPE_CHECKING:
     from src.graph.connection import Neo4jConnection
@@ -24,8 +24,8 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
-# Schema hint passed to Claude for NL-to-Cypher generation
-# TODO: Update this schema hint as your graph evolves.
+# Schema hint passed to Claude for NL-to-Cypher generation.
+# GRAPH_SCHEMA_HINT in src/mcp/schema.py is the single source of truth.
 # ---------------------------------------------------------------------------
 
 from src.mcp.schema import GRAPH_SCHEMA_HINT  # single source of truth
@@ -63,7 +63,7 @@ class GraphRAGRetriever:
     def __init__(
         self,
         neo4j_conn: "Neo4jConnection",
-        model: str = MODEL,
+        model: str = MODEL_FAST,
     ) -> None:
         self.conn = neo4j_conn
         self.model = model
@@ -85,10 +85,10 @@ class GraphRAGRetriever:
         """
         response = self.client.messages.create(
             model=self.model,
-            max_tokens=512,
+            max_tokens=ROUTING_MAX_TOKENS,
             system=NL_TO_CYPHER_SYSTEM,
             messages=[{"role": "user", "content": natural_language_query}],
-            temperature=0,
+            temperature=TEMPERATURE,
         )
         cypher = response.content[0].text.strip()
         logger.info("Generated Cypher:\n%s", cypher)

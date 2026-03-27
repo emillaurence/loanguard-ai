@@ -6,11 +6,11 @@ The new ComplianceAgent takes (tools, execute_tool_fn) as constructor args
 and returns a ComplianceResult dataclass from .run().
 """
 
-import json
 import pytest
-from unittest.mock import MagicMock, patch, call
+from unittest.mock import MagicMock, patch
 
 from src.agent.compliance_agent import ComplianceAgent
+from src.agent.investigation_agent import InvestigationAgent
 from src.agent.utils import extract_text
 from src.mcp.schema import ComplianceResult
 
@@ -60,7 +60,7 @@ def mock_execute_tool():
 
 @pytest.fixture
 def mock_anthropic_client():
-    with patch("src.agent.compliance_agent.anthropic.Anthropic") as mock_cls:
+    with patch("src.agent.config.anthropic.Anthropic") as mock_cls:
         mock_client = MagicMock()
         mock_cls.return_value = mock_client
         yield mock_client
@@ -146,12 +146,41 @@ class TestComplianceAgentRun:
         )
         mock_anthropic_client.messages.create.return_value = tool_response
 
-        with patch("src.agent.compliance_agent.MAX_ITERATIONS", 3):
+        with patch("src.agent.compliance_agent.COMPLIANCE_MAX_ITERATIONS", 3):
             agent = ComplianceAgent(tools=[], execute_tool_fn=mock_execute_tool)
             result = agent.run("Loop me forever.")
 
         assert mock_anthropic_client.messages.create.call_count == 3
         assert isinstance(result, ComplianceResult)
+
+    def test_short_circuit_after_persist_assessment(self, mock_execute_tool, mock_anthropic_client):
+        """After persist_assessment, agent breaks without another Claude call."""
+        persist_response = _make_tool_use_response(
+            tool_name="persist_assessment",
+            tool_input={
+                "entity_id": "LOAN-0002",
+                "entity_type": "LoanApplication",
+                "regulation_id": "APG-223",
+                "verdict": "NON_COMPLIANT",
+                "confidence": 0.88,
+                "findings": [],
+                "reasoning_steps": [],
+            },
+        )
+        mock_execute_tool.return_value = {
+            "assessment_id": "ASSESS-LOAN-0002-APG-223-20260318-120000",
+            "findings": [],
+        }
+        mock_anthropic_client.messages.create.return_value = persist_response
+
+        agent = ComplianceAgent(tools=[], execute_tool_fn=mock_execute_tool)
+        result = agent.run("Is LOAN-0002 compliant?")
+
+        # Claude called only once — short-circuit prevented the final iter
+        assert mock_anthropic_client.messages.create.call_count == 1
+        assert result.verdict == "NON_COMPLIANT"
+        assert result.confidence == 0.88
+        assert result.assessment_id == "ASSESS-LOAN-0002-APG-223-20260318-120000"
 
     def test_cypher_queries_tracked(self, mock_execute_tool, mock_anthropic_client):
         """Cypher queries from read-neo4j-cypher calls should be recorded."""
@@ -169,6 +198,74 @@ class TestComplianceAgentRun:
         result = agent.run("Check LVR.")
 
         assert cypher in result.cypher_used
+
+
+# ---------------------------------------------------------------------------
+# Multi-regulation pre-run
+# ---------------------------------------------------------------------------
+
+
+class TestMultiRegulationPreRun:
+    def test_single_regulation_mentioned_makes_one_traverse_call(
+        self, mock_execute_tool, mock_anthropic_client
+    ):
+        """When caller supplies a single named_regulation, only one pre-run traverse is made."""
+        mock_anthropic_client.messages.create.return_value = _make_text_response(
+            "Done.\nVERDICT: COMPLIANT\nCONFIDENCE: 0.9\n"
+            "REQUIREMENTS CHECKED: none\nTHRESHOLDS BREACHED: none\n"
+        )
+        agent = ComplianceAgent(
+            tools=[], execute_tool_fn=mock_execute_tool,
+            regulation_ids=["APG-223", "APS-112", "APS-220"],
+        )
+        agent.run("Is LOAN-0001 compliant with APG-223?", named_regulations=["APG-223"])
+
+        traverse_calls = [
+            c for c in mock_execute_tool.call_args_list
+            if c.args[0] == "traverse_compliance_path"
+        ]
+        assert len(traverse_calls) == 1
+        assert traverse_calls[0].args[1]["regulation_id"] == "APG-223"
+
+    def test_no_regulation_makes_one_traverse_per_regulation(
+        self, mock_execute_tool, mock_anthropic_client
+    ):
+        """When no regulation is mentioned, one traverse is made per regulation_id."""
+        mock_anthropic_client.messages.create.return_value = _make_text_response(
+            "Done.\nVERDICT: COMPLIANT\nCONFIDENCE: 0.9\n"
+            "REQUIREMENTS CHECKED: none\nTHRESHOLDS BREACHED: none\n"
+        )
+        agent = ComplianceAgent(
+            tools=[], execute_tool_fn=mock_execute_tool,
+            regulation_ids=["APG-223", "APS-112"],
+        )
+        agent.run("Why might LOAN-0013 require manual review?")
+
+        traverse_calls = [
+            c for c in mock_execute_tool.call_args_list
+            if c.args[0] == "traverse_compliance_path"
+        ]
+        assert len(traverse_calls) == 2
+        called_regs = {c.args[1]["regulation_id"] for c in traverse_calls}
+        assert called_regs == {"APG-223", "APS-112"}
+
+    def test_no_regulation_ids_falls_back_to_unfiltered_traverse(
+        self, mock_execute_tool, mock_anthropic_client
+    ):
+        """When regulation_ids is empty, one unfiltered traverse is made."""
+        mock_anthropic_client.messages.create.return_value = _make_text_response(
+            "Done.\nVERDICT: COMPLIANT\nCONFIDENCE: 0.9\n"
+            "REQUIREMENTS CHECKED: none\nTHRESHOLDS BREACHED: none\n"
+        )
+        agent = ComplianceAgent(tools=[], execute_tool_fn=mock_execute_tool)
+        agent.run("Why might LOAN-0013 require manual review?")
+
+        traverse_calls = [
+            c for c in mock_execute_tool.call_args_list
+            if c.args[0] == "traverse_compliance_path"
+        ]
+        assert len(traverse_calls) == 1
+        assert traverse_calls[0].args[1]["regulation_id"] == ""
 
 
 # ---------------------------------------------------------------------------
@@ -215,3 +312,66 @@ class TestParseResult:
         assert result.confidence == 0.5
         assert result.requirement_ids == []
         assert result.threshold_breaches == []
+
+
+# ---------------------------------------------------------------------------
+# InvestigationAgent._parse_result
+# ---------------------------------------------------------------------------
+
+
+class TestInvestigationParseResult:
+    def test_signal_with_pattern_tag_preserved_in_string(self):
+        text = (
+            "ENTITY: BRW-0582 (Borrower)\n"
+            "RISK SIGNALS:\n"
+            "1. [HIGH] pattern=layered_ownership: 3-hop OWNS chain detected\n"
+            "CONNECTIONS: BRW-0582 owns BRW-0581 owns BRW-0580\n"
+            "ANOMALIES FOUND: layered_ownership (1)\n"
+            "RECOMMENDED NEXT STEPS:\n1. Review chain\n"
+        )
+        result = InvestigationAgent._parse_result(text, [])
+        assert len(result.risk_signals) == 1
+        # The tag is preserved in the string — orchestrator strips it
+        assert "pattern=layered_ownership" in result.risk_signals[0]
+        assert "[HIGH]" in result.risk_signals[0]
+
+    def test_signal_with_pattern_none_tag(self):
+        text = (
+            "ENTITY: BRW-0001 (Borrower)\n"
+            "RISK SIGNALS:\n"
+            "1. [MEDIUM] pattern=none: Sole director controls all layers\n"
+            "CONNECTIONS: none\nANOMALIES FOUND: none\nRECOMMENDED NEXT STEPS:\n1. Check\n"
+        )
+        result = InvestigationAgent._parse_result(text, [])
+        assert len(result.risk_signals) == 1
+        assert "pattern=none" in result.risk_signals[0]
+
+    def test_signal_without_pattern_tag_preserved(self):
+        # Legacy/fallback: signals without pattern= tag still captured
+        text = (
+            "ENTITY: BRW-0001 (Borrower)\n"
+            "RISK SIGNALS:\n"
+            "1. [LOW] No directors recorded for this entity\n"
+            "CONNECTIONS: none\nANOMALIES FOUND: none\nRECOMMENDED NEXT STEPS:\n1. Verify\n"
+        )
+        result = InvestigationAgent._parse_result(text, [])
+        assert len(result.risk_signals) == 1
+        assert "[LOW]" in result.risk_signals[0]
+        assert "No directors" in result.risk_signals[0]
+
+    def test_max_iterations_fallback_produces_info_signal(self):
+        result = InvestigationAgent._parse_result("", ["MATCH (n) RETURN n", "MATCH (b) RETURN b"])
+        assert len(result.risk_signals) == 1
+        assert "[INFO]" in result.risk_signals[0]
+        assert "max iterations" in result.risk_signals[0]
+
+    def test_entity_id_extracted(self):
+        text = "ENTITY: BRW-0582 (Borrower)\nRISK SIGNALS:\nCONNECTIONS: none\nANOMALIES FOUND: none\nRECOMMENDED NEXT STEPS:\n"
+        result = InvestigationAgent._parse_result(text, [])
+        assert result.entity_id == "BRW-0582"
+
+    def test_anomaly_patterns_passed_through(self):
+        patterns = [{"pattern_name": "layered_ownership", "severity": "MEDIUM",
+                     "description": "Multi-hop chain", "finding_count": 1}]
+        result = InvestigationAgent._parse_result("ENTITY: BRW-0582 (Borrower)\nRISK SIGNALS:\nCONNECTIONS:\nANOMALIES FOUND:\nRECOMMENDED NEXT STEPS:\n", [], patterns)
+        assert result.anomaly_patterns == patterns

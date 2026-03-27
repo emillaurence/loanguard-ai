@@ -209,4 +209,9 @@ FASTMCP_TOOL_DEFS: list[dict] = [
     },
 ]
 
+# Cache the entire tools block: Anthropic caches from the start of the tools
+# array up to and including the last entry that carries cache_control.
+# Adding it to the last FastMCP tool caches all 8 tool schemas for 5 minutes.
+FASTMCP_TOOL_DEFS[-1] = {**FASTMCP_TOOL_DEFS[-1], "cache_control": {"type": "ephemeral"}}
+
 TOOLS: list[dict] = NEO4J_MCP_TOOLS + FASTMCP_TOOL_DEFS
